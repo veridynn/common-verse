@@ -1,0 +1,18 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "site_title": "مشروع الشعر",
+  "site_description": "شعر وورشات وتواصل بلغات متعددة.",
+  "home_heading": "الشعر يجمعنا",
+  "home_intro": "مساحة متعددة اللغات للقصائد والورشات والتعلّم معًا.",
+  "nav_workshops": "الورشات",
+  "nav_poems": "القصائد",
+  "nav_primary": "التنقل الرئيسي",
+  "language_label": "اللغة",
+  "skip_to_content": "الانتقال إلى المحتوى",
+  "workshop_label": "ورشة",
+  "poem_original": "النص الأصلي",
+  "poem_translations": "الترجمات",
+  "translated_by": "ترجمة {name}",
+  "registration": "التسجيل",
+  "preview_notice": "معاينة المسودة"
+}

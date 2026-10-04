@@ -1,0 +1,18 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "site_title": "پروژه شعر",
+  "site_description": "شعر، کارگاه و پیوند به زبان‌های گوناگون.",
+  "home_heading": "شعر ما را پیوند می‌دهد",
+  "home_intro": "خانه‌ای چندزبانه برای شعرها، کارگاه‌ها و یادگیری مشترک.",
+  "nav_workshops": "کارگاه‌ها",
+  "nav_poems": "شعرها",
+  "nav_primary": "پیمایش اصلی",
+  "language_label": "زبان",
+  "skip_to_content": "رفتن به محتوا",
+  "workshop_label": "کارگاه",
+  "poem_original": "اصل",
+  "poem_translations": "ترجمه‌ها",
+  "translated_by": "ترجمهٔ {name}",
+  "registration": "ثبت‌نام",
+  "preview_notice": "پیش‌نمایش پیش‌نویس"
+}

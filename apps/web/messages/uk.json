@@ -1,0 +1,18 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "site_title": "Поетичний проєкт",
+  "site_description": "Багатомовна поезія, майстерні та спільнота.",
+  "home_heading": "Поезія єднає",
+  "home_intro": "Багатомовний простір для віршів, майстерень і спільного навчання.",
+  "nav_workshops": "Майстерні",
+  "nav_poems": "Вірші",
+  "nav_primary": "Основна навігація",
+  "language_label": "Мова",
+  "skip_to_content": "Перейти до вмісту",
+  "workshop_label": "Майстерня",
+  "poem_original": "Оригінал",
+  "poem_translations": "Переклади",
+  "translated_by": "Переклад: {name}",
+  "registration": "Зареєструватися",
+  "preview_notice": "Попередній перегляд чернетки"
+}

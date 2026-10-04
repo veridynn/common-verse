@@ -1,0 +1,18 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "site_title": "The Poetry Project",
+  "site_description": "Multilingual poetry, workshops, and connection.",
+  "home_heading": "Poetry connects us",
+  "home_intro": "A multilingual home for poems, workshops, and learning together.",
+  "nav_workshops": "Workshops",
+  "nav_poems": "Poems",
+  "nav_primary": "Primary navigation",
+  "language_label": "Language",
+  "skip_to_content": "Skip to content",
+  "workshop_label": "Workshop",
+  "poem_original": "Original",
+  "poem_translations": "Translations",
+  "translated_by": "Translated by {name}",
+  "registration": "Register",
+  "preview_notice": "Draft preview"
+}

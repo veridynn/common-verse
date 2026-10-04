@@ -1,0 +1,18 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "site_title": "Projeya Helbestê",
+  "site_description": "Helbest, atolyeyên pirzimanî û têkilî.",
+  "home_heading": "Helbest me digihîne hev",
+  "home_intro": "Maleke pirzimanî ji bo helbestan, atolye û hînbûna bi hev re.",
+  "nav_workshops": "Atolye",
+  "nav_poems": "Helbest",
+  "nav_primary": "Navîgasyona sereke",
+  "language_label": "Ziman",
+  "skip_to_content": "Biçe naverokê",
+  "workshop_label": "Atolye",
+  "poem_original": "Orîjînal",
+  "poem_translations": "Werger",
+  "translated_by": "Wergêr: {name}",
+  "registration": "Tomar bike",
+  "preview_notice": "Pêşdîtina reşnivîsê"
+}
