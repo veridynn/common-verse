@@ -1,0 +1,16 @@
+node_modules/
+.astro/
+.svelte-kit/
+.next/
+dist/
+build/
+coverage/
+playwright-report/
+test-results/
+.env
+.env.*
+!.env.example
+payload-types.ts
+*.tsbuildinfo
+apps/web/src/paraglide/
+.DS_Store

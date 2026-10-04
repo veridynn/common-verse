@@ -1,0 +1,26 @@
+{
+  "name": "the-poetry-project",
+  "private": true,
+  "packageManager": "pnpm@12.3.4",
+  "engines": {
+    "node": ">=26 <27",
+    "pnpm": ">=10"
+  },
+  "scripts": {
+    "dev": "pnpm --parallel --filter @poetry/web --filter @poetry/cms dev",
+    "dev:web": "pnpm --filter @poetry/web dev",
+    "dev:cms": "pnpm --filter @poetry/cms dev",
+    "build": "pnpm -r --if-present build",
+    "check": "pnpm -r --if-present check",
+    "lint": "prettier --check .",
+    "test": "pnpm -r --if-present test",
+    "test:e2e": "playwright test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "prettier": "3.6.2",
+    "typescript": "5.9.3"
+  }
+}

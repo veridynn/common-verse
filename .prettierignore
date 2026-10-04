@@ -1,0 +1,14 @@
+node_modules
+# Upstream skills are managed by the skills CLI; preserve their source hashes.
+.agents/skills
+.astro
+.next
+dist
+coverage
+playwright-report
+test-results
+apps/web/src/paraglide
+apps/web/project.inlang/.lix
+apps/web/project.inlang/cache
+apps/cms/src/payload-types.ts
+apps/cms/src/app/(payload)/admin/importMap.js
