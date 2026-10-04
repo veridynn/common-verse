@@ -1,0 +1,29 @@
+---
+import { isLocale, localizedPath } from '@poetry/i18n'
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+import { getPoems } from '../../../lib/cms'
+import * as m from '../../../paraglide/messages.js'
+
+const { locale: rawLocale } = Astro.params
+if (!isLocale(rawLocale)) return new Response('Not found', { status: 404 })
+const locale = rawLocale
+const poems = await getPoems(locale)
+const title = m.nav_poems({}, { locale })
+---
+
+<BaseLayout {locale} {title}>
+  <section>
+    <p class="eyebrow">{m.site_title({}, { locale })}</p>
+    <h1>{title}</h1>
+    <ul class="content-list">
+      {poems.map((poem) => (
+        <li>
+          <article>
+            <h2><a href={localizedPath(locale, `poems/${poem.slug}`)}>{poem.title}</a></h2>
+            {typeof poem.author === 'object' && poem.author && <p>{poem.author.name}</p>}
+          </article>
+        </li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>

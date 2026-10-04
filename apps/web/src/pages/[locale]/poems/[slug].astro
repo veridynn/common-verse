@@ -1,0 +1,51 @@
+---
+import { getLocaleMetadata, isLocale, localeMetadata } from '@poetry/i18n'
+import { getPoem } from '../../../lib/cms'
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+import * as m from '../../../paraglide/messages.js'
+
+const { locale: rawLocale, slug } = Astro.params
+if (!isLocale(rawLocale) || !slug) return new Response('Not found', { status: 404 })
+const locale = rawLocale
+const suppliedSecret = Astro.url.searchParams.get('previewSecret') ?? undefined
+const previewSecret = import.meta.env.PREVIEW_SECRET
+const preview = Boolean(suppliedSecret && previewSecret && suppliedSecret === previewSecret)
+if (suppliedSecret && !preview) return new Response('Invalid preview link', { status: 401 })
+const poem = await getPoem(slug, locale, preview ? suppliedSecret : undefined)
+if (!poem) return new Response('Not found', { status: 404 })
+const originalDirection = poem.originalLanguage === 'other' ? 'ltr' : getLocaleMetadata(poem.originalLanguage).direction
+const originalLabel = poem.originalLanguage === 'other' ? poem.originalLanguageLabel : localeMetadata[poem.originalLanguage].label
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: poem.title,
+  inLanguage: poem.originalLanguage === 'other' ? poem.originalLanguageLabel : poem.originalLanguage,
+  ...(typeof poem.author === 'object' && poem.author ? { author: { '@type': 'Person', name: poem.author.name } } : {}),
+  url: new URL(`/${locale}/poems/${slug}`, import.meta.env.PUBLIC_SITE_URL ?? 'http://localhost:4321').href,
+}
+---
+
+<BaseLayout {locale} title={`${poem.title} · ${m.site_title({}, { locale })}`} {structuredData} canonicalPath={`poems/${slug}`} {preview} contentType="article">
+  <article>
+    <p class="eyebrow">{m.poem_original({}, { locale })} · {originalLabel}</p>
+    <h1>{poem.title}</h1>
+    <div class="prose" lang={poem.originalLanguage === 'other' ? undefined : poem.originalLanguage} dir={originalDirection}>{poem.originalText}</div>
+    {poem.translations && poem.translations.length > 0 && (
+      <section aria-labelledby="translations-heading">
+        <h2 id="translations-heading">{m.poem_translations({}, { locale })}</h2>
+        {poem.translations.map((translation) => {
+          const direction = translation.language === 'other' ? 'ltr' : getLocaleMetadata(translation.language).direction
+          const label = translation.language === 'other' ? translation.languageLabel : localeMetadata[translation.language].label
+          return (
+            <article class="translation" lang={translation.language === 'other' ? undefined : translation.language} dir={direction}>
+              <p class="eyebrow">{label}</p>
+              <h3>{translation.title}</h3>
+              <div class="prose">{translation.text}</div>
+              {translation.translator && <p>{m.translated_by({ name: translation.translator }, { locale })}</p>}
+            </article>
+          )
+        })}
+      </section>
+    )}
+  </article>
+</BaseLayout>
