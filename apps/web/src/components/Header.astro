@@ -1,0 +1,21 @@
+---
+import { localizedPath, type Locale } from '@poetry/i18n'
+import * as m from '../paraglide/messages.js'
+import LanguageSwitcher from './LanguageSwitcher.svelte'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const messageOptions = { locale }
+---
+
+<header class="site-header">
+  <a class="brand" href={localizedPath(locale)}>{m.site_title({}, messageOptions)}</a>
+  <nav aria-label={m.nav_primary({}, messageOptions)}>
+    <a href={localizedPath(locale, 'workshops')}>{m.nav_workshops({}, messageOptions)}</a>
+    <a href={localizedPath(locale, 'poems')}>{m.nav_poems({}, messageOptions)}</a>
+  </nav>
+  <LanguageSwitcher client:load currentLocale={locale} label={m.language_label({}, messageOptions)} />
+</header>

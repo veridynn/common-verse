@@ -1,0 +1,17 @@
+---
+import { isLocale } from '@poetry/i18n'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import * as m from '../../paraglide/messages.js'
+
+const { locale: rawLocale } = Astro.params
+if (!isLocale(rawLocale)) return new Response('Not found', { status: 404 })
+const locale = rawLocale
+---
+
+<BaseLayout {locale}>
+  <section class="hero">
+    <p class="eyebrow">{m.site_title({}, { locale })}</p>
+    <h1>{m.home_heading({}, { locale })}</h1>
+    <p class="lede">{m.home_intro({}, { locale })}</p>
+  </section>
+</BaseLayout>
