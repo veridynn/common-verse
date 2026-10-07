@@ -4,23 +4,31 @@
   "packageManager": "pnpm@12.3.4",
   "engines": {
     "node": ">=26 <27",
-    "pnpm": ">=10"
+    "pnpm": ">=12 <13"
   },
   "scripts": {
-    "dev": "pnpm --parallel --filter @poetry/web --filter @poetry/cms dev",
+    "dev": "node scripts/dev.mjs",
     "dev:web": "pnpm --filter @poetry/web dev",
     "dev:cms": "pnpm --filter @poetry/cms dev",
     "build": "pnpm -r --if-present build",
     "check": "pnpm -r --if-present check",
     "lint": "prettier --check .",
-    "test": "pnpm -r --if-present test",
+    "test": "node --test scripts/setup.test.mjs && pnpm -r --if-present test",
     "test:e2e": "playwright test",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "dev:setup": "node scripts/setup.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",
     "prettier": "3.6.2",
     "typescript": "5.9.3"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "26.10.0",
+      "onFail": "download"
+    }
   }
 }

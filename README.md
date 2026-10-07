@@ -1,43 +1,42 @@
 # The Poetry Project
 
-Multilingual editorial prototype built with Astro, Svelte 5, Paraglide, Payload, and PostgreSQL.
+Multilingual editorial prototype using Astro, Svelte 5, Paraglide, Payload, and PostgreSQL. Ecommerce is deferred.
 
-## Local development
+## Development
 
-1. Use Node.js 26 and pnpm.
-2. Copy `.env.example` to `.env` and replace the secrets. Both apps load this root file.
-3. Start PostgreSQL with `docker compose up -d postgres`.
-4. Run `pnpm install`.
-5. Run `pnpm --filter @poetry/cms seed` to create the six-language workshop and multilingual poem used by the prototype.
-6. Run `pnpm dev`.
+Requires pnpm 12 and a running Docker Engine with Compose v2. pnpm selects
+Node.js 26.10.0 automatically.
 
-The public site runs at `http://localhost:4321`; Payload admin runs at `http://localhost:3001/admin`.
+```sh
+pnpm dev
+```
 
-## Commands
+Startup installs locked dependencies, creates local configuration once, waits for
+PostgreSQL, seeds an empty local database, and starts both apps. Existing secrets
+and editorial content are preserved.
 
-- `pnpm dev` — run the web and CMS apps
-- `pnpm build` — build all packages and apps
-- `pnpm check` — type/framework checks
-- `pnpm test` — unit tests
-- `pnpm test:e2e` — Playwright smoke tests
-- `pnpm --filter @poetry/cms seed` — idempotently create prototype editorial content
-- `pnpm --filter @poetry/cms payload migrate:create` — create a Payload migration
-- `pnpm --filter @poetry/cms payload migrate` — run Payload migrations
+`pnpm dev:setup` prepares without launching apps. Use `--no-seed` to skip demo
+content or `--external-db` to use your configured database without Compose or
+automatic seeding. [Startup and secrets explained](docs/development.md).
 
-The first milestone intentionally excludes ecommerce.
+Site: `http://localhost:4321`. Admin: `http://localhost:3001/admin`;
+create the first account there. Ports 4321, 3001, and 5432 must be available.
+The database and uploads are local data and are not transferred by cloning.
 
-Playwright starts a small mock Payload HTTP server, so routing, preview authorization, SEO, RTL, and accessibility smoke tests are deterministic without changing the development database. The real editor-to-database flow still uses Payload and PostgreSQL through Compose.
+## Checks
 
-## Agent documentation and content tools
+`pnpm check`, `pnpm test`, `pnpm lint`, and `pnpm build`.
+For browser tests, run `pnpm exec playwright install chromium` once, then
+`pnpm test:e2e` with development servers stopped. The browser suite uses a mock CMS.
 
-Project rules live in [AGENTS.md](AGENTS.md) and the task-specific sections of
-[the implementation guide](docs/project-guidance.md). `.agents/skills/` contains
-upstream skills installed for this project with `npx skills add`; their sources
-and hashes are recorded in `skills-lock.json`. Keep the installed copies and
-lockfile in the same commit. See `AGENTS.md` for skill routing and update commands.
+## Project guidance
 
-The checked-in `.mcp.json` connects compatible development agents to Astro's official documentation server. The official Payload MCP plugin exposes the local content endpoint at `http://localhost:3001/api/mcp`; start Payload, create a scoped key under **Payload MCP API Keys** in the admin, and adapt `docs/payload-mcp.example.json` in your personal MCP client configuration. Never commit the key. User accounts are not exposed through MCP, and destructive content deletion is disabled.
+- [Agent guide](AGENTS.md) and [implementation guidance](docs/project-guidance.md).
+- [Architecture review](docs/architecture-review.md).
+- [Accessible UI library research](docs/ui-library-research.md).
+- Skills are committed in `.agents/skills/` with `skills-lock.json`.
+- `.mcp.json` provides Astro docs; [Payload MCP example](docs/payload-mcp.example.json)
+  requires a personal scoped key and the CMS running.
 
-See [the architecture review](docs/architecture-review.md) for the milestone boundaries, verification evidence, and the required real-PostgreSQL acceptance pass before ecommerce begins.
-
-See [the accessible UI library research](docs/ui-library-research.md) for component options and recommendations.
+For deployment, set environment-specific secrets and database credentials in the
+hosting platform. Keep them stable across deploys; do not reuse local secrets.
