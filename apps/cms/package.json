@@ -10,7 +10,7 @@
     "check": "tsc --noEmit",
     "payload": "payload",
     "generate:types": "payload generate:types",
-    "seed": "tsx src/seed.ts",
+    "seed": "tsx src/seed-cli.ts",
     "test": "vitest run"
   },
   "dependencies": {

@@ -14,3 +14,6 @@ payload-types.ts
 *.tsbuildinfo
 apps/web/src/paraglide/
 .DS_Store
+
+# Local Payload uploads; seed artwork is source-controlled separately.
+apps/cms/media/
