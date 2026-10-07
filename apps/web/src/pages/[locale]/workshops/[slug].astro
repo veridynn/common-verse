@@ -1,4 +1,5 @@
 ---
+import { getSecret } from 'astro:env/server'
 import { isLocale } from '@poetry/i18n'
 import { Button } from '$lib/components/ui/button/index.js'
 import { getWorkshop, getWorkshopLocales } from '../../../lib/cms'
@@ -9,7 +10,7 @@ const { locale: rawLocale, slug } = Astro.params
 if (!isLocale(rawLocale) || !slug) return new Response('Not found', { status: 404 })
 const locale = rawLocale
 const suppliedSecret = Astro.url.searchParams.get('previewSecret') ?? undefined
-const previewSecret = import.meta.env.PREVIEW_SECRET
+const previewSecret = getSecret('PREVIEW_SECRET')
 const preview = Boolean(suppliedSecret && previewSecret && suppliedSecret === previewSecret)
 if (suppliedSecret && !preview) return new Response('Invalid preview link', { status: 401 })
 const workshop = await getWorkshop(slug, locale, preview ? suppliedSecret : undefined)

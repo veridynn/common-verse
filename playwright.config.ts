@@ -16,15 +16,17 @@ export default defineConfig({
         {
           command: "node tests/fixtures/mock-cms.mjs",
           url: "http://127.0.0.1:3001/health",
-          reuseExistingServer: true,
+          reuseExistingServer: false,
         },
         {
           command:
             "pnpm --filter @poetry/web build && node tests/fixtures/serve-web.mjs",
           url: "http://localhost:4321/de",
-          reuseExistingServer: true,
+          reuseExistingServer: false,
           env: {
-            PREVIEW_SECRET: "test-preview",
+            // Build and runtime use different values to detect embedded secrets.
+            PREVIEW_SECRET: "build-preview",
+            PLAYWRIGHT_PREVIEW_SECRET: "test-preview",
             PUBLIC_CMS_URL: "http://127.0.0.1:3001",
           },
         },

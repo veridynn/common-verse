@@ -140,3 +140,20 @@ test("Arabic home has no console or page errors", async ({ page }) => {
   await page.waitForLoadState("networkidle");
   expect(errors).toEqual([]);
 });
+
+test("preview secrets are taken from runtime for both content types", async ({
+  page,
+}) => {
+  for (const route of ["/de/workshops/test", "/ar/poems/test-poem"]) {
+    const buildSecret = await page.request.get(
+      `${route}?previewSecret=build-preview`,
+    );
+    expect(buildSecret.status()).toBe(401);
+    await page.goto(`${route}?previewSecret=test-preview`);
+    await expect(page.getByRole("status")).toBeVisible();
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
+      "content",
+      "noindex,nofollow",
+    );
+  }
+});
