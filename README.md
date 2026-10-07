@@ -39,3 +39,5 @@ lockfile in the same commit. See `AGENTS.md` for skill routing and update comman
 The checked-in `.mcp.json` connects compatible development agents to Astro's official documentation server. The official Payload MCP plugin exposes the local content endpoint at `http://localhost:3001/api/mcp`; start Payload, create a scoped key under **Payload MCP API Keys** in the admin, and adapt `docs/payload-mcp.example.json` in your personal MCP client configuration. Never commit the key. User accounts are not exposed through MCP, and destructive content deletion is disabled.
 
 See [the architecture review](docs/architecture-review.md) for the milestone boundaries, verification evidence, and the required real-PostgreSQL acceptance pass before ecommerce begins.
+
+See [the accessible UI library research](docs/ui-library-research.md) for component options and recommendations.
