@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "node scripts/dev.mjs",
+    "dev:force": "node scripts/dev.mjs --force",
     "dev:web": "pnpm --filter @poetry/web dev",
     "dev:cms": "pnpm --filter @poetry/cms dev",
     "build": "pnpm -r --if-present build",

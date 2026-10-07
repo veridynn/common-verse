@@ -1,10 +1,13 @@
 import path from "node:path";
 import { createRequire } from "node:module";
 import { checkPort, options, root, run, setup } from "./setup.mjs";
+import { releaseDevPorts } from "./ports.mjs";
 
 const controller = new AbortController();
 try {
-  const config = options(process.argv.slice(2));
+  const args = process.argv.slice(2);
+  const config = options(args.filter((arg) => arg !== "--force"));
+  if (args.includes("--force")) await releaseDevPorts();
   await Promise.all([checkPort(4321), checkPort(3001)]);
   await setup(config);
   console.log(

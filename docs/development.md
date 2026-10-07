@@ -28,6 +28,9 @@ default requires this explicit option. After setup, the existing `dev:web` and
 `dev:cms` commands remain available for individual application development.
 
 Site: `http://localhost:4321`. Admin: `http://localhost:3001/admin`.
+`pnpm dev:force` stops this checkout's servers on ports 4321 and 3001 before
+starting again (macOS/Linux, requires `lsof`). Services from other projects are
+left running and produce an error. It is also available in Zed's task picker.
 Create the first account in the admin UI; the seed never creates credentials.
 Ctrl+C stops the apps. `docker compose stop postgres` stops the database while
 retaining data. Ports 4321 and 3001 must be free; Compose needs local port 5432.
