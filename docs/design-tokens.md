@@ -5,6 +5,32 @@ the old website's `--bs-primary`. The `brand-50` to `brand-900` ramp supplies
 lighter surfaces and deeper shades. Yellow actions use dark text; small yellow
 text uses the darker `primary-text` token for contrast in light mode.
 
+The palette is Plum in both appearances. Palette primitives (`plum-50` through
+`plum-900`, `reading-white`, and `amber-surface`) are private inputs to semantic
+tokens, not component utilities. Each semantic token defines its light and dark
+values together with `light-dark()`, keeping the two appearances in one place.
+
+| Role              | Light   | Dark    |
+| ----------------- | ------- | ------- |
+| Background        | #FCF8FC | #211A24 |
+| Card / popover    | #FFFFFF | #302735 |
+| Main text         | #302735 | #F8F0E7 |
+| Secondary surface | #F0E7F3 | #413348 |
+| Secondary text    | #736377 | #C5B5C6 |
+| Hover / selection | #F0E7F3 | #483524 |
+| Decorative border | #DED2E2 | #57465E |
+| Control boundary  | #736377 | #9E8AA6 |
+| Primary action    | #F1A60A | #F1A60A |
+| Text on primary   | #302735 | #302735 |
+| Primary hover     | #FABD31 | #FABD31 |
+| Highlighted text  | #804811 | #FFD065 |
+
+The light header retains the brand yellow; its dark counterpart uses the card
+surface. Header controls and their hover/border states have semantic tokens too.
+The newsletter uses deep Plum in light mode and the card surface in dark mode,
+with ivory text in both. Status colours keep their distinct meanings rather than
+being recoloured purple.
+
 Use semantic tokens in components instead of choosing brand shades directly:
 
 | Role                 | Tokens                                                                       |
@@ -21,6 +47,13 @@ and `bg-error-subtle text-error`. `destructive` aliases the error palette.
 Do not communicate status through colour alone; add clear text or an icon with a
 text label. Compatibility aliases `paper`, `ink`, `soft`, and `white` keep the
 existing editorial pages on the same theme.
+
+Use `border` for decorative dividers and `input` for visible control boundaries.
+Use `ring` for keyboard focus. Keep literal colours and palette primitives out of
+components; use semantic Tailwind utilities or `var(--token)` in project CSS.
+When adding a surface, choose its foreground pairing and cover its interactive
+states. The browser theme tests check rendered text pairings at 4.5:1 and control
+boundaries/focus at 3:1 in both themes, alongside axe checks and locale behaviour.
 
 The appearance picker offers Light, Dark, and System. System is the default and
 follows the device preference, including when JavaScript is disabled. CSS
