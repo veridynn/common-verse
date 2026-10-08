@@ -25,7 +25,7 @@
 <style>
   [data-slot='eyebrow'] {
     color: var(--secondary-text);
-    font-size: 0.8rem;
+    font-size: var(--font-size-sm);
     font-weight: 800;
     letter-spacing: 0.12em;
     text-transform: uppercase;

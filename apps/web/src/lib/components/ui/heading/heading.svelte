@@ -38,15 +38,15 @@
     overflow-wrap: anywhere;
   }
   [data-variant='display'] {
-    font-size: clamp(3rem, 9vw, 7.5rem);
+    font-size: var(--font-size-xxxl);
     font-weight: 500;
   }
   [data-variant='title'] {
-    font-size: clamp(1.6rem, 4vw, 2.5rem);
+    font-size: var(--font-size-xl);
     font-weight: 500;
   }
   [data-variant='subtitle'] {
-    font-size: 1.5rem;
+    font-size: var(--font-size-lg);
     line-height: 1.4;
     font-weight: 500;
   }

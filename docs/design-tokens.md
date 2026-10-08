@@ -1,9 +1,9 @@
-# Colour and appearance
+# Design tokens
 
 Theme tokens live in `apps/web/src/styles/token.css`, imported by the global CSS
 entry point configured in `apps/web/components.json`. Layout and component rules
 stay in `global.css`. The token file owns Tailwind mappings, colour generation,
-geometry tokens, shadows, and `color-scheme` selection.
+typography, geometry tokens, shadows, and `color-scheme` selection.
 
 ## Editable inputs
 
@@ -116,3 +116,30 @@ card layers, and verify shade propagation from a changed HEX input. German and
 Arabic checks cover saved preferences, system changes, keyboard opening/focus
 return, 320px layouts, no-JavaScript rendering, and light/dark axe scans.
 These checks cover the prototype, not a complete WCAG conformance audit.
+
+## Fluid typography
+
+The seven `--font-size-*` tokens follow the [Fluid Type Scale calculator](https://www.fluid-type-scale.com/):
+400–1280px viewport widths, a 16–19px base, and ratios of 1.25–1.333. Values use
+`clamp()` with rem bounds and a viewport term, rounded to two decimals at a
+16px rem. Below and above this range the scale holds at its minimum and maximum.
+Keep the root font size at the browser default; apply the base token to `body`
+so rem spacing and browser font preferences remain independent of the fluid scale.
+
+| Step   | Minimum | Maximum | Usage                                                  |
+| ------ | ------- | ------- | ------------------------------------------------------ |
+| `sm`   | 0.80rem | 0.89rem | Captions, metadata, eyebrows, badges, compact controls |
+| `base` | 1.00rem | 1.19rem | Body, navigation, links                                |
+| `md`   | 1.25rem | 1.58rem | Leads, editorial prose, translation titles             |
+| `lg`   | 1.56rem | 2.11rem | Subtitles, card titles, featured verses                |
+| `xl`   | 1.95rem | 2.81rem | Page subheadings and feature titles                    |
+| `xxl`  | 2.44rem | 3.75rem | Homepage section headings                              |
+| `xxxl` | 3.05rem | 5.00rem | Page and hero titles                                   |
+
+Use these variables for component CSS. Tailwind `text-sm`, `text-base`, `text-md`,
+`text-lg`, `text-xl`, `text-xxl`, and `text-xxxl` map to the same scale;
+`text-xs`, `text-2xl`, and `text-3xl` are compatibility aliases for `sm`, `xxl`,
+and `xxxl`. Choose a step by content role, independently of the semantic heading
+level. Heading variants use `display` → `xxxl`, `title` → `xl`, and `subtitle` →
+`lg`; Text uses `body` → `base`, `lead` → `md`, and `small`/`caption` → `sm`.
+Preserve unitless line heights and wrapping for translated and RTL content.

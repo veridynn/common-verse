@@ -33,18 +33,19 @@
 
 <style>
   .ui-text {
+    font-size: var(--font-size-base);
     line-height: 1.6;
     overflow-wrap: anywhere;
   }
   [data-variant='lead'] {
     max-width: 44rem;
-    font-size: clamp(1.15rem, 2.5vw, 1.6rem);
+    font-size: var(--font-size-md);
   }
   [data-variant='small'] {
-    font-size: 0.875rem;
+    font-size: var(--font-size-sm);
   }
   [data-variant='caption'] {
-    font-size: 0.8125rem;
+    font-size: var(--font-size-sm);
   }
   [data-tone='muted'] {
     color: var(--muted-foreground);
