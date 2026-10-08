@@ -20,7 +20,11 @@ content or `--external-db` to use your configured database without Compose or
 automatic seeding. [Startup and secrets explained](docs/development.md).
 
 Site: `http://localhost:4321`. Admin: `http://localhost:3001/admin`;
-create the first account there. Ports 4321, 3001, and 5432 must be available.
+create the first account there. Optional larger demo dataset:
+`pnpm --filter @poetry/cms seed:bulk` adds 300 poems, 100 workshops, and supporting
+content to the local database. See [bulk seed details](docs/development.md#optional-bulk-demo-data).
+Optional event photos (free, no API key): `pnpm --filter @poetry/cms seed:photos`.
+Ports 4321, 3001, and 5432 must be available.
 The database and uploads are local data and are not transferred by cloning.
 
 ## Checks

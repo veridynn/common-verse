@@ -3,6 +3,7 @@ import type { Locale } from "@poetry/i18n";
 export interface MediaReference {
   id: number | string;
   alt: string;
+  credit?: string | null;
   url?: string | null;
   width?: number | null;
   height?: number | null;

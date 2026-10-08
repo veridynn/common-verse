@@ -3,6 +3,7 @@ import { getSecret } from 'astro:env/server'
 import { isLocale } from '@poetry/i18n'
 import { Button } from '$lib/components/ui/button/index.js'
 import { getWorkshop, getWorkshopLocales } from '../../../lib/cms'
+import { mediaCredit } from '../../../lib/media-credit'
 import BaseLayout from '../../../layouts/BaseLayout.astro'
 import * as m from '../../../paraglide/messages.js'
 
@@ -20,6 +21,7 @@ const title = workshop.seo?.title ?? `${workshop.title} · ${m.site_title({}, { 
 const cmsUrl = import.meta.env.PUBLIC_CMS_URL ?? 'http://localhost:3001'
 const socialMedia = workshop.seo?.image && typeof workshop.seo.image === 'object' ? workshop.seo.image : null
 const workshopMedia = workshop.image && typeof workshop.image === 'object' ? workshop.image : null
+const credit = mediaCredit(workshopMedia?.credit)
 const image = socialMedia?.url ? new URL(socialMedia.url, cmsUrl).href : workshopMedia?.url ? new URL(workshopMedia.url, cmsUrl).href : null
 const structuredData = {
   '@context': 'https://schema.org',
@@ -41,7 +43,14 @@ const alternateLocales = await getWorkshopLocales(slug, preview ? suppliedSecret
   <article>
     <p class="eyebrow">{m.workshop_label({}, { locale })}</p>
     <h1>{workshop.title}</h1>
-    {workshopMedia?.url && workshopMedia.alt && <img class="hero-image" src={new URL(workshopMedia.url, cmsUrl).href} alt={workshopMedia.alt} width={workshopMedia.width ?? 1200} height={workshopMedia.height ?? 800} />}
+    {workshopMedia?.url && workshopMedia.alt && <figure class="hero-figure">
+      <img class="hero-image" src={new URL(workshopMedia.url, cmsUrl).href} alt={workshopMedia.alt} width={workshopMedia.width ?? 1200} height={workshopMedia.height ?? 800} />
+      {credit && <figcaption>
+        {credit.source && <p>{m.demo_photo_notice({}, { locale })}</p>}
+        <p dir="auto">{credit.text}</p>
+        {credit.source && credit.license && <p lang="en" dir="ltr"><a href={credit.source}>Wikimedia Commons</a> · <a href={credit.license}>License</a></p>}
+      </figcaption>}
+    </figure>}
     <div class="content-grid">
       <div>
         {workshop.description && <p class="lede">{workshop.description}</p>}
@@ -55,3 +64,9 @@ const alternateLocales = await getWorkshopLocales(slug, preview ? suppliedSecret
     </div>
   </article>
 </BaseLayout>
+
+<style>
+  .hero-figure { margin: 0; }
+  figcaption { margin-block: -1rem 2rem; font-size: 0.875rem; overflow-wrap: anywhere; }
+  figcaption p { margin-block: 0.25rem; }
+</style>
