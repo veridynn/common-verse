@@ -10,6 +10,7 @@
   let hydrated = $state(false)
   let hash = $state('')
   const current = $derived(localeMetadata[currentLocale])
+  const triggerLabel = $derived(`${currentLocale.toUpperCase()} — ${label}: ${current.label}`)
   onMount(() => {
     hydrated = true
     const updateHash = () => { hash = window.location.hash }
@@ -44,7 +45,7 @@
 <div class="language-switcher">
   {#if hydrated}
     <Popover.Root>
-      <Popover.Trigger class="language-trigger" aria-label={`${label}: ${current.label}`}>
+      <Popover.Trigger class="language-trigger" aria-label={triggerLabel} title={`${label}: ${current.label}`}>
         {@render triggerContent()}
       </Popover.Trigger>
       <Popover.Content class="language-popover" align="end" sideOffset={8} dir={current.direction} aria-label={label}>
@@ -53,7 +54,7 @@
     </Popover.Root>
   {:else}
     <details class="language-fallback">
-      <summary class="language-trigger" aria-label={`${label}: ${current.label}`}>
+      <summary class="language-trigger" aria-label={triggerLabel} title={`${label}: ${current.label}`}>
         {@render triggerContent()}
       </summary>
       <div class="language-popover" dir={current.direction}>{@render languageLinks()}</div>

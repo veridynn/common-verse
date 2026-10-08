@@ -3,6 +3,7 @@ import { localizedPath, unlocalizedPath, type Locale } from '@poetry/i18n'
 import * as m from '../paraglide/messages.js'
 import LanguageSwitcher from './LanguageSwitcher.svelte'
 import ThemeSwitcher from './ThemeSwitcher.svelte'
+import BrandLogo from './BrandLogo.astro'
 import type { ThemePreference } from '../lib/theme'
 
 interface Props {
@@ -15,7 +16,7 @@ const messageOptions = { locale }
 ---
 
 <header class="site-header">
-  <a class="brand" href={localizedPath(locale)}><span class="brand-mark" aria-hidden="true">p<span>p</span></span><span>{m.site_title({}, messageOptions)}</span></a>
+  <a class="brand" href={localizedPath(locale)}><BrandLogo /><span class="sr-only">The Poetry Project{m.site_title({}, messageOptions) !== 'The Poetry Project' ? ` — ${m.site_title({}, messageOptions)}` : ''}</span></a>
   <nav aria-label={m.nav_primary({}, messageOptions)}>
     <a href={localizedPath(locale, 'workshops')}>{m.nav_workshops({}, messageOptions)}</a>
     <a href={localizedPath(locale, 'poems')}>{m.nav_poems({}, messageOptions)}</a>

@@ -1,6 +1,7 @@
 ---
 import { getLocaleMetadata, locales, localizedPath, type Locale } from '@poetry/i18n'
 import Header from '../components/Header.astro'
+import BrandLogo from '../components/BrandLogo.astro'
 import * as m from '../paraglide/messages.js'
 import '../styles/global.css'
 import { themePreference } from '../lib/theme'
@@ -45,6 +46,9 @@ const theme = themePreference(Astro.cookies.get('poetry-theme')?.value)
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
+    <link rel="icon" href="/brand/line-break/favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="icon" type="image/svg+xml" href="/brand/line-break/favicon.svg" />
+    <link rel="apple-touch-icon" href="/brand/line-break/icon-180.png" sizes="180x180" />
     <meta name="description" content={description} />
     <meta name="robots" content={noIndex || preview ? 'noindex,nofollow' : 'index,follow'} />
     <link rel="canonical" href={canonical} />
@@ -70,7 +74,7 @@ const theme = themePreference(Astro.cookies.get('poetry-theme')?.value)
     <Header {locale} themePreference={theme} />
     {preview && <p class="preview-banner" role="status">{m.preview_notice({}, { locale })}</p>}
     <main id="main" tabindex="-1" class={mainClass}><slot /></main>
-    <footer class="site-footer"><a class="brand" href={localizedPath(locale)}>{m.site_title({}, { locale })}</a>
+    <footer class="site-footer"><a class="brand" href={localizedPath(locale)}><BrandLogo /><span class="sr-only">The Poetry Project{m.site_title({}, { locale }) !== 'The Poetry Project' ? ` — ${m.site_title({}, { locale })}` : ''}</span></a>
       <nav aria-label={m.home_footer({}, { locale })}>
         <a href="https://thepoetryproject.de/kontakt">{m.home_contact({}, { locale })}</a>
         <a href="https://thepoetryproject.de/datenschutz">{m.home_privacy({}, { locale })}</a>

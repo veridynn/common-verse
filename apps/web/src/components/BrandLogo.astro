@@ -1,0 +1,46 @@
+<span class="brand-logo" aria-hidden="true"><span class="brand-logo-accent"></span></span>
+
+<style>
+  .brand-logo {
+    position: relative;
+    display: block;
+    inline-size: var(--brand-logo-size, 8rem);
+    aspect-ratio: 358 / 290;
+    flex-shrink: 0;
+    background: currentColor;
+    mask: url('/brand/line-break/logo-monochrome.svg') center / contain no-repeat;
+  }
+  .brand-logo-accent {
+    position: absolute;
+    /* Artwork coordinates stay fixed in both writing directions. */
+    left: calc(12 / 358 * 100%);
+    top: calc(120 / 290 * 100%);
+    width: calc(10 / 358 * 100%);
+    height: calc(48 / 290 * 100%);
+    background: var(--brand-logo-accent, var(--primary));
+  }
+  @supports (animation-timeline: scroll(root block)) and (animation-range: 0px 160px) {
+    @media (prefers-reduced-motion: no-preference) {
+      :global(.site-header) .brand-logo {
+        animation: compact-logo 1s linear both;
+        animation-timeline: var(--header-scroll-timeline);
+        animation-range: 0px 160px;
+      }
+    }
+  }
+  @keyframes compact-logo {
+    from {
+      inline-size: var(--brand-logo-size);
+    }
+    to {
+      inline-size: var(--brand-logo-compact-size);
+    }
+  }
+  @media (forced-colors: active) {
+    .brand-logo,
+    .brand-logo-accent {
+      background: LinkText;
+      forced-color-adjust: none;
+    }
+  }
+</style>
