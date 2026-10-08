@@ -12,7 +12,7 @@ CMS, database, commerce backend, or general-purpose UI library without a concret
 missing capability and an architecture review. Use Payload migrations rather than
 hand-written application tables.
 
-Astro owns public pages and locale-prefixed routes, layouts, metadata, server
+Astro owns public pages and locale URLs, layouts, metadata, server
 rendering, and Payload integration. Render useful HTML on the server. Reuse Svelte
 components directly from Astro, including noninteractive components; hydrate only
 components that need browser state or events. Avoid `client:only`, broad
@@ -43,6 +43,11 @@ Supported locales are `de`, `en`, `ar`, `fa`, `uk`, and `ku` (Kurmanji). Locale
 direction and labels live in `@poetry/i18n`; do not duplicate direction
 conditionals. Arabic and Persian are RTL; Kurmanji is LTR.
 
+German is the default language at `/`, with unprefixed content URLs. Other
+languages use their locale prefix. Legacy `/de` URLs redirect permanently to the
+unprefixed equivalent. Build links, canonicals, and preview URLs with
+`localizedPath`; the language picker preserves the content path, query, and anchor.
+
 Keep three translation domains separate:
 
 - UI messages: Paraglide message JSON in Git.
@@ -62,6 +67,10 @@ Use project-owned shadcn-svelte source first and Bits UI when a lower-level
 accessible primitive is needed. Keep tokens in `apps/web/src/styles/global.css`
 and build project components on top of them. Do not add another component
 framework. A component should not be hydrated merely because it uses Svelte.
+
+The primary colour is the old site's yellow, `#f1a60a`. Use semantic tokens for
+surfaces, text, controls, and status colours. Light, dark, and system preferences
+share the same tokens; see [design-tokens.md](design-tokens.md).
 
 Components must work in LTR and RTL, expose semantic HTML, retain visible focus,
 and respect reduced motion. Prefer logical CSS properties. Preserve native
