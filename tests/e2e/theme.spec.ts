@@ -202,17 +202,34 @@ test.describe("server-rendered Plum themes", () => {
           const backgroundLuminance = luminance(pageBackground);
           probe.style.color = "var(--primary)";
           const primary = rgb(getComputedStyle(probe).color);
+          probe.style.color = "var(--primary-base)";
+          const primaryBase = rgb(getComputedStyle(probe).color);
+          probe.style.color = "var(--primary-foreground)";
+          const primaryForeground = rgb(getComputedStyle(probe).color);
+          probe.style.color = "var(--black)";
+          const black = rgb(getComputedStyle(probe).color);
+          probe.style.color = "var(--header-background)";
+          const headerColor = getComputedStyle(probe).color;
+          const header = rgb(headerColor);
+          const headerAlpha = alpha(headerColor);
           probe.remove();
           return {
             pairs: results,
             backgroundLuminance,
             primary,
+            primaryBase,
+            primaryForeground,
+            black,
+            header,
+            headerAlpha,
             nested,
             cardAlpha,
             shadowAlpha,
           };
         });
         if (theme === "light") {
+          // Neutral header chrome leaves gold for primary actions and accents.
+          expect(Math.min(...results.header)).toBeGreaterThan(240);
           expect(results.backgroundLuminance).toBeGreaterThan(0.85);
           expect(results.cardAlpha).toBe(1);
           expect(results.shadowAlpha).toBeGreaterThan(0);
@@ -236,7 +253,10 @@ test.describe("server-rendered Plum themes", () => {
             ).toBeGreaterThanOrEqual(4.5);
           }
         }
-        expect(results.primary).toEqual([241, 166, 10]);
+        expect(results.primaryBase).toEqual([241, 166, 10]);
+        expect(results.primary).toEqual(results.primaryBase);
+        expect(results.primaryForeground).toEqual(results.black);
+        expect(results.headerAlpha).toBe(1);
         for (const result of results.pairs) {
           expect(result.ratio, result.pair).toBeGreaterThanOrEqual(
             result.minimum,

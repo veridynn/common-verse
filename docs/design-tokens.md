@@ -30,16 +30,21 @@ palette primitives; components should use semantic roles instead.
 
 ## Surfaces and elevation
 
-The light page mixes 97% white with 3% Plum. The dark page mixes 88% black with
-12% Plum. These percentages describe OKLCH interpolation weights, not alpha.
-Gold stays concentrated in actions, the light header, and meaningful highlights.
+Light cards, menus, and the header mix 97% white with 3% gold for a faint warm
+tint. The page mixes this neutral with 2% black, giving cards a quiet paper-like
+backdrop. The dark page mixes 88% black with 12% Plum.
+These percentages describe OKLCH interpolation weights, not alpha. Gold stays
+concentrated in primary actions and meaningful highlights. The header is opaque
+and warm near-white in light mode; dark mode uses an opaque composite of 5% pale tint
+over the dark page. Header hover states and general accent surfaces use pale
+Plum in light mode, leaving gold for elements that need attention.
 
-| Surface                  | Light                                 | Dark                                                 |
-| ------------------------ | ------------------------------------- | ---------------------------------------------------- |
-| Page                     | Opaque, almost white with a Plum tint | Opaque near-black with a Plum tint                   |
-| Card                     | Opaque white, small shadow            | Pale Plum-tinted background at 5% alpha              |
-| Secondary / raised state | Pale Plum surface                     | Same pale tint at 8% alpha                           |
-| Menu / popover           | Opaque white, floating shadow         | Opaque composite of 12% pale tint over the dark page |
+| Surface                  | Light                              | Dark                                                 |
+| ------------------------ | ---------------------------------- | ---------------------------------------------------- |
+| Page                     | Opaque paper neutral               | Opaque near-black with a Plum tint                   |
+| Card                     | Opaque warm white, small shadow    | Pale Plum-tinted background at 5% alpha              |
+| Secondary / raised state | Pale Plum surface                  | Same pale tint at 8% alpha                           |
+| Menu / popover           | Opaque warm white, floating shadow | Opaque composite of 12% pale tint over the dark page |
 
 Dark card backgrounds use alpha, not element opacity. Nested cards therefore
 accumulate light while text stays opaque. Text pairings are verified against up
@@ -70,6 +75,11 @@ page surface. Status text uses controlled lightness (42% light / 80% dark) and
 capped chroma, with subtle fills mixed into the active page background. A fixed
 OKLCH lightness difference does not guarantee a WCAG contrast ratio.
 
+Primary backgrounds retain the vibrant gold input with near-black labels.
+Primary text uses the same gold in both themes, with no outlines or halos.
+Its contrast on light surfaces is unresolved and intentionally deferred;
+existing contrast checks remain unchanged. The logo indent stays the original gold.
+
 Use semantic Tailwind utilities such as `bg-primary text-primary-foreground`,
 or semantic variables in project CSS. `destructive` aliases error. Compatibility
 aliases `paper`, `ink`, `soft`, and `white` map existing editorial layouts onto the
@@ -91,7 +101,7 @@ wrong-theme flash. Pickers use project-owned shadcn-svelte Popover / Bits UI.
 The system requires support for relative OKLCH, `color-mix()`, and `light-dark()`.
 After changing an input or formula, rerun theme browser tests: generated colours
 do not automatically guarantee contrast. Tests sample composited sRGB pixels,
-verify text at 4.5:1 and control/focus pairings at 3:1, check three nested alpha
+verify text pairings at 4.5:1 and control/focus pairings at 3:1, check three nested alpha
 card layers, and verify shade propagation from a changed HEX input. German and
 Arabic checks cover saved preferences, system changes, keyboard opening/focus
 return, 320px layouts, no-JavaScript rendering, and light/dark axe scans.

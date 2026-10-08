@@ -86,10 +86,7 @@ a:hover {
   padding-block: var(--header-padding-expanded);
   padding-inline: max(1.25rem, calc((100vw - 72rem) / 2));
   border-block-end: 1px solid var(--header-border);
-  /* Theme overlays need an opaque base while content scrolls underneath. */
-  background:
-    linear-gradient(var(--header-background), var(--header-background)),
-    var(--background);
+  background: var(--header-background);
   color: var(--header-foreground);
 }
 .site-header > nav {
@@ -115,7 +112,7 @@ a:hover {
   --brand-logo-size: 4rem;
   --brand-logo-compact-size: 3rem;
   min-block-size: 2.75rem;
-  --brand-logo-accent: light-dark(var(--header-foreground), var(--primary));
+  --brand-logo-accent: var(--primary-base);
 }
 .brand {
   display: inline-flex;
