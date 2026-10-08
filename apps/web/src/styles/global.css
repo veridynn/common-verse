@@ -123,6 +123,13 @@ a:hover {
   font-size: 1rem;
   font-weight: 700;
   text-decoration: none;
+  outline: none;
+  transition-property:
+    background-color, border-color, box-shadow, text-decoration-color,
+    text-decoration-thickness;
+}
+.brand:focus-visible {
+  box-shadow: 0 2px 0 currentColor;
 }
 nav {
   display: flex;
