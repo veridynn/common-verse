@@ -1,0 +1,26 @@
+---
+import type { MediaReference } from '@poetry/types'
+import { mediaObject } from '../lib/homepage'
+import { mediaCredit } from '../lib/media-credit'
+import * as m from '../paraglide/messages.js'
+import type { Locale } from '@poetry/i18n'
+interface Props { image?: MediaReference | number | string | null; locale: Locale; eager?: boolean }
+const { image, locale, eager = false } = Astro.props
+const media = mediaObject(image)
+const credit = mediaCredit(media?.credit)
+const url = media?.url ? new URL(media.url, import.meta.env.PUBLIC_CMS_URL ?? 'http://localhost:3001').href : null
+---
+{media && url && <figure class="editorial-image">
+  <img src={url} alt={media.alt} width={media.width ?? 1200} height={media.height ?? 800} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+  {credit && <figcaption>
+    {credit.source && <p>{m.demo_photo_notice({}, { locale })}</p>}
+    <span dir="auto">{credit.text}</span>
+    {credit.source && credit.license && <span lang="en" dir="ltr"> · <a href={credit.source}>Wikimedia Commons</a> · <a href={credit.license}>License</a></span>}
+  </figcaption>}
+</figure>}
+<style>
+  figure { margin: 0; min-width: 0; }
+  img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 0.75rem; }
+  figcaption { font-size: 0.8125rem; margin-block-start: 0.75rem; overflow-wrap: anywhere; }
+  figcaption p { margin-block: 0.25rem; }
+</style>
