@@ -96,11 +96,6 @@ test.describe("server-rendered Plum themes", () => {
           "dir",
           locale === "ar" ? "rtl" : "ltr",
         );
-        await expect(page.locator("body")).toHaveCSS(
-          "background-color",
-          theme === "light" ? "rgb(252, 248, 252)" : "rgb(33, 26, 36)",
-        );
-
         const results = await page.evaluate(() => {
           const pairs: [string, string, number][] = [
             ["foreground", "background", 4.5],
@@ -133,11 +128,29 @@ test.describe("server-rendered Plum themes", () => {
           }
           const probe = document.createElement("span");
           document.body.append(probe);
-          const luminance = (color: string) => {
-            const channels = color
-              .match(/[\d.]+/g)!
-              .slice(0, 3)
-              .map(Number);
+          // Computed colours may be RGB, OKLCH, or color(). Sample sRGB pixels
+          // rather than treating every serialisation as three RGB channels.
+          const canvas = document.createElement("canvas");
+          canvas.width = canvas.height = 1;
+          const ctx = canvas.getContext("2d", { colorSpace: "srgb" })!;
+          const pageBackground = getComputedStyle(
+            document.body,
+          ).backgroundColor;
+          const rgb = (color: string, layers = [pageBackground]) => {
+            if (!CSS.supports("color", color))
+              throw new Error(`Invalid colour: ${color}`);
+            ctx.clearRect(0, 0, 1, 1);
+            for (const layer of [...layers, color]) {
+              ctx.fillStyle = layer;
+              ctx.fillRect(0, 0, 1, 1);
+            }
+            const pixel = Array.from(ctx.getImageData(0, 0, 1, 1).data);
+            if (pixel[3] !== 255)
+              throw new Error(`Non-opaque colour: ${color}`);
+            return pixel.slice(0, 3);
+          };
+          const luminance = (color: string, layers?: string[]) => {
+            const channels = rgb(color, layers);
             const linear = channels.map((channel) => {
               const value = channel / 255;
               return value <= 0.04045
@@ -158,10 +171,73 @@ test.describe("server-rendered Plum themes", () => {
               minimum,
             };
           });
+          probe.style.backgroundColor = "var(--card)";
+          const card = getComputedStyle(probe).backgroundColor;
+          const nested = [1, 2, 3].map((depth) => {
+            const layers = [pageBackground, ...Array<string>(depth).fill(card)];
+            const b = luminance(card, layers.slice(0, -1));
+            return {
+              luminance: b,
+              pairs: ["foreground", "muted-foreground", "primary-text"].map(
+                (token) => {
+                  probe.style.color = `var(--${token})`;
+                  const a = luminance(getComputedStyle(probe).color, layers);
+                  return {
+                    token,
+                    ratio: (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05),
+                  };
+                },
+              ),
+            };
+          });
+          const alpha = (color: string) => {
+            ctx.clearRect(0, 0, 1, 1);
+            ctx.fillStyle = color;
+            ctx.fillRect(0, 0, 1, 1);
+            return ctx.getImageData(0, 0, 1, 1).data[3] / 255;
+          };
+          const cardAlpha = alpha(card);
+          probe.style.color = "var(--shadow-color)";
+          const shadowAlpha = alpha(getComputedStyle(probe).color);
+          const backgroundLuminance = luminance(pageBackground);
+          probe.style.color = "var(--primary)";
+          const primary = rgb(getComputedStyle(probe).color);
           probe.remove();
-          return results;
+          return {
+            pairs: results,
+            backgroundLuminance,
+            primary,
+            nested,
+            cardAlpha,
+            shadowAlpha,
+          };
         });
-        for (const result of results) {
+        if (theme === "light") {
+          expect(results.backgroundLuminance).toBeGreaterThan(0.85);
+          expect(results.cardAlpha).toBe(1);
+          expect(results.shadowAlpha).toBeGreaterThan(0);
+        } else {
+          expect(results.backgroundLuminance).toBeLessThan(0.03);
+          expect(results.cardAlpha).toBeGreaterThan(0);
+          expect(results.cardAlpha).toBeLessThan(0.1);
+          expect(results.shadowAlpha).toBe(0);
+          expect(results.nested[1].luminance).toBeGreaterThan(
+            results.nested[0].luminance,
+          );
+          expect(results.nested[2].luminance).toBeGreaterThan(
+            results.nested[1].luminance,
+          );
+        }
+        for (const [depth, surface] of results.nested.entries()) {
+          for (const pair of surface.pairs) {
+            expect(
+              pair.ratio,
+              `${pair.token} on nested card ${depth + 1}`,
+            ).toBeGreaterThanOrEqual(4.5);
+          }
+        }
+        expect(results.primary).toEqual([241, 166, 10]);
+        for (const result of results.pairs) {
           expect(result.ratio, result.pair).toBeGreaterThanOrEqual(
             result.minimum,
           );
@@ -171,6 +247,25 @@ test.describe("server-rendered Plum themes", () => {
         await page.screenshot({
           path: `/tmp/poetry-plum-${locale}-${theme}.png`,
           fullPage: true,
+        });
+        const ramp = await page.evaluate(() => {
+          const root = document.documentElement;
+          const probe = document.createElement("span");
+          document.body.append(probe);
+          const colours = () =>
+            [50, 100, 200, 300, 400, 500, 600, 700, 800, 900].map((shade) => {
+              probe.style.color = `var(--plum-${shade})`;
+              return getComputedStyle(probe).color;
+            });
+          const before = colours();
+          root.style.setProperty("--plum", "#37684a");
+          const after = colours();
+          root.style.removeProperty("--plum");
+          probe.remove();
+          return { before, after };
+        });
+        ramp.before.forEach((colour, index) => {
+          expect(ramp.after[index]).not.toBe(colour);
         });
       });
     }

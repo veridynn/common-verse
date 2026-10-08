@@ -64,7 +64,7 @@ language and direction.
 ## UI and accessibility
 
 Use project-owned shadcn-svelte source first and Bits UI when a lower-level
-accessible primitive is needed. Keep tokens in `apps/web/src/styles/global.css`
+accessible primitive is needed. Keep tokens in `apps/web/src/styles/token.css`, imported by `global.css`,
 and build project components on top of them. Do not add another component
 framework. A component should not be hydrated merely because it uses Svelte.
 

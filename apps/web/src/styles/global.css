@@ -1,144 +1,11 @@
 @import "tailwindcss";
-
-@theme inline {
-  --color-brand-50: var(--brand-50);
-  --color-brand-100: var(--brand-100);
-  --color-brand-200: var(--brand-200);
-  --color-brand-300: var(--brand-300);
-  --color-brand-400: var(--brand-400);
-  --color-brand-500: var(--brand-500);
-  --color-brand-600: var(--brand-600);
-  --color-brand-700: var(--brand-700);
-  --color-brand-800: var(--brand-800);
-  --color-brand-900: var(--brand-900);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary-hover: var(--primary-hover);
-  --color-primary-text: var(--primary-text);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-success: var(--success);
-  --color-success-foreground: var(--success-foreground);
-  --color-success-subtle: var(--success-subtle);
-  --color-warning: var(--warning);
-  --color-warning-foreground: var(--warning-foreground);
-  --color-warning-subtle: var(--warning-subtle);
-  --color-error: var(--error);
-  --color-error-foreground: var(--error-foreground);
-  --color-error-subtle: var(--error-subtle);
-  --color-destructive: var(--error);
-  --color-destructive-foreground: var(--error-foreground);
-  --color-info: var(--info);
-  --color-info-foreground: var(--info-foreground);
-  --color-info-subtle: var(--info-subtle);
-  /* Compatibility aliases for existing editorial layouts. */
-  --color-paper: var(--background);
-  --color-ink: var(--foreground);
-  --color-soft: var(--border);
-  --color-white: var(--card);
-  --font-sans: "Avenir Next", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: Georgia, "Times New Roman", serif;
-  --radius-sm: calc(var(--radius) * 0.5);
-  --radius-md: calc(var(--radius) * 0.75);
-  --radius-lg: var(--radius);
-}
+@import "./token.css";
 
 :root {
-  /* The old website's --bs-primary was #f1a60a. */
-  --brand-50: #fff9eb;
-  --brand-100: #fff0cb;
-  --brand-200: #ffe199;
-  --brand-300: #ffd065;
-  --brand-400: #fabd31;
-  --brand-500: #f1a60a;
-  --brand-600: #cb8005;
-  --brand-700: #9f5c0c;
-  --brand-800: #804811;
-  --brand-900: #6a3b11;
-  /* Palette primitives stay here; components consume semantic roles below. */
-  --plum-50: #fcf8fc;
-  --plum-100: #f0e7f3;
-  --plum-200: #ded2e2;
-  --plum-300: #c5b5c6;
-  --plum-400: #9e8aa6;
-  --plum-500: #736377;
-  --plum-600: #57465e;
-  --plum-700: #413348;
-  --plum-800: #302735;
-  --plum-900: #211a24;
-  --reading-white: #f8f0e7;
-  --amber-surface: #483524;
-
-  /* light-dark() follows color-scheme for both explicit and system choices. */
-  --background: light-dark(var(--plum-50), var(--plum-900));
-  --foreground: light-dark(var(--plum-800), var(--reading-white));
-  --card: light-dark(#ffffff, var(--plum-800));
-  --card-foreground: var(--foreground);
-  --popover: var(--card);
-  --popover-foreground: var(--foreground);
-  --primary: var(--brand-500);
-  --primary-foreground: var(--plum-800);
-  --primary-hover: var(--brand-400);
-  --primary-text: light-dark(var(--brand-800), var(--brand-300));
-  --secondary: light-dark(var(--plum-100), var(--plum-700));
-  --secondary-foreground: var(--foreground);
-  --muted: var(--secondary);
-  --muted-foreground: light-dark(var(--plum-500), var(--plum-300));
-  --accent: light-dark(var(--plum-100), var(--amber-surface));
-  --accent-foreground: var(--foreground);
-  /* Decorative dividers are quieter than interactive control boundaries. */
-  --border: light-dark(var(--plum-200), var(--plum-600));
-  --input: light-dark(var(--plum-500), var(--plum-400));
-  --ring: var(--foreground);
-  --success: light-dark(#176848, #8ad3aa);
-  --success-foreground: light-dark(#ffffff, #10291c);
-  --success-subtle: light-dark(#e7f4ec, #183629);
-  --warning: light-dark(#8a4b00, #ffd065);
-  --warning-foreground: light-dark(#ffffff, #342309);
-  --warning-subtle: light-dark(#fff0cb, #3e321b);
-  --error: light-dark(#b42318, #ffaaa0);
-  --error-foreground: light-dark(#ffffff, #421a16);
-  --error-subtle: light-dark(#fff0ed, #40201d);
-  --info: light-dark(#215f93, #9ecdf2);
-  --info-foreground: light-dark(#ffffff, #122a3c);
-  --info-subtle: light-dark(#eaf3fb, #1b3243);
-  --header-background: light-dark(var(--primary), var(--card));
-  --header-foreground: var(--foreground);
-  --header-border: light-dark(var(--brand-800), var(--border));
-  --header-control-background: light-dark(var(--brand-100), var(--secondary));
-  --header-control-hover: light-dark(var(--brand-50), var(--accent));
-  --header-control-border: var(--input);
-  --brand-mark-color: light-dark(var(--plum-800), var(--primary));
-  --newsletter-background: light-dark(var(--plum-900), var(--card));
-  --newsletter-foreground: var(--reading-white);
-  --radius: 1rem;
-  --shadow-card: 0 12px 40px light-dark(rgb(33 26 36 / 6%), rgb(0 0 0 / 16%));
-  --space-section: clamp(2.5rem, 6vw, 5rem);
-  --space-gutter: clamp(1rem, 4vw, 1.5rem);
-  color-scheme: light dark;
-  background: var(--color-paper);
-  color: var(--color-ink);
+  background: var(--background);
+  color: var(--foreground);
   font-family: var(--font-sans);
   line-height: 1.6;
-}
-:root[data-theme="light"] {
-  color-scheme: light;
-}
-:root[data-theme="dark"] {
-  color-scheme: dark;
 }
 
 * {
@@ -336,7 +203,7 @@ nav {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 0.6rem;
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-floating);
   z-index: 10;
 }
 .theme-trigger {
@@ -850,4 +717,17 @@ footer {
   .poet-grid {
     grid-template-columns: 1fr;
   }
+}
+
+.meta-card,
+.featured-event,
+.section-introduction,
+.participation-grid > li {
+  box-shadow: var(--shadow-card);
+}
+.section-newsletter {
+  box-shadow: var(--shadow-raised);
+}
+[data-popover-content] {
+  box-shadow: var(--shadow-floating);
 }

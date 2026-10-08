@@ -1,71 +1,98 @@
 # Colour and appearance
 
-Tokens live in `apps/web/src/styles/global.css`. The primary yellow is **#F1A60A**,
-the old website's `--bs-primary`. The `brand-50` to `brand-900` ramp supplies
-lighter surfaces and deeper shades. Yellow actions use dark text; small yellow
-text uses the darker `primary-text` token for contrast in light mode.
+Theme tokens live in `apps/web/src/styles/token.css`, imported by the global CSS
+entry point configured in `apps/web/components.json`. Layout and component rules
+stay in `global.css`. The token file owns Tailwind mappings, colour generation,
+geometry tokens, shadows, and `color-scheme` selection.
 
-The palette is Plum in both appearances. Palette primitives (`plum-50` through
-`plum-900`, `reading-white`, and `amber-surface`) are private inputs to semantic
-tokens, not component utilities. Each semantic token defines its light and dark
-values together with `light-dark()`, keeping the two appearances in one place.
+## Editable inputs
 
-| Role              | Light   | Dark    |
-| ----------------- | ------- | ------- |
-| Background        | #FCF8FC | #211A24 |
-| Card / popover    | #FFFFFF | #302735 |
-| Main text         | #302735 | #F8F0E7 |
-| Secondary surface | #F0E7F3 | #413348 |
-| Secondary text    | #736377 | #C5B5C6 |
-| Hover / selection | #F0E7F3 | #483524 |
-| Decorative border | #DED2E2 | #57465E |
-| Control boundary  | #736377 | #9E8AA6 |
-| Primary action    | #F1A60A | #F1A60A |
-| Text on primary   | #302735 | #302735 |
-| Primary hover     | #FABD31 | #FABD31 |
-| Highlighted text  | #804811 | #FFD065 |
+Only these HEX inputs define the palette:
 
-The light header retains the brand yellow; its dark counterpart uses the card
-surface. Header controls and their hover/border states have semantic tokens too.
-The newsletter uses deep Plum in light mode and the card surface in dark mode,
-with ivory text in both. Status colours keep their distinct meanings rather than
-being recoloured purple.
+| Input   | Value   | Purpose                           |
+| ------- | ------- | --------------------------------- |
+| `black` | #101012 | Near-black anchor                 |
+| `white` | #FDFDFC | Near-white anchor                 |
+| `gold`  | #F1A60A | Original site brand yellow        |
+| `plum`  | #736377 | Secondary colour and neutral tint |
+| `green` | #176848 | Success                           |
+| `red`   | #B42318 | Error                             |
+| `blue`  | #215F93 | Information                       |
 
-Use semantic tokens in components instead of choosing brand shades directly:
+`primary-base`, `secondary-base`, `success-base`, `error-base`, and `info-base`
+convert the corresponding HEX input automatically with `oklch(from … l c h)`.
+Warning derives from gold. There is no conversion script or separate numeric
+OKLCH value to maintain.
+
+The `brand-50`–`brand-900` and `plum-50`–`plum-900` ramps mix each base towards
+white or black in OKLCH. The 500 step retains the exact input. These ramps are
+palette primitives; components should use semantic roles instead.
+
+## Surfaces and elevation
+
+The light page mixes 97% white with 3% Plum. The dark page mixes 88% black with
+12% Plum. These percentages describe OKLCH interpolation weights, not alpha.
+Gold stays concentrated in actions, the light header, and meaningful highlights.
+
+| Surface                  | Light                                 | Dark                                                 |
+| ------------------------ | ------------------------------------- | ---------------------------------------------------- |
+| Page                     | Opaque, almost white with a Plum tint | Opaque near-black with a Plum tint                   |
+| Card                     | Opaque white, small shadow            | Pale Plum-tinted background at 5% alpha              |
+| Secondary / raised state | Pale Plum surface                     | Same pale tint at 8% alpha                           |
+| Menu / popover           | Opaque white, floating shadow         | Opaque composite of 12% pale tint over the dark page |
+
+Dark card backgrounds use alpha, not element opacity. Nested cards therefore
+accumulate light while text stays opaque. Text pairings are verified against up
+to three nested card layers; arbitrary nesting or placing these overlays on
+photographs requires its own checks. Floating menus use an opaque composite
+because portalled content cannot rely on a parent surface, and underlying text
+must not bleed through. The opaque menu mix uses sRGB to match alpha compositing.
+
+Light hierarchy uses three shadow tokens: `shadow-card` (2px offset / 6px blur),
+`shadow-raised` (6px / 20px), and `shadow-floating` (12px / 36px). All use the black
+anchor at 8% alpha in light mode and a transparent shadow colour in dark mode.
+Card shadows apply consistently to editorial, event, and participation panels.
+
+## Semantic roles
 
 | Role                 | Tokens                                                                       |
 | -------------------- | ---------------------------------------------------------------------------- |
 | Page and text        | `background`, `foreground`                                                   |
-| Cards and popovers   | `card`, `card-foreground`, `popover`, `popover-foreground`                   |
-| Main action          | `primary`, `primary-foreground`, `primary-hover`                             |
+| Cards and menus      | `card`, `card-foreground`, `popover`, `popover-foreground`                   |
+| Main action          | `primary`, `primary-foreground`, `primary-hover`, `primary-text`             |
 | Supporting surfaces  | `secondary`, `muted`, `accent`, each with `-foreground`                      |
 | Boundaries and focus | `border`, `input`, `ring`                                                    |
-| Status               | `success`, `warning`, `error`, `info`, each with `-foreground` and `-subtle` |
+| Feedback             | `success`, `warning`, `error`, `info`, each with `-foreground` and `-subtle` |
 
-Tailwind exposes these as utilities such as `bg-primary text-primary-foreground`
-and `bg-error-subtle text-error`. `destructive` aliases the error palette.
-Do not communicate status through colour alone; add clear text or an icon with a
-text label. Compatibility aliases `paper`, `ink`, `soft`, and `white` keep the
-existing editorial pages on the same theme.
+Text derives from the neutral anchors: main light text mixes black with 8% Plum,
+and main dark text mixes white with 4% gold. Secondary text mixes towards the
+page surface. Status text uses controlled lightness (42% light / 80% dark) and
+capped chroma, with subtle fills mixed into the active page background. A fixed
+OKLCH lightness difference does not guarantee a WCAG contrast ratio.
 
-Use `border` for decorative dividers and `input` for visible control boundaries.
-Use `ring` for keyboard focus. Keep literal colours and palette primitives out of
-components; use semantic Tailwind utilities or `var(--token)` in project CSS.
-When adding a surface, choose its foreground pairing and cover its interactive
-states. The browser theme tests check rendered text pairings at 4.5:1 and control
-boundaries/focus at 3:1 in both themes, alongside axe checks and locale behaviour.
+Use semantic Tailwind utilities such as `bg-primary text-primary-foreground`,
+or semantic variables in project CSS. `destructive` aliases error. Compatibility
+aliases `paper`, `ink`, `soft`, and `white` map existing editorial layouts onto the
+same system. The Tailwind `white` compatibility alias represents the card surface;
+the raw `--white` input represents the neutral anchor.
 
-The appearance picker offers Light, Dark, and System. System is the default and
-follows the device preference, including when JavaScript is disabled. CSS
-`light-dark()` values adapt through `color-scheme`. Explicit choices are saved in
-a first-party `poetry-theme` cookie for one year and applied during server rendering
-to avoid a light flash on dark pages. The cookie contains only the appearance
-preference and is shared across locale routes.
+Use `border` for decorative dividers and `input` for control boundaries. Use
+`ring` for keyboard focus. Do not communicate status through colour alone; add
+clear text or an icon with a label. Keep literal colours out of components.
 
-Pickers use project-owned shadcn-svelte Popover components backed by Bits UI.
-The language picker also renders a native details fallback without JavaScript.
-These primitives and CSS tokens can be replaced independently of CMS content.
+## Preferences and verification
 
-Browser verification covers keyboard opening and focus return, theme persistence,
-system changes, language navigation, 320px layouts, and axe checks in German and
-Arabic. These checks cover the implemented prototype, not a complete WCAG audit.
+Light, Dark, and System use the same semantic tokens through `light-dark()` and
+`color-scheme`. System follows the device preference even without JavaScript.
+Explicit choices are saved in the first-party `poetry-theme` cookie for one year,
+shared across locale routes and applied during server rendering to prevent a
+wrong-theme flash. Pickers use project-owned shadcn-svelte Popover / Bits UI.
+
+The system requires support for relative OKLCH, `color-mix()`, and `light-dark()`.
+After changing an input or formula, rerun theme browser tests: generated colours
+do not automatically guarantee contrast. Tests sample composited sRGB pixels,
+verify text at 4.5:1 and control/focus pairings at 3:1, check three nested alpha
+card layers, and verify shade propagation from a changed HEX input. German and
+Arabic checks cover saved preferences, system changes, keyboard opening/focus
+return, 320px layouts, no-JavaScript rendering, and light/dark axe scans.
+These checks cover the prototype, not a complete WCAG conformance audit.

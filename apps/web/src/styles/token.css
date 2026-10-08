@@ -1,0 +1,214 @@
+@theme inline {
+  --color-brand-50: var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-200: var(--brand-200);
+  --color-brand-300: var(--brand-300);
+  --color-brand-400: var(--brand-400);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+  --color-brand-800: var(--brand-800);
+  --color-brand-900: var(--brand-900);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-text: var(--primary-text);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-success-subtle: var(--success-subtle);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning-subtle: var(--warning-subtle);
+  --color-error: var(--error);
+  --color-error-foreground: var(--error-foreground);
+  --color-error-subtle: var(--error-subtle);
+  --color-destructive: var(--error);
+  --color-destructive-foreground: var(--error-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-info-subtle: var(--info-subtle);
+  /* Compatibility aliases for existing editorial layouts. */
+  --color-paper: var(--background);
+  --color-ink: var(--foreground);
+  --color-soft: var(--border);
+  --color-white: var(--card);
+  --font-sans: "Avenir Next", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: Georgia, "Times New Roman", serif;
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
+  --radius-lg: var(--radius);
+}
+
+/* Edit these HEX inputs; all theme colours derive from them. */
+:root {
+  --black: #101012;
+  --white: #fdfdfc;
+  --gold: #f1a60a;
+  --plum: #736377;
+  --green: #176848;
+  --red: #b42318;
+  --blue: #215f93;
+
+  --primary-base: oklch(from var(--gold) l c h);
+  --secondary-base: oklch(from var(--plum) l c h);
+  --success-base: oklch(from var(--green) l c h);
+  --error-base: oklch(from var(--red) l c h);
+  --info-base: oklch(from var(--blue) l c h);
+  --brand-50: color-mix(in oklch, var(--primary-base) 4%, var(--white));
+  --brand-100: color-mix(in oklch, var(--primary-base) 12%, var(--white));
+  --brand-200: color-mix(in oklch, var(--primary-base) 25%, var(--white));
+  --brand-300: color-mix(in oklch, var(--primary-base) 45%, var(--white));
+  --brand-400: color-mix(in oklch, var(--primary-base) 72%, var(--white));
+  --brand-500: var(--primary-base);
+  --brand-600: color-mix(in oklch, var(--primary-base) 82%, var(--black));
+  --brand-700: color-mix(in oklch, var(--primary-base) 65%, var(--black));
+  --brand-800: color-mix(in oklch, var(--primary-base) 48%, var(--black));
+  --brand-900: color-mix(in oklch, var(--primary-base) 30%, var(--black));
+  --plum-50: color-mix(in oklch, var(--secondary-base) 4%, var(--white));
+  --plum-100: color-mix(in oklch, var(--secondary-base) 12%, var(--white));
+  --plum-200: color-mix(in oklch, var(--secondary-base) 25%, var(--white));
+  --plum-300: color-mix(in oklch, var(--secondary-base) 45%, var(--white));
+  --plum-400: color-mix(in oklch, var(--secondary-base) 72%, var(--white));
+  --plum-500: var(--secondary-base);
+  --plum-600: color-mix(in oklch, var(--secondary-base) 82%, var(--black));
+  --plum-700: color-mix(in oklch, var(--secondary-base) 65%, var(--black));
+  --plum-800: color-mix(in oklch, var(--secondary-base) 48%, var(--black));
+  --plum-900: color-mix(in oklch, var(--secondary-base) 30%, var(--black));
+
+  /* Neutral anchors carry only a small Plum tint. */
+  --background-light: color-mix(
+    in oklch,
+    var(--white) 97%,
+    var(--secondary-base)
+  );
+  --background-dark: color-mix(
+    in oklch,
+    var(--black) 88%,
+    var(--secondary-base)
+  );
+  --surface-light: var(--white);
+  --surface-tint: color-mix(in oklch, var(--white) 97%, var(--secondary-base));
+  /* Background alpha, never element opacity: nested cards accumulate light. */
+  --surface-overlay: oklch(from var(--surface-tint) l c h / 5%);
+  --surface-raised-overlay: oklch(from var(--surface-tint) l c h / 8%);
+  /* Portalled menus get an opaque composite so content behind cannot interfere. */
+  --surface-floating-dark: color-mix(
+    in srgb,
+    var(--background-dark) 88%,
+    var(--surface-tint)
+  );
+  --background: light-dark(var(--background-light), var(--background-dark));
+  --foreground: light-dark(
+    color-mix(in oklch, var(--black) 92%, var(--secondary-base)),
+    color-mix(in oklch, var(--white) 96%, var(--primary-base))
+  );
+  --card: light-dark(var(--surface-light), var(--surface-overlay));
+  --card-foreground: var(--foreground);
+  --popover: light-dark(var(--surface-light), var(--surface-floating-dark));
+  --popover-foreground: var(--foreground);
+  --primary: var(--primary-base);
+  --primary-foreground: var(--black);
+  --primary-hover: color-mix(in oklch, var(--primary-base) 88%, var(--white));
+  --primary-text: light-dark(
+    oklch(from var(--primary-base) 42% min(c, 0.1) h),
+    color-mix(in oklch, var(--primary-base) 75%, var(--white))
+  );
+  --secondary: light-dark(var(--plum-100), var(--surface-raised-overlay));
+  --secondary-foreground: var(--foreground);
+  --muted: var(--secondary);
+  --muted-foreground: light-dark(
+    color-mix(in oklch, var(--black) 67%, var(--background-light)),
+    color-mix(in oklch, var(--white) 78%, var(--background-dark))
+  );
+  --accent: light-dark(
+    color-mix(in oklch, var(--primary-base) 12%, var(--surface-light)),
+    oklch(from var(--primary-base) l c h / 12%)
+  );
+  --accent-foreground: var(--foreground);
+  --border: light-dark(
+    color-mix(in oklch, var(--black) 18%, var(--background-light)),
+    oklch(from var(--white) l c h / 18%)
+  );
+  --input: light-dark(
+    color-mix(in oklch, var(--black) 60%, var(--white)),
+    color-mix(in oklch, var(--white) 65%, var(--black))
+  );
+  --ring: var(--foreground);
+  --success: light-dark(
+    oklch(from var(--success-base) 42% min(c, 0.12) h),
+    oklch(from var(--success-base) 80% min(c, 0.12) h)
+  );
+  --success-foreground: light-dark(var(--white), var(--black));
+  --success-subtle: color-mix(in oklch, var(--success) 12%, var(--background));
+  --error: light-dark(
+    oklch(from var(--error-base) 42% min(c, 0.12) h),
+    oklch(from var(--error-base) 80% min(c, 0.12) h)
+  );
+  --error-foreground: light-dark(var(--white), var(--black));
+  --error-subtle: color-mix(in oklch, var(--error) 12%, var(--background));
+  --info: light-dark(
+    oklch(from var(--info-base) 42% min(c, 0.12) h),
+    oklch(from var(--info-base) 80% min(c, 0.12) h)
+  );
+  --info-foreground: light-dark(var(--white), var(--black));
+  --info-subtle: color-mix(in oklch, var(--info) 12%, var(--background));
+  --warning: light-dark(
+    oklch(from var(--primary-base) 42% min(c, 0.12) h),
+    oklch(from var(--primary-base) 80% min(c, 0.12) h)
+  );
+  --warning-foreground: light-dark(var(--white), var(--black));
+  --warning-subtle: color-mix(in oklch, var(--warning) 12%, var(--background));
+
+  --header-background: light-dark(var(--primary), var(--surface-overlay));
+  --header-foreground: var(--foreground);
+  --header-border: var(--border);
+  --header-control-background: light-dark(
+    var(--brand-100),
+    var(--surface-overlay)
+  );
+  --header-control-hover: light-dark(
+    var(--brand-50),
+    var(--surface-raised-overlay)
+  );
+  --header-control-border: var(--input);
+  --brand-mark-color: light-dark(var(--black), var(--primary));
+  --newsletter-background: light-dark(
+    var(--background-dark),
+    var(--surface-overlay)
+  );
+  --newsletter-foreground: color-mix(
+    in oklch,
+    var(--white) 96%,
+    var(--primary-base)
+  );
+
+  --radius: 1rem;
+  --space-section: clamp(2.5rem, 6vw, 5rem);
+  --space-gutter: clamp(1rem, 4vw, 1.5rem);
+  --shadow-color: light-dark(oklch(from var(--black) l c h / 8%), transparent);
+  --shadow-card: 0 2px 6px var(--shadow-color);
+  --shadow-raised: 0 6px 20px var(--shadow-color);
+  --shadow-floating: 0 12px 36px var(--shadow-color);
+  color-scheme: light dark;
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
