@@ -1,0 +1,21 @@
+---
+import { isLocale, localizedPath } from '@poetry/i18n'
+import { getAuthors } from '../../../lib/cms'
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+import EditorialImage from '../../../components/EditorialImage.astro'
+import * as m from '../../../paraglide/messages.js'
+const { locale: rawLocale } = Astro.params
+if (!isLocale(rawLocale)) return new Response('Not found', { status: 404 })
+const locale = rawLocale
+const authors = await getAuthors(locale)
+const title = m.home_poets_heading({}, { locale })
+---
+<BaseLayout {locale} {title} canonicalPath="poets">
+  <h1>{title}</h1>
+  <p class="lede">{m.home_poets_description({}, { locale })}</p>
+  <ul class="poet-grid">{authors.map((author) => <li><article>
+    <EditorialImage image={author.portrait} {locale} />
+    <h2><a href={localizedPath(locale, `poets/${author.id}`)}>{author.name}</a></h2>
+  </article></li>)}</ul>
+</BaseLayout>
+<style>h2 { font-size: 1.5rem; line-height: 1.4; } .poet-grid { margin-block: 3rem; }</style>

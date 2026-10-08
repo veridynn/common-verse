@@ -1,0 +1,53 @@
+---
+import { localizedPath, type Locale } from '@poetry/i18n'
+import type { Homepage } from '@poetry/types'
+import { Button } from '$lib/components/ui/button'
+import { contentDirection, poemExcerpt, safeHref } from '../lib/homepage'
+import EditorialImage from './EditorialImage.astro'
+import * as m from '../paraglide/messages.js'
+interface Props { feature?: Homepage['feature']; locale: Locale; preview?: boolean; hasUpcoming?: boolean }
+const { feature, locale, preview = false, hasUpcoming = true } = Astro.props
+const poem = feature?.kind === 'poem' && typeof feature.poem === 'object' && (preview || feature.poem?._status !== 'draft') ? feature.poem : null
+const event = feature?.kind === 'event' && typeof feature.event === 'object' && (preview || feature.event?._status !== 'draft') && feature.event?.title ? feature.event : null
+const announcement = feature?.kind === 'announcement' && feature.announcement?.title ? feature.announcement : null
+const excerpt = poem ? poemExcerpt(poem, locale) : null
+const author = poem && typeof poem.author === 'object' ? poem.author : null
+const o = { locale }
+---
+<section class:list={['home-feature', { 'has-feature': poem || event || announcement }]} aria-labelledby="home-heading">
+  <div class="home-feature-intro">
+    <p class="feature-note">{m.home_welcome({}, o)}</p>
+    <h1 id="home-heading">{feature?.heading || m.home_heading({}, o)}</h1>
+    <p class="lede">{feature?.description || m.home_intro({}, o)}</p>
+    <Button href={localizedPath(locale, 'poems')}>{m.home_explore({}, o)}</Button>
+    <a class="secondary-link" href={hasUpcoming ? '#upcoming' : localizedPath(locale, 'workshops')}>{m.home_events_link({}, o)}</a>
+  </div>
+  {poem && excerpt && <article class="featured-poem" aria-label={m.home_featured_poem({}, o)}>
+    <p class="feature-note">{m.home_featured_poem({}, o)}</p>
+    <div lang={poem.originalLanguage === 'other' ? 'und' : poem.originalLanguage} dir={contentDirection(poem.originalLanguage)}>
+      <h2>{poem.title}</h2>
+      <blockquote>{excerpt.original}</blockquote>
+    </div>
+    {excerpt.translation && poem.originalLanguage !== locale && <div class="feature-translation" lang={locale} dir={contentDirection(locale)}>
+      <h3>{excerpt.translation.title}</h3>
+      <p class="verse">{excerpt.translation.text.split('\n').slice(0, 5).join('\n')}</p>
+      {excerpt.translation.translator && <p class="translation-credit">{m.translated_by({ name: excerpt.translation.translator }, o)}</p>}
+    </div>}
+    {author && <p class="feature-author">{author.name}</p>}
+    <a class="feature-read" href={localizedPath(locale, `poems/${poem.slug}`)}>{m.home_read_poem({}, o)}</a>
+  </article>}
+  {event && <article class="featured-event">
+    <EditorialImage image={event.image} {locale} eager />
+    <p class="feature-note">{event.kind === 'event' ? m.home_event({}, o) : m.workshop_label({}, o)}</p>
+    <h2>{event.title}</h2>
+    <p><time datetime={event.startDate}>{new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeStyle: 'short', timeZone: 'Europe/Berlin' }).format(new Date(event.startDate))}</time></p>
+    {event.location && <p>{event.location}</p>}
+    <a href={localizedPath(locale, `workshops/${event.slug}`)}>{m.home_event_details({}, o)}</a>
+  </article>}
+  {announcement && <article class="featured-event">
+    <EditorialImage image={announcement.image} {locale} eager />
+    <h2>{announcement.title}</h2>
+    {announcement.text && <p>{announcement.text}</p>}
+    {announcement.linkLabel && safeHref(announcement.linkUrl, locale) && <a href={safeHref(announcement.linkUrl, locale)}>{announcement.linkLabel}</a>}
+  </article>}
+</section>

@@ -1,0 +1,23 @@
+---
+import { isLocale, localizedPath } from '@poetry/i18n'
+import { getAuthor, getAuthorPoems } from '../../../lib/cms'
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+import EditorialImage from '../../../components/EditorialImage.astro'
+import * as m from '../../../paraglide/messages.js'
+const { locale: rawLocale, id } = Astro.params
+if (!isLocale(rawLocale) || !id) return new Response('Not found', { status: 404 })
+const locale = rawLocale
+const [author, poems] = await Promise.all([getAuthor(id, locale), getAuthorPoems(id, locale)])
+if (!author) return new Response('Not found', { status: 404 })
+---
+<BaseLayout {locale} title={author.name} canonicalPath={`poets/${id}`}>
+  <article>
+    <h1>{author.name}</h1>
+    <EditorialImage image={author.portrait} {locale} />
+    {author.biography && <p class="lede">{author.biography}</p>}
+    <h2>{m.nav_poems({}, { locale })}</h2>
+    <ul class="content-list">{poems.map((poem) => <li><article>
+      <h3><a href={localizedPath(locale, `poems/${poem.slug}`)}>{poem.title}</a></h3>
+    </article></li>)}</ul>
+  </article>
+</BaseLayout>

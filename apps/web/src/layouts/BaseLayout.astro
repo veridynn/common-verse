@@ -15,6 +15,7 @@ interface Props {
   contentType?: 'website' | 'article'
   structuredData?: Record<string, unknown>
   alternateLocales?: readonly Locale[]
+  mainClass?: string
 }
 
 const {
@@ -28,6 +29,7 @@ const {
   contentType = 'website',
   structuredData,
   alternateLocales = locales,
+  mainClass,
 } = Astro.props
 const { direction } = getLocaleMetadata(locale)
 const siteUrl = import.meta.env.PUBLIC_SITE_URL ?? 'http://localhost:4321'
@@ -65,7 +67,14 @@ const xDefaultLocale = alternateLocales.includes('de') ? 'de' : (alternateLocale
     <a class="skip-link" href="#main">{m.skip_to_content({}, { locale })}</a>
     <Header {locale} />
     {preview && <p class="preview-banner" role="status">{m.preview_notice({}, { locale })}</p>}
-    <main id="main" tabindex="-1"><slot /></main>
-    <footer><p>© {new Date().getFullYear()} {m.site_title({}, { locale })}</p></footer>
+    <main id="main" tabindex="-1" class={mainClass}><slot /></main>
+    <footer class="site-footer"><a class="brand" href={localizedPath(locale)}>{m.site_title({}, { locale })}</a>
+      <nav aria-label={m.home_footer({}, { locale })}>
+        <a href="https://thepoetryproject.de/kontakt">{m.home_contact({}, { locale })}</a>
+        <a href="https://thepoetryproject.de/datenschutz">{m.home_privacy({}, { locale })}</a>
+        <a href="https://thepoetryproject.de/impressum">{m.home_legal({}, { locale })}</a>
+      </nav>
+      <p>© {new Date().getFullYear()} The Poetry Project e.V.</p>
+    </footer>
   </body>
 </html>

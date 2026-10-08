@@ -1,17 +1,72 @@
 ---
+import { getSecret } from 'astro:env/server'
 import { isLocale } from '@poetry/i18n'
 import BaseLayout from '../../layouts/BaseLayout.astro'
+import HomeFeature from '../../components/HomeFeature.astro'
+import HomeSections from '../../components/HomeSections.astro'
+import { getAuthors, getAuthorPoems, getHomepage, getUpcomingWorkshops } from '../../lib/cms'
+import { defaultSections, mediaObject } from '../../lib/homepage'
 import * as m from '../../paraglide/messages.js'
 
 const { locale: rawLocale } = Astro.params
 if (!isLocale(rawLocale)) return new Response('Not found', { status: 404 })
 const locale = rawLocale
+const suppliedSecret = Astro.url.searchParams.get('previewSecret')
+const previewSecret = getSecret('PREVIEW_SECRET')
+const preview = Boolean(suppliedSecret && previewSecret && suppliedSecret === previewSecret)
+if (suppliedSecret !== null && !preview) return new Response('Invalid preview link', { status: 401 })
+if (preview) {
+  Astro.response.headers.set('Cache-Control', 'no-store')
+  Astro.response.headers.set('Referrer-Policy', 'no-referrer')
+}
+const result = await Promise.allSettled([
+  getHomepage(locale, preview ? suppliedSecret! : undefined), getAuthors(locale), getUpcomingWorkshops(locale),
+])
+const homepage = result[0].status === 'fulfilled' ? result[0].value : null
+const authors = result[1].status === 'fulfilled' ? result[1].value : []
+const events = result[2].status === 'fulfilled' ? result[2].value : []
+const sections = homepage?.sections?.length ? homepage.sections : defaultSections
+const poetIds = [...new Set(sections.filter((section) => section.blockType === 'poets' && section.enabled !== false).flatMap((section) => {
+  const selected = section.poets?.filter((author) => typeof author === 'object') ?? []
+  return (selected.length ? selected : authors).slice(0, 4).map((author) => String(author.id))
+}))]
+const samples = await Promise.allSettled(poetIds.map((id) => getAuthorPoems(id, locale, 1)))
+const poems = samples.flatMap((sample) => sample.status === 'fulfilled' ? sample.value : [])
+const unavailable = [...result, ...samples].some((entry) => entry.status === 'rejected')
+if (unavailable) Astro.response.status = 503
+const title = homepage?.seo?.title || m.site_title({}, { locale })
+const description = homepage?.seo?.description || m.site_description({}, { locale })
+const social = mediaObject(homepage?.seo?.image)
+const image = social?.url ? new URL(social.url, import.meta.env.PUBLIC_CMS_URL ?? 'http://localhost:3001').href : undefined
+const hasUpcoming = sections.some((section) => section.blockType === 'events' && section.enabled !== false)
 ---
 
-<BaseLayout {locale}>
-  <section class="hero">
-    <p class="eyebrow">{m.site_title({}, { locale })}</p>
-    <h1>{m.home_heading({}, { locale })}</h1>
-    <p class="lede">{m.home_intro({}, { locale })}</p>
-  </section>
+<BaseLayout {locale} {title} {description} {image} {preview} mainClass="homepage">
+  {unavailable && <p class="content-unavailable" role="status">{m.home_unavailable({}, { locale })}</p>}
+  <HomeFeature feature={homepage?.feature} {locale} {preview} {hasUpcoming} />
+  <HomeSections {sections} {authors} {events} {poems} {locale} />
+  {preview && <div id="homepage-live-preview" data-server-url={import.meta.env.PUBLIC_CMS_URL ?? 'http://localhost:3001'} />}
 </BaseLayout>
+
+<script>
+  import { isDocumentEvent, ready } from '@payloadcms/live-preview'
+  const marker = document.getElementById('homepage-live-preview')
+  if (marker?.dataset.serverUrl) {
+    const serverURL = new URL(marker.dataset.serverUrl).origin
+    const scrollKey = 'homepage-preview-scroll'
+    let savedScroll: string | null = null
+    try { savedScroll = sessionStorage.getItem(scrollKey) } catch { /* Storage can be unavailable in an embedded preview. */ }
+    if (savedScroll) {
+      try { sessionStorage.removeItem(scrollKey) } catch { /* Preview remains usable without storage. */ }
+      const position = Number(savedScroll)
+      if (Number.isFinite(position)) requestAnimationFrame(() => window.scrollTo({ top: position, behavior: 'instant' }))
+    }
+    window.addEventListener('message', (event) => {
+      if ((event.source === window.parent || event.source === window.opener) && isDocumentEvent(event, serverURL)) {
+        try { sessionStorage.setItem(scrollKey, String(window.scrollY)) } catch { /* Saving scroll position is optional. */ }
+        window.location.reload()
+      }
+    })
+    ready({ serverURL })
+  }
+</script>
