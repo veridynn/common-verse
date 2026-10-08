@@ -12,5 +12,5 @@ const url = media?.url ? new URL(media.url, import.meta.env.PUBLIC_CMS_URL ?? 'h
 </figure>}
 <style>
   figure { margin: 0; min-width: 0; }
-  img { display: block; width: 100%; height: auto; aspect-ratio: var(--editorial-image-ratio, 3 / 2); object-fit: cover; object-position: var(--editorial-image-position, center); border-radius: 0.75rem; }
+  img { display: block; width: 100%; height: auto; aspect-ratio: var(--editorial-image-ratio, 3 / 2); object-fit: cover; object-position: var(--editorial-image-position, center); border-radius: 0.75rem; corner-shape: squircle; }
 </style>

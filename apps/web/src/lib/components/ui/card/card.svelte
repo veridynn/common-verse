@@ -40,6 +40,7 @@
     padding-block: var(--card-spacing);
     border: 1px solid var(--border);
     border-radius: var(--radius);
+    corner-shape: squircle;
     background: var(--card);
     color: var(--card-foreground);
     box-shadow: var(--shadow-card);

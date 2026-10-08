@@ -26,5 +26,5 @@
   height="720"
   {loading}
   decoding="async"
-  class={cn('block aspect-square w-full rounded-lg object-cover', className)}
+  class={cn('block aspect-square w-full rounded-lg [corner-shape:squircle] object-cover', className)}
 />

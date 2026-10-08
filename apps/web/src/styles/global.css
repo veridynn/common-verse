@@ -69,6 +69,7 @@ a:hover {
   color: var(--color-paper);
   padding: 0.75rem 1rem;
   border-radius: 0.25rem;
+  corner-shape: squircle;
 }
 .skip-link:focus {
   transform: translateY(0);
@@ -165,6 +166,7 @@ nav {
   min-height: 2rem;
   border: 0;
   border-radius: calc(var(--radius) * 0.5);
+  corner-shape: squircle;
   background: transparent;
   padding: 0.25rem 0.375rem;
   color: var(--header-foreground);
@@ -224,6 +226,7 @@ nav {
   min-height: 3rem;
   padding: 0.7rem 0.75rem;
   border-radius: calc(var(--radius) * 0.5);
+  corner-shape: squircle;
   text-decoration: none;
 }
 .language-options a:hover,
@@ -253,6 +256,7 @@ nav {
   background: var(--popover);
   border: 1px solid var(--border);
   border-radius: var(--radius);
+  corner-shape: squircle;
   padding: 0.6rem;
   box-shadow: var(--shadow-floating);
   z-index: 10;
@@ -274,6 +278,7 @@ nav {
   min-height: 3rem;
   padding: 0.7rem 0.75rem;
   border-radius: calc(var(--radius) * 0.5);
+  corner-shape: squircle;
   cursor: pointer;
 }
 .theme-option:hover,
@@ -344,6 +349,7 @@ h6 {
   margin-block: 2rem;
   object-fit: cover;
   border-radius: 0.5rem;
+  corner-shape: squircle;
 }
 .prose {
   white-space: pre-wrap;
@@ -439,6 +445,7 @@ footer {
   background: var(--color-white);
   padding: clamp(1.5rem, 4vw, 3rem);
   border-radius: 1rem 1rem 3rem 1rem;
+  corner-shape: squircle;
   box-shadow: var(--shadow-card);
   min-width: 0;
 }
@@ -485,6 +492,7 @@ footer {
   padding: 1.5rem;
   background: var(--color-white);
   border-radius: 1rem;
+  corner-shape: squircle;
 }
 .featured-event h2 {
   font-size: var(--font-size-xl);
@@ -515,6 +523,7 @@ footer {
   background: var(--color-white);
   padding: clamp(1.5rem, 4vw, 3.5rem);
   border-radius: 1.25rem;
+  corner-shape: squircle;
 }
 .introduction-layout {
   display: grid;
@@ -605,6 +614,7 @@ footer {
 .participation-grid > li {
   padding: 1.5rem;
   border-radius: 0.75rem;
+  corner-shape: squircle;
   background: var(--color-white);
 }
 .participation-grid h3 {
@@ -618,6 +628,7 @@ footer {
   background: var(--newsletter-background);
   color: var(--newsletter-foreground);
   border-radius: 1.25rem;
+  corner-shape: squircle;
   padding: clamp(1.5rem, 4vw, 3.5rem);
   margin-block: 1rem 2rem;
 }
@@ -636,6 +647,7 @@ footer {
   background: var(--primary);
   color: var(--primary-foreground);
   border-radius: 999px;
+  corner-shape: squircle;
   font-weight: 600;
   text-align: center;
   flex-shrink: 0;

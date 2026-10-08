@@ -2,7 +2,7 @@
   import { tv, type VariantProps } from 'tailwind-variants'
   import type { HTMLAttributes, HTMLAnchorAttributes } from 'svelte/elements'
   export const badgeVariants = tv({
-    base: 'inline-flex max-w-full items-center gap-1 rounded-full border px-2.5 py-0.5 text-sm font-semibold leading-relaxed whitespace-normal [&_svg]:size-3 [&_svg]:shrink-0',
+    base: 'inline-flex max-w-full items-center gap-1 rounded-full [corner-shape:squircle] border px-2.5 py-0.5 text-sm font-semibold leading-relaxed whitespace-normal [&_svg]:size-3 [&_svg]:shrink-0',
     variants: {
       variant: {
         default: 'border-transparent bg-primary text-primary-foreground',
