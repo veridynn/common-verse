@@ -1,4 +1,8 @@
 ---
+import { Heading } from '$lib/components/ui/heading'
+import { Eyebrow } from '$lib/components/ui/eyebrow'
+import { Text } from '$lib/components/ui/text'
+import * as Card from '$lib/components/ui/card'
 import { getSecret } from 'astro:env/server'
 import { isLocale, localizedPath } from '@poetry/i18n'
 import { Button } from '$lib/components/ui/button/index.js'
@@ -41,8 +45,8 @@ const alternateLocales = await getWorkshopLocales(slug, preview ? suppliedSecret
 
 <BaseLayout {locale} {title} {description} {image} {structuredData} {alternateLocales} canonicalPath={`workshops/${slug}`} noIndex={workshop.seo?.noIndex ?? false} {preview} contentType="article">
   <article>
-    <p class="eyebrow">{m.workshop_label({}, { locale })}</p>
-    <h1>{workshop.title}</h1>
+    <Eyebrow>{m.workshop_label({}, { locale })}</Eyebrow>
+    <Heading level={1}>{workshop.title}</Heading>
     {workshopMedia?.url && workshopMedia.alt && <figure class="hero-figure">
       <img class="hero-image" src={new URL(workshopMedia.url, cmsUrl).href} alt={workshopMedia.alt} width={workshopMedia.width ?? 1200} height={workshopMedia.height ?? 800} />
       {credit && <figcaption>
@@ -53,14 +57,16 @@ const alternateLocales = await getWorkshopLocales(slug, preview ? suppliedSecret
     </figure>}
     <div class="content-grid">
       <div>
-        {workshop.description && <p class="lede">{workshop.description}</p>}
+        {workshop.description && <Text variant="lead" class="lede">{workshop.description}</Text>}
         {workshop.content && <div class="prose">{workshop.content}</div>}
       </div>
-      <aside class="meta-card" aria-label={m.workshop_label({}, { locale })}>
+      <Card.Root as="aside" variant="accent" size="sm" class="self-start" aria-label={m.workshop_label({}, { locale })}>
+        <Card.Content>
         <p><time datetime={workshop.startDate}>{date}</time></p>
         {workshop.location && <p>{workshop.location}</p>}
-        {workshop.registrationUrl && <Button href={workshop.registrationUrl}>{m.registration({}, { locale })}</Button>}
-      </aside>
+        </Card.Content>
+        {workshop.registrationUrl && <Card.Footer><Button href={workshop.registrationUrl}>{m.registration({}, { locale })}</Button></Card.Footer>}
+      </Card.Root>
     </div>
   </article>
 </BaseLayout>

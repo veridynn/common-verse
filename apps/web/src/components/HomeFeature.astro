@@ -1,4 +1,8 @@
 ---
+import { Heading } from '$lib/components/ui/heading'
+import { Text } from '$lib/components/ui/text'
+import { Link } from '$lib/components/ui/link'
+import { Badge } from '$lib/components/ui/badge'
 import { localizedPath, type Locale } from '@poetry/i18n'
 import type { Homepage } from '@poetry/types'
 import { Button } from '$lib/components/ui/button'
@@ -17,19 +21,19 @@ const o = { locale }
 <section class:list={['home-feature', { 'has-feature': poem || event || announcement }]} aria-labelledby="home-heading">
   <div class="home-feature-intro">
     <p class="feature-note">{m.home_welcome({}, o)}</p>
-    <h1 id="home-heading">{feature?.heading || m.home_heading({}, o)}</h1>
-    <p class="lede">{feature?.description || m.home_intro({}, o)}</p>
+    <Heading level={1} id="home-heading">{feature?.heading || m.home_heading({}, o)}</Heading>
+    <Text variant="lead" class="lede">{feature?.description || m.home_intro({}, o)}</Text>
     <Button href={localizedPath(locale, 'poems')}>{m.home_explore({}, o)}</Button>
     <a class="secondary-link" href={hasUpcoming ? '#upcoming' : localizedPath(locale, 'workshops')}>{m.home_events_link({}, o)}</a>
   </div>
   {poem && excerpt && <article class="featured-poem" aria-label={m.home_featured_poem({}, o)}>
     <p class="feature-note">{m.home_featured_poem({}, o)}</p>
     <div lang={poem.originalLanguage === 'other' ? 'und' : poem.originalLanguage} dir={contentDirection(poem.originalLanguage)}>
-      <h2>{poem.title}</h2>
+      <Heading level={2}>{poem.title}</Heading>
       <blockquote>{excerpt.original}</blockquote>
     </div>
     {excerpt.translation && poem.originalLanguage !== locale && <div class="feature-translation" lang={locale} dir={contentDirection(locale)}>
-      <h3>{excerpt.translation.title}</h3>
+      <Heading level={3}>{excerpt.translation.title}</Heading>
       <p class="verse">{excerpt.translation.text.split('\n').slice(0, 5).join('\n')}</p>
       {excerpt.translation.translator && <p class="translation-credit">{m.translated_by({ name: excerpt.translation.translator }, o)}</p>}
     </div>}
@@ -38,15 +42,15 @@ const o = { locale }
   </article>}
   {event && <article class="featured-event">
     <EditorialImage image={event.image} {locale} eager />
-    <p class="feature-note">{event.kind === 'event' ? m.home_event({}, o) : m.workshop_label({}, o)}</p>
-    <h2>{event.title}</h2>
+    <Badge variant="secondary">{event.kind === 'event' ? m.home_event({}, o) : m.workshop_label({}, o)}</Badge>
+    <Heading level={2}>{event.title}</Heading>
     <p><time datetime={event.startDate}>{new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeStyle: 'short', timeZone: 'Europe/Berlin' }).format(new Date(event.startDate))}</time></p>
     {event.location && <p>{event.location}</p>}
-    <a href={localizedPath(locale, `workshops/${event.slug}`)}>{m.home_event_details({}, o)}</a>
+    <Link variant="standalone" href={localizedPath(locale, `workshops/${event.slug}`)}>{m.home_event_details({}, o)}</Link>
   </article>}
   {announcement && <article class="featured-event">
     <EditorialImage image={announcement.image} {locale} eager />
-    <h2>{announcement.title}</h2>
+    <Heading level={2}>{announcement.title}</Heading>
     {announcement.text && <p>{announcement.text}</p>}
     {announcement.linkLabel && safeHref(announcement.linkUrl, locale) && <a href={safeHref(announcement.linkUrl, locale)}>{announcement.linkLabel}</a>}
   </article>}

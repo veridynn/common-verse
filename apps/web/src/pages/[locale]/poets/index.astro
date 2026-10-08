@@ -1,4 +1,7 @@
 ---
+import { Heading } from '$lib/components/ui/heading'
+import { Text } from '$lib/components/ui/text'
+import { Link } from '$lib/components/ui/link'
 import { isLocale, localizedPath } from '@poetry/i18n'
 import { getAuthors } from '../../../lib/cms'
 import BaseLayout from '../../../layouts/BaseLayout.astro'
@@ -11,11 +14,11 @@ const authors = await getAuthors(locale)
 const title = m.home_poets_heading({}, { locale })
 ---
 <BaseLayout {locale} {title} canonicalPath="poets">
-  <h1>{title}</h1>
-  <p class="lede">{m.home_poets_description({}, { locale })}</p>
+  <Heading level={1}>{title}</Heading>
+  <Text variant="lead" class="lede">{m.home_poets_description({}, { locale })}</Text>
   <ul class="poet-grid">{authors.map((author) => <li><article>
     <EditorialImage image={author.portrait} {locale} />
-    <h2><a href={localizedPath(locale, `poets/${author.id}`)}>{author.name}</a></h2>
+    <Heading level={2} variant="subtitle"><Link variant="heading" href={localizedPath(locale, `poets/${author.id}`)}>{author.name}</Link></Heading>
   </article></li>)}</ul>
 </BaseLayout>
-<style>h2 { font-size: 1.5rem; line-height: 1.4; } .poet-grid { margin-block: 3rem; }</style>
+<style>.poet-grid { margin-block: 3rem; }</style>

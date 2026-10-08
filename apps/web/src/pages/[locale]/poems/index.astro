@@ -1,4 +1,7 @@
 ---
+import { Heading } from '$lib/components/ui/heading'
+import { Eyebrow } from '$lib/components/ui/eyebrow'
+import { Link } from '$lib/components/ui/link'
 import { isLocale, localizedPath } from '@poetry/i18n'
 import BaseLayout from '../../../layouts/BaseLayout.astro'
 import { getPoems } from '../../../lib/cms'
@@ -13,13 +16,13 @@ const title = m.nav_poems({}, { locale })
 
 <BaseLayout {locale} {title}>
   <section>
-    <p class="eyebrow">{m.site_title({}, { locale })}</p>
-    <h1>{title}</h1>
+    <Eyebrow>{m.site_title({}, { locale })}</Eyebrow>
+    <Heading level={1}>{title}</Heading>
     <ul class="content-list">
       {poems.map((poem) => (
         <li>
           <article>
-            <h2><a href={localizedPath(locale, `poems/${poem.slug}`)}>{poem.title}</a></h2>
+            <Heading level={2}><Link variant="heading" href={localizedPath(locale, `poems/${poem.slug}`)}>{poem.title}</Link></Heading>
             {typeof poem.author === 'object' && poem.author && <p>{poem.author.name}</p>}
           </article>
         </li>
