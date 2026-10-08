@@ -1,4 +1,5 @@
 ---
+import { authorDisplayName } from '../lib/editorial'
 import { Heading } from '$lib/components/ui/heading'
 import { Link } from '$lib/components/ui/link'
 import { localizedPath, type Locale } from '@poetry/i18n'
@@ -43,7 +44,7 @@ const dateFormat = new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeStyl
         return <li><article>
           <EditorialImage image={author.portrait} {locale} />
           {!mediaObject(author.portrait) && <div class="poet-monogram" aria-hidden="true">{author.name.trim().charAt(0)}</div>}
-          <Heading level={3}><Link variant="heading" href={localizedPath(locale, `poets/${author.id}`)}>{author.name}</Link></Heading>
+          <Heading level={3}><Link variant="heading" href={localizedPath(locale, `poets/${author.id}`)}>{authorDisplayName(author.name)}</Link></Heading>
           {poem && <p class="poet-excerpt" lang={translation ? locale : poem.originalLanguage === 'other' ? 'und' : poem.originalLanguage} dir={contentDirection(translation ? locale : poem.originalLanguage)}>{(translation?.text ?? poem.originalText).split('\n').slice(0, 2).join('\n')}</p>}
         </article></li>
       })}</ul> : <p class="empty-message">{m.home_no_poets({}, o)}</p>}

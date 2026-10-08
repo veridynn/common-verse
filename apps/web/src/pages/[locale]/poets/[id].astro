@@ -1,4 +1,5 @@
 ---
+import { authorDisplayName } from '../../../lib/editorial'
 import { Heading } from '$lib/components/ui/heading'
 import { Text } from '$lib/components/ui/text'
 import { Link } from '$lib/components/ui/link'
@@ -13,9 +14,9 @@ const locale = rawLocale
 const [author, poems] = await Promise.all([getAuthor(id, locale), getAuthorPoems(id, locale)])
 if (!author) return new Response('Not found', { status: 404 })
 ---
-<BaseLayout {locale} title={author.name} canonicalPath={`poets/${id}`}>
+<BaseLayout {locale} title={authorDisplayName(author.name)} canonicalPath={`poets/${id}`}>
   <article>
-    <Heading level={1}>{author.name}</Heading>
+    <Heading level={1}>{authorDisplayName(author.name)}</Heading>
     <EditorialImage image={author.portrait} {locale} />
     {author.biography && <Text variant="lead" class="lede">{author.biography}</Text>}
     <Heading level={2}>{m.nav_poems({}, { locale })}</Heading>

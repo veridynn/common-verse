@@ -123,9 +123,7 @@ with respect to image services.
 The importer searches for poetry readings, selects a repeatable sample, and
 accepts only photos with an author, source page, and CC BY or CC BY-SA license.
 It saves source title, photographer, license, source link, license link, and a
-resizing/cropping notice in each media credit. Workshop pages display these
-credits and a translated notice identifying the photo as an illustration of a
-different event. Localized alternative text describes its illustrative purpose.
+resizing/cropping notice in each media credit. Credits remain stored in CMS media metadata. Localized alternative text describes its illustrative purpose.
 
 The command upgrades only seed artwork on bulk demo workshops, keeps intentionally
 image-free fixtures, and preserves editor-chosen images and draft/published status.

@@ -1,4 +1,5 @@
 ---
+import { authorDisplayName } from '../../../lib/editorial'
 import { Heading } from '$lib/components/ui/heading'
 import { Text } from '$lib/components/ui/text'
 import { Link } from '$lib/components/ui/link'
@@ -18,7 +19,7 @@ const title = m.home_poets_heading({}, { locale })
   <Text variant="lead" class="lede">{m.home_poets_description({}, { locale })}</Text>
   <ul class="poet-grid">{authors.map((author) => <li><article>
     <EditorialImage image={author.portrait} {locale} />
-    <Heading level={2} variant="subtitle"><Link variant="heading" href={localizedPath(locale, `poets/${author.id}`)}>{author.name}</Link></Heading>
+    <Heading level={2} variant="subtitle"><Link variant="heading" href={localizedPath(locale, `poets/${author.id}`)}>{authorDisplayName(author.name)}</Link></Heading>
   </article></li>)}</ul>
 </BaseLayout>
 <style>.poet-grid { margin-block: 3rem; }</style>

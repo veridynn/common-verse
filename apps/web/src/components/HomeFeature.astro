@@ -1,4 +1,5 @@
 ---
+import { authorDisplayName } from '../lib/editorial'
 import { Heading } from '$lib/components/ui/heading'
 import { Text } from '$lib/components/ui/text'
 import { Link } from '$lib/components/ui/link'
@@ -37,7 +38,7 @@ const o = { locale }
       <p class="verse">{excerpt.translation.text.split('\n').slice(0, 5).join('\n')}</p>
       {excerpt.translation.translator && <p class="translation-credit">{m.translated_by({ name: excerpt.translation.translator }, o)}</p>}
     </div>}
-    {author && <p class="feature-author">{author.name}</p>}
+    {author && <p class="feature-author">{authorDisplayName(author.name)}</p>}
     <a class="feature-read" href={localizedPath(locale, `poems/${poem.slug}`)}>{m.home_read_poem({}, o)}</a>
   </article>}
   {event && <article class="featured-event">

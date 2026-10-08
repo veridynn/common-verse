@@ -1,4 +1,5 @@
 ---
+import { authorDisplayName } from '../../../lib/editorial'
 import { Eyebrow } from '$lib/components/ui/eyebrow'
 import { getSecret } from 'astro:env/server'
 import { getLocaleMetadata, isLocale, localeMetadata, localizedPath } from '@poetry/i18n'
@@ -22,7 +23,7 @@ const structuredData = {
   '@type': 'CreativeWork',
   name: poem.title,
   inLanguage: poem.originalLanguage === 'other' ? poem.originalLanguageLabel : poem.originalLanguage,
-  ...(typeof poem.author === 'object' && poem.author ? { author: { '@type': 'Person', name: poem.author.name } } : {}),
+  ...(typeof poem.author === 'object' && poem.author ? { author: { '@type': 'Person', name: authorDisplayName(poem.author.name) } } : {}),
   url: new URL(localizedPath(locale, `poems/${slug}`), import.meta.env.PUBLIC_SITE_URL ?? 'http://localhost:4321').href,
 }
 ---
