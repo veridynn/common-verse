@@ -1,21 +1,27 @@
 ---
-import { localizedPath, type Locale } from '@poetry/i18n'
+import { localizedPath, unlocalizedPath, type Locale } from '@poetry/i18n'
 import * as m from '../paraglide/messages.js'
 import LanguageSwitcher from './LanguageSwitcher.svelte'
+import ThemeSwitcher from './ThemeSwitcher.svelte'
+import type { ThemePreference } from '../lib/theme'
 
 interface Props {
   locale: Locale
+  themePreference: ThemePreference
 }
 
-const { locale } = Astro.props
+const { locale, themePreference } = Astro.props
 const messageOptions = { locale }
 ---
 
 <header class="site-header">
-  <a class="brand" href={localizedPath(locale)}>{m.site_title({}, messageOptions)}</a>
+  <a class="brand" href={localizedPath(locale)}><span class="brand-mark" aria-hidden="true">p<span>p</span></span><span>{m.site_title({}, messageOptions)}</span></a>
   <nav aria-label={m.nav_primary({}, messageOptions)}>
     <a href={localizedPath(locale, 'workshops')}>{m.nav_workshops({}, messageOptions)}</a>
     <a href={localizedPath(locale, 'poems')}>{m.nav_poems({}, messageOptions)}</a>
   </nav>
-  <LanguageSwitcher client:load currentLocale={locale} label={m.language_label({}, messageOptions)} />
+  <div class="header-controls">
+    <LanguageSwitcher client:load currentLocale={locale} label={m.language_label({}, messageOptions)} path={unlocalizedPath(Astro.originPathname)} search={Astro.url.search} />
+    <ThemeSwitcher client:load preference={themePreference} label={m.theme_label({}, messageOptions)} lightLabel={m.theme_light({}, messageOptions)} darkLabel={m.theme_dark({}, messageOptions)} systemLabel={m.theme_system({}, messageOptions)} />
+  </div>
 </header>

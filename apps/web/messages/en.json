@@ -47,5 +47,9 @@
   "home_footer": "Footer navigation",
   "home_contact": "Contact",
   "home_privacy": "Privacy",
-  "home_legal": "Legal notice"
+  "home_legal": "Legal notice",
+  "theme_label": "Appearance",
+  "theme_light": "Light",
+  "theme_dark": "Dark",
+  "theme_system": "System"
 }

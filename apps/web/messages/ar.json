@@ -47,5 +47,9 @@
   "home_footer": "روابط التذييل",
   "home_contact": "تواصل معنا",
   "home_privacy": "الخصوصية",
-  "home_legal": "الإشعار القانوني"
+  "home_legal": "الإشعار القانوني",
+  "theme_label": "المظهر",
+  "theme_light": "فاتح",
+  "theme_dark": "داكن",
+  "theme_system": "النظام"
 }

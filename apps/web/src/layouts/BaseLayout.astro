@@ -3,6 +3,7 @@ import { getLocaleMetadata, locales, localizedPath, type Locale } from '@poetry/
 import Header from '../components/Header.astro'
 import * as m from '../paraglide/messages.js'
 import '../styles/global.css'
+import { themePreference } from '../lib/theme'
 
 interface Props {
   locale: Locale
@@ -36,10 +37,11 @@ const siteUrl = import.meta.env.PUBLIC_SITE_URL ?? 'http://localhost:4321'
 const canonical = new URL(localizedPath(locale, canonicalPath), siteUrl)
 const socialImage = image ? new URL(image, siteUrl) : undefined
 const xDefaultLocale = alternateLocales.includes('de') ? 'de' : (alternateLocales[0] ?? locale)
+const theme = themePreference(Astro.cookies.get('poetry-theme')?.value)
 ---
 
 <!doctype html>
-<html lang={locale} dir={direction}>
+<html lang={locale} dir={direction} data-theme={theme}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -65,7 +67,7 @@ const xDefaultLocale = alternateLocales.includes('de') ? 'de' : (alternateLocale
   </head>
   <body>
     <a class="skip-link" href="#main">{m.skip_to_content({}, { locale })}</a>
-    <Header {locale} />
+    <Header {locale} themePreference={theme} />
     {preview && <p class="preview-banner" role="status">{m.preview_notice({}, { locale })}</p>}
     <main id="main" tabindex="-1" class={mainClass}><slot /></main>
     <footer class="site-footer"><a class="brand" href={localizedPath(locale)}>{m.site_title({}, { locale })}</a>

@@ -1,22 +1,62 @@
 <script lang="ts">
-  import { localeMetadata, locales, type Locale } from '@poetry/i18n'
+  import { onMount } from 'svelte'
+  import { localeMetadata, locales, localizedPath, type Locale } from '@poetry/i18n'
+  import { Languages, ChevronDown, Check } from 'lucide-svelte'
+  import * as Popover from '$lib/components/ui/popover'
 
-  let { currentLocale, label }: { currentLocale: Locale; label: string } = $props()
-
-  function switchLocale(event: Event) {
-    const nextLocale = (event.currentTarget as HTMLSelectElement).value
-    const segments = window.location.pathname.split('/').filter(Boolean)
-    if (segments.length && locales.includes(segments[0] as Locale)) segments[0] = nextLocale
-    else segments.unshift(nextLocale)
-    window.location.assign(`/${segments.join('/')}${window.location.search}`)
-  }
+  let { currentLocale, label, path = '/', search = '' }: {
+    currentLocale: Locale; label: string; path?: string; search?: string
+  } = $props()
+  let hydrated = $state(false)
+  let hash = $state('')
+  const current = $derived(localeMetadata[currentLocale])
+  onMount(() => {
+    hydrated = true
+    const updateHash = () => { hash = window.location.hash }
+    updateHash()
+    window.addEventListener('hashchange', updateHash)
+    return () => window.removeEventListener('hashchange', updateHash)
+  })
 </script>
 
-<label class="language-switcher">
-  <span class="sr-only">{label}</span>
-  <select aria-label={label} value={currentLocale} onchange={switchLocale}>
-    {#each locales as locale}
-      <option value={locale}>{localeMetadata[locale].label}</option>
+{#snippet triggerContent()}
+  <Languages size={18} aria-hidden="true" />
+  <span class="language-name" lang={currentLocale} dir={current.direction}>{current.label}</span>
+  <span class="language-code" aria-hidden="true">{currentLocale.toUpperCase()}</span>
+  <ChevronDown size={16} aria-hidden="true" class="language-chevron" />
+{/snippet}
+
+{#snippet languageLinks()}
+  <p class="language-title">{label}</p>
+  <ul class="language-options">
+    {#each locales as locale (locale)}
+      <li>
+        <a href={`${localizedPath(locale, path)}${search}${hash}`} hreflang={locale}
+          aria-current={locale === currentLocale ? 'page' : undefined}>
+          <span lang={locale} dir={localeMetadata[locale].direction}>{localeMetadata[locale].label}</span>
+          {#if locale === currentLocale}<Check size={18} aria-hidden="true" />{/if}
+        </a>
+      </li>
     {/each}
-  </select>
-</label>
+  </ul>
+{/snippet}
+
+<div class="language-switcher">
+  {#if hydrated}
+    <Popover.Root>
+      <Popover.Trigger class="language-trigger" aria-label={`${label}: ${current.label}`}>
+        {@render triggerContent()}
+      </Popover.Trigger>
+      <Popover.Content class="language-popover" align="end" sideOffset={8} dir={current.direction} aria-label={label}>
+        {@render languageLinks()}
+      </Popover.Content>
+    </Popover.Root>
+  {:else}
+    <details class="language-fallback">
+      <summary class="language-trigger" aria-label={`${label}: ${current.label}`}>
+        {@render triggerContent()}
+      </summary>
+      <div class="language-popover" dir={current.direction}>{@render languageLinks()}</div>
+    </details>
+  {/if}
+</div>

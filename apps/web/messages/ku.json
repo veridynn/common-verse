@@ -47,5 +47,9 @@
   "home_footer": "Rêberiya binê rûpelê",
   "home_contact": "Têkilî",
   "home_privacy": "Nepenî",
-  "home_legal": "Agahiyên qanûnî"
+  "home_legal": "Agahiyên qanûnî",
+  "theme_label": "Xuyang",
+  "theme_light": "Ronahî",
+  "theme_dark": "Tarî",
+  "theme_system": "Sîstem"
 }

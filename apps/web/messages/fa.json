@@ -47,5 +47,9 @@
   "home_footer": "پیوندهای پایین صفحه",
   "home_contact": "تماس",
   "home_privacy": "حریم خصوصی",
-  "home_legal": "اطلاعات حقوقی"
+  "home_legal": "اطلاعات حقوقی",
+  "theme_label": "ظاهر",
+  "theme_light": "روشن",
+  "theme_dark": "تیره",
+  "theme_system": "سیستم"
 }

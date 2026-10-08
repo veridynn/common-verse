@@ -64,7 +64,8 @@ test("language switcher changes the locale URL and document direction", async ({
   page,
 }) => {
   await page.goto("/");
-  await page.getByRole("combobox", { name: "Sprache" }).selectOption("ar");
+  await page.getByRole("button", { name: "Sprache: Deutsch" }).click();
+  await page.getByRole("link", { name: "العربية", exact: true }).click();
   await expect(page).toHaveURL(/\/ar$/);
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
 });
@@ -120,7 +121,7 @@ test("poem keeps the Persian original visible with explicit translations", async
   page,
 }) => {
   await page.goto("/en/poems/test-poem");
-  await expect(page.locator('[lang="fa"][dir="rtl"]')).toContainText(
+  await expect(page.locator('.prose[lang="fa"][dir="rtl"]')).toContainText(
     "صبح از میان پنجره‌های ما",
   );
   await expect(

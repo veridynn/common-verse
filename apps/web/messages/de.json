@@ -47,5 +47,9 @@
   "home_footer": "Navigation im Seitenfuß",
   "home_contact": "Kontakt",
   "home_privacy": "Datenschutz",
-  "home_legal": "Impressum"
+  "home_legal": "Impressum",
+  "theme_label": "Darstellung",
+  "theme_light": "Hell",
+  "theme_dark": "Dunkel",
+  "theme_system": "System"
 }

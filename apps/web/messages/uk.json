@@ -47,5 +47,9 @@
   "home_footer": "Навігація внизу сторінки",
   "home_contact": "Контакти",
   "home_privacy": "Конфіденційність",
-  "home_legal": "Правова інформація"
+  "home_legal": "Правова інформація",
+  "theme_label": "Оформлення",
+  "theme_light": "Світле",
+  "theme_dark": "Темне",
+  "theme_system": "Система"
 }
