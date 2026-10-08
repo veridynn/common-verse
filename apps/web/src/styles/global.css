@@ -543,17 +543,6 @@ footer {
   display: inline-block;
   padding-block: 0.5rem;
 }
-.poet-monogram {
-  display: grid;
-  place-items: center;
-  min-height: 10rem;
-  aspect-ratio: 3 / 2;
-  font-family: var(--font-serif);
-  font-size: 4rem;
-  color: var(--color-ink);
-  background: var(--accent);
-  border-radius: 0.75rem;
-}
 .poet-excerpt {
   white-space: pre-wrap;
   font-family: var(--font-serif);

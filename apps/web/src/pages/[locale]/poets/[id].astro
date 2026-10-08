@@ -1,4 +1,5 @@
 ---
+import PersonPortrait from '../../../components/PersonPortrait.svelte'
 import { authorDisplayName } from '../../../lib/editorial'
 import { Heading } from '$lib/components/ui/heading'
 import { Text } from '$lib/components/ui/text'
@@ -6,7 +7,6 @@ import { Link } from '$lib/components/ui/link'
 import { isLocale, localizedPath } from '@poetry/i18n'
 import { getAuthor, getAuthorPoems } from '../../../lib/cms'
 import BaseLayout from '../../../layouts/BaseLayout.astro'
-import EditorialImage from '../../../components/EditorialImage.astro'
 import * as m from '../../../paraglide/messages.js'
 const { locale: rawLocale, id } = Astro.params
 if (!isLocale(rawLocale) || !id) return new Response('Not found', { status: 404 })
@@ -17,7 +17,7 @@ if (!author) return new Response('Not found', { status: 404 })
 <BaseLayout {locale} title={authorDisplayName(author.name)} canonicalPath={`poets/${id}`}>
   <article>
     <Heading level={1}>{authorDisplayName(author.name)}</Heading>
-    <EditorialImage image={author.portrait} {locale} />
+    <PersonPortrait userId={author.id} image={author.portrait} />
     {author.biography && <Text variant="lead" class="lede">{author.biography}</Text>}
     <Heading level={2}>{m.nav_poems({}, { locale })}</Heading>
     <ul class="content-list">{poems.map((poem) => <li><article>

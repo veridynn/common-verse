@@ -151,3 +151,12 @@ A mismatched lockfile fails startup. After an intentional dependency change, run
 accessible to your user. Fresh-copy startup, repeat startup, PostgreSQL rollback,
 and browser tests have passed on macOS. Startup unit tests also pass on Linux;
 full Linux and Windows startup remain unverified.
+
+### Generated profile portraits
+
+Public poet cards and profile pages use DiceBear Open Peeps with the Bold Pop
+preset. A missing portrait is generated locally from the person’s ID; the same ID
+produces the same illustration across locales and pages. Uploaded editorial
+portraits take precedence. Earlier imported demo portrait photos are replaced in
+the public UI by illustrations; their media records remain intact. No external
+avatar API calls, browser JavaScript, or portrait-photo seed step is needed.

@@ -1,4 +1,5 @@
 ---
+import PersonPortrait from './PersonPortrait.svelte'
 import { authorDisplayName } from '../lib/editorial'
 import { Heading } from '$lib/components/ui/heading'
 import { Link } from '$lib/components/ui/link'
@@ -42,8 +43,7 @@ const dateFormat = new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeStyl
         const poem = poems.find((entry) => typeof entry.author === 'object' && String(entry.author?.id) === String(author.id))
         const translation = poem?.translations?.find((entry) => entry.language === locale)
         return <li><article>
-          <EditorialImage image={author.portrait} {locale} />
-          {!mediaObject(author.portrait) && <div class="poet-monogram" aria-hidden="true">{author.name.trim().charAt(0)}</div>}
+          <PersonPortrait userId={author.id} image={author.portrait} />
           <Heading level={3}><Link variant="heading" href={localizedPath(locale, `poets/${author.id}`)}>{authorDisplayName(author.name)}</Link></Heading>
           {poem && <p class="poet-excerpt" lang={translation ? locale : poem.originalLanguage === 'other' ? 'und' : poem.originalLanguage} dir={contentDirection(translation ? locale : poem.originalLanguage)}>{(translation?.text ?? poem.originalText).split('\n').slice(0, 2).join('\n')}</p>}
         </article></li>
