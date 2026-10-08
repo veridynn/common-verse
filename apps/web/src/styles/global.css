@@ -509,7 +509,7 @@ footer {
   font-size: var(--font-size-xxl);
   line-height: 1.18;
   margin-block: 0 1rem;
-  max-width: 20ch;
+  inline-size: 100%;
 }
 .home-section h3 {
   font-size: var(--font-size-lg);
@@ -538,9 +538,13 @@ footer {
 .section-heading {
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: stretch;
   gap: 0.25rem;
   margin-block-end: 1.5rem;
+}
+.section-heading > div {
+  flex: 1;
+  min-inline-size: 0;
 }
 .section-heading p {
   margin-block: 0.5rem;
@@ -565,6 +569,9 @@ footer {
 .poet-grid > li {
   min-width: 0;
 }
+.poet-grid h3 {
+  font-size: var(--font-size-md);
+}
 .poet-grid h3 a {
   display: inline-block;
   padding-block: 0.5rem;
@@ -572,7 +579,7 @@ footer {
 .poet-excerpt {
   white-space: pre-wrap;
   font-family: var(--font-serif);
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-base);
 }
 .section-events {
   border-block-start: 1px solid var(--color-soft);
