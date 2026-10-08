@@ -112,7 +112,6 @@ a:hover {
   --brand-logo-size: 4rem;
   --brand-logo-compact-size: 3rem;
   min-block-size: 2.75rem;
-  --brand-logo-accent: var(--primary-base);
 }
 .brand {
   display: inline-flex;

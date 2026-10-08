@@ -66,7 +66,6 @@
   --blue: #215f93;
 
   --primary-base: oklch(from var(--gold) l c h);
-  --brand-logo-accent: var(--primary-base);
   --secondary-base: oklch(from var(--slate) l c h);
   --success-base: oklch(from var(--green) l c h);
   --error-base: oklch(from var(--red) l c h);

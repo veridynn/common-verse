@@ -46,9 +46,8 @@ const theme = themePreference(Astro.cookies.get('poetry-theme')?.value)
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" href="/brand/line-break/favicon.ico" sizes="16x16 32x32 48x48" />
-    <link rel="icon" type="image/svg+xml" href="/brand/line-break/favicon.svg" />
-    <link rel="apple-touch-icon" href="/brand/line-break/icon-180.png" sizes="180x180" />
+    <link rel="icon" href="/brand/line-break/favicon.ico?v=yellow-indent" sizes="16x16 32x32 48x48" />
+    <link rel="icon" type="image/svg+xml" href="/brand/line-break/favicon.svg?v=yellow-indent" />
     <meta name="description" content={description} />
     <meta name="robots" content={noIndex || preview ? 'noindex,nofollow' : 'index,follow'} />
     <link rel="canonical" href={canonical} />
