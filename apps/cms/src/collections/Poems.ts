@@ -1,4 +1,5 @@
 import type { CollectionConfig } from "payload";
+import { isLocale, localizedPath } from "@poetry/i18n";
 import { authenticated, publishedOrAuthenticated } from "./access";
 import { previewEndpoint } from "./preview";
 
@@ -22,10 +23,14 @@ export const Poems: CollectionConfig = {
     preview: (doc, { locale }) => {
       const siteUrl = process.env.PUBLIC_SITE_URL ?? "http://localhost:4321";
       const code = locale ?? "de";
+      if (!isLocale(code)) return null;
       const params = new URLSearchParams({
         previewSecret: process.env.PREVIEW_SECRET ?? "",
       });
-      return `${siteUrl}/${code}/poems/${doc.slug ?? ""}?${params}`;
+      return new URL(
+        `${localizedPath(code, `poems/${doc.slug ?? ""}`)}?${params}`,
+        siteUrl,
+      ).href;
     },
   },
   access: {

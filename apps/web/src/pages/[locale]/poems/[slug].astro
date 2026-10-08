@@ -1,6 +1,6 @@
 ---
 import { getSecret } from 'astro:env/server'
-import { getLocaleMetadata, isLocale, localeMetadata } from '@poetry/i18n'
+import { getLocaleMetadata, isLocale, localeMetadata, localizedPath } from '@poetry/i18n'
 import { getPoem } from '../../../lib/cms'
 import BaseLayout from '../../../layouts/BaseLayout.astro'
 import * as m from '../../../paraglide/messages.js'
@@ -22,7 +22,7 @@ const structuredData = {
   name: poem.title,
   inLanguage: poem.originalLanguage === 'other' ? poem.originalLanguageLabel : poem.originalLanguage,
   ...(typeof poem.author === 'object' && poem.author ? { author: { '@type': 'Person', name: poem.author.name } } : {}),
-  url: new URL(`/${locale}/poems/${slug}`, import.meta.env.PUBLIC_SITE_URL ?? 'http://localhost:4321').href,
+  url: new URL(localizedPath(locale, `poems/${slug}`), import.meta.env.PUBLIC_SITE_URL ?? 'http://localhost:4321').href,
 }
 ---
 

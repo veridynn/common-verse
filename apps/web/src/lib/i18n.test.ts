@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { getLocaleMetadata, isLocale, localizedPath } from "@poetry/i18n";
+import {
+  getLocaleMetadata,
+  isLocale,
+  localizedPath,
+  unlocalizedPath,
+} from "@poetry/i18n";
 
 describe("locale metadata", () => {
   it("marks Arabic and Persian as RTL", () => {
@@ -16,7 +21,13 @@ describe("locale metadata", () => {
     expect(isLocale("ckb")).toBe(false);
   });
 
-  it("creates locale-prefixed paths", () => {
+  it("uses unprefixed German paths and prefixes the other languages", () => {
     expect(localizedPath("en", "/workshops/test/")).toBe("/en/workshops/test");
+    expect(localizedPath("de")).toBe("/");
+    expect(localizedPath("de", "/workshops/test/")).toBe("/workshops/test");
+    expect(localizedPath("en")).toBe("/en");
+    expect(unlocalizedPath("/ar/workshops/test")).toBe("/workshops/test");
+    expect(unlocalizedPath("/workshops/test")).toBe("/workshops/test");
+    expect(unlocalizedPath("/en")).toBe("/");
   });
 });

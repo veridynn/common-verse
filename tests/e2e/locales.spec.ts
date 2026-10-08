@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { localizedPath } from "@poetry/i18n";
 
 const expectations = [
   ["de", "ltr"],
@@ -22,7 +23,7 @@ for (const [locale, direction] of expectations) {
   test(`${locale} has the expected document language and direction`, async ({
     page,
   }) => {
-    await page.goto(`/${locale}`);
+    await page.goto(localizedPath(locale));
     await expect(page.locator("html")).toHaveAttribute("lang", locale);
     await expect(page.locator("html")).toHaveAttribute("dir", direction);
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
@@ -31,7 +32,7 @@ for (const [locale, direction] of expectations) {
   test(`${locale} workshop route renders localized content`, async ({
     page,
   }) => {
-    await page.goto(`/${locale}/workshops/test`);
+    await page.goto(localizedPath(locale, "workshops/test"));
     await expect(
       page.getByRole("heading", { level: 1, name: workshopTitles[locale] }),
     ).toBeVisible();
@@ -40,7 +41,7 @@ for (const [locale, direction] of expectations) {
 }
 
 test("primary navigation is keyboard accessible", async ({ page }) => {
-  await page.goto("/de");
+  await page.goto("/");
   await page.keyboard.press("Tab");
   await expect(page.getByRole("link", { name: /zum inhalt/i })).toBeFocused();
 });
@@ -49,12 +50,12 @@ test("primary navigation targets render collection indexes", async ({
   page,
 }) => {
   await page.goto("/en");
-  await page.getByRole("link", { name: "Workshops" }).click();
+  await page.getByRole("link", { name: "Workshops", exact: true }).click();
   await expect(page).toHaveURL(/\/en\/workshops$/);
   await expect(
     page.getByRole("link", { name: "Poetry Across Borders" }),
   ).toBeVisible();
-  await page.getByRole("link", { name: "Poems" }).click();
+  await page.getByRole("link", { name: "Poems", exact: true }).click();
   await expect(page).toHaveURL(/\/en\/poems$/);
   await expect(page.getByRole("link", { name: "صبح مشترک" })).toBeVisible();
 });
@@ -62,7 +63,7 @@ test("primary navigation targets render collection indexes", async ({
 test("language switcher changes the locale URL and document direction", async ({
   page,
 }) => {
-  await page.goto("/de");
+  await page.goto("/");
   await page.getByRole("combobox", { name: "Sprache" }).selectOption("ar");
   await expect(page).toHaveURL(/\/ar$/);
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");

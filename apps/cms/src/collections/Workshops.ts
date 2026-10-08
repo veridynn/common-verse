@@ -1,4 +1,5 @@
 import type { CollectionConfig } from "payload";
+import { isLocale, localizedPath } from "@poetry/i18n";
 import { authenticated, publishedOrAuthenticated } from "./access";
 import { previewEndpoint } from "./preview";
 
@@ -14,11 +15,15 @@ export const Workshops: CollectionConfig = {
     preview: (doc, { locale }) => {
       const siteUrl = process.env.PUBLIC_SITE_URL ?? "http://localhost:4321";
       const code = locale ?? "de";
+      if (!isLocale(code)) return null;
       const slug = typeof doc.slug === "string" ? doc.slug : "";
       const params = new URLSearchParams({
         previewSecret: process.env.PREVIEW_SECRET ?? "",
       });
-      return `${siteUrl}/${code}/workshops/${slug}?${params}`;
+      return new URL(
+        `${localizedPath(code, `workshops/${slug}`)}?${params}`,
+        siteUrl,
+      ).href;
     },
   },
   access: {

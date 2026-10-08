@@ -1,6 +1,6 @@
 ---
 import { getSecret } from 'astro:env/server'
-import { isLocale } from '@poetry/i18n'
+import { isLocale, localizedPath } from '@poetry/i18n'
 import { Button } from '$lib/components/ui/button/index.js'
 import { getWorkshop, getWorkshopLocales } from '../../../lib/cms'
 import { mediaCredit } from '../../../lib/media-credit'
@@ -32,7 +32,7 @@ const structuredData = {
   ...(workshop.endDate ? { endDate: workshop.endDate } : {}),
   ...(workshop.location ? { location: { '@type': 'Place', name: workshop.location } } : {}),
   ...(image ? { image: [image] } : {}),
-  url: new URL(`/${locale}/workshops/${slug}`, import.meta.env.PUBLIC_SITE_URL ?? 'http://localhost:4321').href,
+  url: new URL(localizedPath(locale, `workshops/${slug}`), import.meta.env.PUBLIC_SITE_URL ?? 'http://localhost:4321').href,
   eventStatus: 'https://schema.org/EventScheduled',
 }
 const date = new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeStyle: 'short' }).format(new Date(workshop.startDate))

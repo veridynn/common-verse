@@ -55,6 +55,14 @@ export function getLocaleMetadata(locale: Locale): LocaleMetadata {
 }
 
 export function localizedPath(locale: Locale, path = ""): string {
-  const normalized = path === "/" ? "" : `/${path.replace(/^\/+|\/+$/g, "")}`;
-  return `/${locale}${normalized}`;
+  const normalized = path.replace(/^\/+|\/+$/g, "");
+  const suffix = normalized ? `/${normalized}` : "";
+  return locale === defaultLocale ? suffix || "/" : `/${locale}${suffix}`;
+}
+
+/** Removes an optional locale prefix from a public pathname. */
+export function unlocalizedPath(pathname: string): string {
+  const segments = pathname.split("/").filter(Boolean);
+  if (isLocale(segments[0])) segments.shift();
+  return segments.length ? `/${segments.join("/")}` : "/";
 }
