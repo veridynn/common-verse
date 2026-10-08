@@ -73,7 +73,7 @@ for (const locale of ["de", "ar"] as const) {
   });
 }
 
-test.describe("server-rendered Plum themes", () => {
+test.describe("server-rendered gold and slate themes", () => {
   test.use({ javaScriptEnabled: false });
 
   for (const locale of ["de", "ar"] as const) {
@@ -106,6 +106,8 @@ test.describe("server-rendered Plum themes", () => {
             ["primary-text", "background", 4.5],
             ["primary-text", "card", 4.5],
             ["secondary-foreground", "secondary", 4.5],
+            ["secondary-text", "background", 4.5],
+            ["secondary-text", "card", 4.5],
             ["muted-foreground", "background", 4.5],
             ["muted-foreground", "card", 4.5],
             ["muted-foreground", "muted", 4.5],
@@ -265,7 +267,7 @@ test.describe("server-rendered Plum themes", () => {
         // axe injects scripts into frames; the interactive tests audit the DOM.
         // This context specifically checks CSS and SSR with scripting disabled.
         await page.screenshot({
-          path: `/tmp/poetry-plum-${locale}-${theme}.png`,
+          path: `/tmp/poetry-gold-${locale}-${theme}.png`,
           fullPage: true,
         });
         const ramp = await page.evaluate(() => {
@@ -274,13 +276,13 @@ test.describe("server-rendered Plum themes", () => {
           document.body.append(probe);
           const colours = () =>
             [50, 100, 200, 300, 400, 500, 600, 700, 800, 900].map((shade) => {
-              probe.style.color = `var(--plum-${shade})`;
+              probe.style.color = `var(--slate-${shade})`;
               return getComputedStyle(probe).color;
             });
           const before = colours();
-          root.style.setProperty("--plum", "#37684a");
+          root.style.setProperty("--slate", "#37684a");
           const after = colours();
-          root.style.removeProperty("--plum");
+          root.style.removeProperty("--slate");
           probe.remove();
           return { before, after };
         });

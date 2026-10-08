@@ -21,6 +21,7 @@
   --color-primary-text: var(--primary-text);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary-text: var(--secondary-text);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
@@ -56,17 +57,17 @@
 
 /* Edit these HEX inputs; all theme colours derive from them. */
 :root {
-  --black: #101012;
+  --black: #101010;
   --white: #fdfdfc;
   --gold: #f1a60a;
-  --plum: #736377;
+  --slate: #26465a;
   --green: #176848;
   --red: #b42318;
   --blue: #215f93;
 
   --primary-base: oklch(from var(--gold) l c h);
   --brand-logo-accent: var(--primary-base);
-  --secondary-base: oklch(from var(--plum) l c h);
+  --secondary-base: oklch(from var(--slate) l c h);
   --success-base: oklch(from var(--green) l c h);
   --error-base: oklch(from var(--red) l c h);
   --info-base: oklch(from var(--blue) l c h);
@@ -80,16 +81,16 @@
   --brand-700: color-mix(in oklch, var(--primary-base) 65%, var(--black));
   --brand-800: color-mix(in oklch, var(--primary-base) 48%, var(--black));
   --brand-900: color-mix(in oklch, var(--primary-base) 30%, var(--black));
-  --plum-50: color-mix(in oklch, var(--secondary-base) 4%, var(--white));
-  --plum-100: color-mix(in oklch, var(--secondary-base) 12%, var(--white));
-  --plum-200: color-mix(in oklch, var(--secondary-base) 25%, var(--white));
-  --plum-300: color-mix(in oklch, var(--secondary-base) 45%, var(--white));
-  --plum-400: color-mix(in oklch, var(--secondary-base) 72%, var(--white));
-  --plum-500: var(--secondary-base);
-  --plum-600: color-mix(in oklch, var(--secondary-base) 82%, var(--black));
-  --plum-700: color-mix(in oklch, var(--secondary-base) 65%, var(--black));
-  --plum-800: color-mix(in oklch, var(--secondary-base) 48%, var(--black));
-  --plum-900: color-mix(in oklch, var(--secondary-base) 30%, var(--black));
+  --slate-50: color-mix(in oklch, var(--secondary-base) 4%, var(--white));
+  --slate-100: color-mix(in oklch, var(--secondary-base) 12%, var(--white));
+  --slate-200: color-mix(in oklch, var(--secondary-base) 25%, var(--white));
+  --slate-300: color-mix(in oklch, var(--secondary-base) 45%, var(--white));
+  --slate-400: color-mix(in oklch, var(--secondary-base) 72%, var(--white));
+  --slate-500: var(--secondary-base);
+  --slate-600: color-mix(in oklch, var(--secondary-base) 82%, var(--black));
+  --slate-700: color-mix(in oklch, var(--secondary-base) 65%, var(--black));
+  --slate-800: color-mix(in oklch, var(--secondary-base) 48%, var(--black));
+  --slate-900: color-mix(in oklch, var(--secondary-base) 30%, var(--black));
 
   /* Light surfaces use paper-like neutrals; colour stays in actions and accents. */
   --neutral-light: color-mix(in oklch, var(--white) 97%, var(--primary-base));
@@ -98,13 +99,9 @@
     var(--neutral-light) 98%,
     var(--black)
   );
-  --background-dark: color-mix(
-    in oklch,
-    var(--black) 88%,
-    var(--secondary-base)
-  );
+  --background-dark: color-mix(in oklch, var(--black) 99%, var(--primary-base));
   --surface-light: var(--neutral-light);
-  --surface-tint: color-mix(in oklch, var(--white) 97%, var(--secondary-base));
+  --surface-tint: color-mix(in oklch, var(--white) 99%, var(--primary-base));
   /* Background alpha, never element opacity: nested cards accumulate light. */
   --surface-overlay: oklch(from var(--surface-tint) l c h / 5%);
   --surface-raised-overlay: oklch(from var(--surface-tint) l c h / 8%);
@@ -116,7 +113,7 @@
   );
   --background: light-dark(var(--background-light), var(--background-dark));
   --foreground: light-dark(
-    color-mix(in oklch, var(--black) 92%, var(--secondary-base)),
+    color-mix(in oklch, var(--black) 96%, var(--primary-base)),
     color-mix(in oklch, var(--white) 96%, var(--primary-base))
   );
   --card: light-dark(var(--surface-light), var(--surface-overlay));
@@ -128,18 +125,25 @@
   --primary-foreground: var(--black);
   --primary-hover: color-mix(in oklch, var(--primary-base) 92%, var(--white));
   --primary-text: var(--primary);
+  --secondary-text: light-dark(
+    var(--secondary-base),
+    oklch(from var(--secondary-base) 80% c h)
+  );
   --secondary: light-dark(
-    color-mix(in oklch, var(--secondary-base) 7%, var(--surface-light)),
+    color-mix(in oklch, var(--secondary-base) 12%, var(--surface-light)),
+    oklch(from var(--secondary-text) l c h / 12%)
+  );
+  --secondary-foreground: var(--secondary-text);
+  --muted: light-dark(
+    color-mix(in oklch, var(--black) 5%, var(--surface-light)),
     var(--surface-raised-overlay)
   );
-  --secondary-foreground: var(--foreground);
-  --muted: var(--secondary);
   --muted-foreground: light-dark(
     color-mix(in oklch, var(--black) 67%, var(--background-light)),
     color-mix(in oklch, var(--white) 78%, var(--background-dark))
   );
   --accent: light-dark(
-    color-mix(in oklch, var(--secondary-base) 4%, var(--surface-light)),
+    color-mix(in oklch, var(--primary-base) 20%, var(--surface-light)),
     oklch(from var(--primary-base) l c h / 12%)
   );
   --accent-foreground: var(--foreground);
@@ -194,15 +198,8 @@
   );
   --header-control-border: var(--input);
   --brand-mark-color: light-dark(var(--black), var(--primary-base));
-  --newsletter-background: light-dark(
-    var(--background-dark),
-    var(--surface-overlay)
-  );
-  --newsletter-foreground: color-mix(
-    in oklch,
-    var(--white) 96%,
-    var(--primary-base)
-  );
+  --newsletter-background: var(--accent);
+  --newsletter-foreground: var(--accent-foreground);
 
   --radius: 1rem;
   --space-section: clamp(2.5rem, 6vw, 5rem);

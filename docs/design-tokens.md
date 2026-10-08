@@ -9,22 +9,22 @@ geometry tokens, shadows, and `color-scheme` selection.
 
 Only these HEX inputs define the palette:
 
-| Input   | Value   | Purpose                           |
-| ------- | ------- | --------------------------------- |
-| `black` | #101012 | Near-black anchor                 |
-| `white` | #FDFDFC | Near-white anchor                 |
-| `gold`  | #F1A60A | Original site brand yellow        |
-| `plum`  | #736377 | Secondary colour and neutral tint |
-| `green` | #176848 | Success                           |
-| `red`   | #B42318 | Error                             |
-| `blue`  | #215F93 | Information                       |
+| Input   | Value   | Purpose                                 |
+| ------- | ------- | --------------------------------------- |
+| `black` | #101010 | Neutral near-black anchor               |
+| `white` | #FDFDFC | Near-white anchor                       |
+| `gold`  | #F1A60A | Original site brand yellow              |
+| `slate` | #26465A | Restrained slate-blue secondary accents |
+| `green` | #176848 | Success                                 |
+| `red`   | #B42318 | Error                                   |
+| `blue`  | #215F93 | Information                             |
 
 `primary-base`, `secondary-base`, `success-base`, `error-base`, and `info-base`
 convert the corresponding HEX input automatically with `oklch(from … l c h)`.
 Warning derives from gold. There is no conversion script or separate numeric
 OKLCH value to maintain.
 
-The `brand-50`–`brand-900` and `plum-50`–`plum-900` ramps mix each base towards
+The `brand-50`–`brand-900` and `slate-50`–`slate-900` ramps mix each base towards
 white or black in OKLCH. The 500 step retains the exact input. These ramps are
 palette primitives; components should use semantic roles instead.
 
@@ -32,19 +32,23 @@ palette primitives; components should use semantic roles instead.
 
 Light cards, menus, and the header mix 97% white with 3% gold for a faint warm
 tint. The page mixes this neutral with 2% black, giving cards a quiet paper-like
-backdrop. The dark page mixes 88% black with 12% Plum.
+backdrop. The dark page mixes 99% neutral black with 1% gold. Dark elevation
+overlays mix 99% white with 1% gold before applying alpha. Secondary blue does not tint
+general surfaces or neutral text: both themes keep the same warm gold character.
 These percentages describe OKLCH interpolation weights, not alpha. Gold stays
 concentrated in primary actions and meaningful highlights. The header is opaque
 and warm near-white in light mode; dark mode uses an opaque composite of 5% pale tint
-over the dark page. Header hover states and general accent surfaces use pale
-Plum in light mode, leaving gold for elements that need attention.
+over the dark page. Header hover states and general accent surfaces mix 20% gold
+with the warm light surface. The newsletter card uses this light primary tint
+with the matching accent foreground. Dark accent surfaces use gold at 12% alpha.
 
-| Surface                  | Light                              | Dark                                                 |
-| ------------------------ | ---------------------------------- | ---------------------------------------------------- |
-| Page                     | Opaque paper neutral               | Opaque near-black with a Plum tint                   |
-| Card                     | Opaque warm white, small shadow    | Pale Plum-tinted background at 5% alpha              |
-| Secondary / raised state | Pale Plum surface                  | Same pale tint at 8% alpha                           |
-| Menu / popover           | Opaque warm white, floating shadow | Opaque composite of 12% pale tint over the dark page |
+| Surface              | Light                              | Dark                                                 |
+| -------------------- | ---------------------------------- | ---------------------------------------------------- |
+| Page                 | Opaque paper neutral               | Opaque near-black with a gold tint                   |
+| Card                 | Opaque warm white, small shadow    | Pale gold-tinted background at 5% alpha              |
+| Secondary controls   | Pale slate-blue surface            | Pale slate-blue tint at 12% alpha                    |
+| Muted / raised state | Warm neutral surface               | Pale gold-tinted background at 8% alpha              |
+| Menu / popover       | Opaque warm white, floating shadow | Opaque composite of 12% pale tint over the dark page |
 
 Dark card backgrounds use alpha, not element opacity. Nested cards therefore
 accumulate light while text stays opaque. Text pairings are verified against up
@@ -69,7 +73,7 @@ Card shadows apply consistently to editorial, event, and participation panels.
 | Boundaries and focus | `border`, `input`, `ring`                                                    |
 | Feedback             | `success`, `warning`, `error`, `info`, each with `-foreground` and `-subtle` |
 
-Text derives from the neutral anchors: main light text mixes black with 8% Plum,
+Text derives from the neutral anchors: main light text mixes black with 4% gold,
 and main dark text mixes white with 4% gold. Secondary text mixes towards the
 page surface. Status text uses controlled lightness (42% light / 80% dark) and
 capped chroma, with subtle fills mixed into the active page background. A fixed
@@ -85,6 +89,12 @@ or semantic variables in project CSS. `destructive` aliases error. Compatibility
 aliases `paper`, `ink`, `soft`, and `white` map existing editorial layouts onto the
 same system. The Tailwind `white` compatibility alias represents the card surface;
 the raw `--white` input represents the neutral anchor.
+
+`secondary-text` uses the slate-blue base in light mode and raises its OKLCH
+lightness to 80% in dark mode while preserving chroma and hue. Supporting links
+and editorial notes use this role; secondary controls use blue-tinted fills
+with matching text. Muted surfaces remain neutral so blue never becomes the
+general page background.
 
 Use `border` for decorative dividers and `input` for control boundaries. Use
 `ring` for keyboard focus. Do not communicate status through colour alone; add
