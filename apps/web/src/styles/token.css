@@ -174,7 +174,11 @@
   --warning-foreground: light-dark(var(--white), var(--black));
   --warning-subtle: color-mix(in oklch, var(--warning) 12%, var(--background));
 
-  --header-background: light-dark(var(--primary), var(--surface-overlay));
+  /* Sticky headers need an opaque surface to hide scrolling content. */
+  --header-background: light-dark(
+    var(--primary),
+    color-mix(in srgb, var(--background-dark) 95%, var(--surface-tint))
+  );
   --header-foreground: var(--foreground);
   --header-border: var(--border);
   --header-control-background: light-dark(
