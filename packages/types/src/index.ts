@@ -10,6 +10,7 @@ export interface MediaReference {
 }
 
 export interface Workshop {
+  kind?: "workshop" | "event" | null;
   id: number | string;
   title: string;
   slug: string;
@@ -44,8 +45,65 @@ export interface Poem {
   originalLanguage: Locale | "other";
   originalLanguageLabel?: string | null;
   originalText: string;
-  author?: { id: number | string; name: string } | number | string | null;
+  author?: Author | number | string | null;
   translations?: PoemTranslation[] | null;
+  _status?: "draft" | "published";
+}
+
+export interface Author {
+  id: number | string;
+  name: string;
+  biography?: string | null;
+  portrait?: MediaReference | number | string | null;
+}
+
+export interface HomepageLink {
+  title?: string | null;
+  description?: string | null;
+  url: string;
+}
+
+export interface HomepageSection {
+  id?: string;
+  blockType:
+    | "introduction"
+    | "poets"
+    | "events"
+    | "participation"
+    | "newsletter";
+  enabled?: boolean | null;
+  heading?: string | null;
+  description?: string | null;
+  image?: MediaReference | number | string | null;
+  linkLabel?: string | null;
+  linkUrl?: string | null;
+  poets?: (Author | number | string)[] | null;
+  pinnedEvents?: (Workshop | number | string)[] | null;
+  limit?: number | null;
+  links?: HomepageLink[] | null;
+}
+
+export interface Homepage {
+  feature?: {
+    kind?: "poem" | "event" | "announcement";
+    heading?: string | null;
+    description?: string | null;
+    poem?: Poem | number | string | null;
+    event?: Workshop | number | string | null;
+    announcement?: {
+      title?: string | null;
+      text?: string | null;
+      image?: MediaReference | number | string | null;
+      linkLabel?: string | null;
+      linkUrl?: string | null;
+    } | null;
+  } | null;
+  sections?: HomepageSection[] | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    image?: MediaReference | number | string | null;
+  } | null;
   _status?: "draft" | "published";
 }
 

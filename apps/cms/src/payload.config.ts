@@ -18,6 +18,7 @@ import { Pages } from "./collections/Pages";
 import { Poems } from "./collections/Poems";
 import { Users } from "./collections/Users";
 import { Workshops } from "./collections/Workshops";
+import { Homepage } from "./globals/Homepage";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -25,9 +26,11 @@ const dirname = path.dirname(filename);
 export default buildConfig({
   admin: {
     user: Users.slug,
+    importMap: { baseDir: path.resolve(dirname) },
     meta: { titleSuffix: " · The Poetry Project" },
   },
   collections: [Users, Media, Pages, Authors, Workshops, Poems],
+  globals: [Homepage],
   plugins: [
     mcpPlugin({
       collections: {

@@ -36,6 +36,15 @@ export const Workshops: CollectionConfig = {
   endpoints: [previewEndpoint("workshops")],
   versions: { drafts: { autosave: { interval: 375 } } },
   fields: [
+    {
+      name: "kind",
+      type: "select",
+      defaultValue: "workshop",
+      options: [
+        { label: "Workshop", value: "workshop" },
+        { label: "Reading or event", value: "event" },
+      ],
+    },
     { name: "title", type: "text", localized: true, required: true },
     {
       name: "slug",
