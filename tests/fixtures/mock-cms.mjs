@@ -71,11 +71,54 @@ const poem = {
   _status: "published",
 };
 
+const authors = [poem.author, { id: 4, name: "Workshop Collective" }];
+
+function homepage(locale, preview) {
+  const feature =
+    locale === "de"
+      ? { kind: "event", event: workshop(locale, false) }
+      : locale === "fa"
+        ? {
+            kind: "announcement",
+            announcement: {
+              title: "خبر تازه",
+              text: "با هم می‌نویسیم",
+              linkLabel: "بیشتر بخوانید",
+              linkUrl: "/workshops",
+            },
+          }
+        : { kind: "poem", poem };
+  const sections = [
+    { blockType: "introduction" },
+    { blockType: "poets", poets: authors },
+    { blockType: "events", pinnedEvents: [], limit: 3 },
+    { blockType: "participation" },
+    { blockType: "newsletter" },
+    { blockType: "newsletter", enabled: false, heading: "Hidden section" },
+  ];
+  if (preview) {
+    feature.heading = "Draft homepage";
+    sections.splice(0, 2, sections[1], sections[0]);
+  }
+  return { feature, sections, _status: preview ? "draft" : "published" };
+}
+
 const server = http.createServer((request, response) => {
   const url = new URL(request.url ?? "/", "http://127.0.0.1:3001");
   response.setHeader("content-type", "application/json; charset=utf-8");
   if (url.pathname === "/health")
     return response.end(JSON.stringify({ ok: true }));
+
+  if (url.pathname === "/preview-host") {
+    const previewURL = new URL(
+      "/en?previewSecret=test-preview",
+      process.env.MOCK_WEB_ORIGIN ?? "http://127.0.0.1:4321",
+    );
+    response.setHeader("content-type", "text/html; charset=utf-8");
+    return response.end(
+      `<script>window.addEventListener('message', (event) => { if (event.data?.ready) document.body.dataset.ready = 'true' })</script><iframe title="Homepage preview" src="${previewURL.href}"></iframe>`,
+    );
+  }
 
   const isPreview = url.pathname.endsWith("/preview");
   if (isPreview && request.headers["x-preview-secret"] !== "test-preview") {
@@ -84,6 +127,22 @@ const server = http.createServer((request, response) => {
   }
 
   const locale = url.searchParams.get("locale") ?? "de";
+  if (url.pathname.startsWith("/api/globals/homepage/")) {
+    return response.end(JSON.stringify(homepage(locale, isPreview)));
+  }
+  if (url.pathname === "/api/authors") {
+    return response.end(
+      JSON.stringify({ docs: authors, totalDocs: authors.length }),
+    );
+  }
+  if (url.pathname.startsWith("/api/authors/")) {
+    const author = authors.find(
+      (entry) => String(entry.id) === url.pathname.split("/").at(-1),
+    );
+    if (author) return response.end(JSON.stringify(author));
+    response.statusCode = 404;
+    return response.end(JSON.stringify({ error: "Not found" }));
+  }
   if (url.pathname.startsWith("/api/workshops")) {
     const requestedSlug = isPreview
       ? url.searchParams.get("slug")
@@ -93,6 +152,44 @@ const server = http.createServer((request, response) => {
     return response.end(JSON.stringify({ docs: [document], totalDocs: 1 }));
   }
   if (url.pathname.startsWith("/api/poems")) {
+    const author = url.searchParams.get("where[author][equals]");
+    if (author === "4") {
+      if (url.searchParams.get("page") === "2") {
+        return response.end(
+          JSON.stringify({
+            docs: [
+              {
+                ...poem,
+                id: 6,
+                slug: "next-page-poem",
+                title: "A poem on the next page",
+                author: authors[1],
+              },
+            ],
+            totalDocs: 2,
+            hasNextPage: false,
+          }),
+        );
+      }
+      return response.end(
+        JSON.stringify({
+          docs: [
+            {
+              ...poem,
+              id: 5,
+              slug: "later-poem",
+              title: "A later poem",
+              originalLanguage: "en",
+              originalText: "A voice beyond the first archive page",
+              author: authors[1],
+              translations: [],
+            },
+          ],
+          totalDocs: 1,
+          hasNextPage: url.searchParams.get("limit") !== "1",
+        }),
+      );
+    }
     return response.end(JSON.stringify({ docs: [poem], totalDocs: 1 }));
   }
 
@@ -100,7 +197,7 @@ const server = http.createServer((request, response) => {
   response.end(JSON.stringify({ error: "Not found" }));
 });
 
-server.listen(3001, "127.0.0.1");
+server.listen(Number(process.env.MOCK_CMS_PORT ?? 3001), "127.0.0.1");
 
 for (const signal of ["SIGINT", "SIGTERM"]) {
   process.on(signal, () => server.close(() => process.exit(0)));

@@ -132,6 +132,9 @@ settings:
 importers:
   .:
     devDependencies:
+      "@axe-core/playwright":
+        specifier: 4.13.0
+        version: 4.13.0(playwright-core@1.63.0)
       "@playwright/test":
         specifier: 1.63.0
         version: 1.63.0
@@ -162,6 +165,9 @@ importers:
       "@payloadcms/translations":
         specifier: 3.90.2
         version: 3.90.2
+      "@payloadcms/ui":
+        specifier: 3.90.2
+        version: 3.90.2(@types/react@19.1.16)(monaco-editor@0.57.0)(next@16.3.6(@playwright/test@1.63.0)(@types/node@26.6.4)(babel-plugin-macros@3.1.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(sass@1.77.4))(payload@3.90.2(graphql@16.11.0)(typescript@5.9.3))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@5.9.3)
       "@poetry/i18n":
         specifier: workspace:*
         version: link:../../packages/i18n
@@ -223,6 +229,9 @@ importers:
       "@inlang/paraglide-js":
         specifier: 2.25.4
         version: 2.25.4(typescript@5.9.3)(vite@8.3.1(@types/node@22.18.6)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.77.4)(tsx@4.22.4)(yaml@2.9.1))
+      "@payloadcms/live-preview":
+        specifier: 3.90.2
+        version: 3.90.2
       "@poetry/i18n":
         specifier: workspace:*
         version: link:../../packages/i18n
@@ -266,6 +275,9 @@ importers:
       "@inlang/plugin-message-format":
         specifier: 4.4.4
         version: 4.4.4
+      "@internationalized/date":
+        specifier: ^3.12.4
+        version: 3.12.4
       shadcn-svelte:
         specifier: 1.7.0
         version: 1.7.0(svelte@5.57.1)
@@ -493,6 +505,14 @@ packages:
       {
         integrity: sha512-8oddpOae35pJsXPQXhTkM0ypfKPskVsh2bCxRtbf7e+/Epw2nReakFYpLKjZMEr75CsoF203PMnCocpfz0s69A==,
       }
+
+  "@axe-core/playwright@4.13.0":
+    resolution:
+      {
+        integrity: sha512-6YLx+kxXu5GJceG4ozFg+33a2EMTdjYwWGloJ3sb9Kta5pp+ZNS53uxGVog5JetIY8s++P5UrtX+cri+u0VAVg==,
+      }
+    peerDependencies:
+      playwright-core: ">= 1.0.0"
 
   "@babel/code-frame@7.29.7":
     resolution:
@@ -2958,6 +2978,12 @@ packages:
       graphql: ^16.8.1
       payload: 3.90.2
 
+  "@payloadcms/live-preview@3.90.2":
+    resolution:
+      {
+        integrity: sha512-N9ryFbTPHgfHOBRK9jLDzR8Gb1OnZWP2JVW11m45Mh89b7eNW7ZDtRtOEMEWocJo7v6xRGBmiiMW6qXrThmR7A==,
+      }
+
   "@payloadcms/next@3.90.2":
     resolution:
       {
@@ -3863,6 +3889,13 @@ packages:
         integrity: sha512-kNOjDqAh7px0XWNI+4QbzoiR/nTkHAWNud2uvnJquD1/x5a7EQZMJT0AczqK0Qn67oY/TTQ1LbUKajZpp3I9tQ==,
       }
     engines: { node: ">=8.0.0" }
+
+  axe-core@4.13.0:
+    resolution:
+      {
+        integrity: sha512-UzGt8zg7Ny8djbYMhxl2zuEevVa7r2gJjYY5Lwr1xM7+XU2nd6CkIWFTVcCIbAP63vSz71NaVyyuSk9lHKcy0A==,
+      }
+    engines: { node: ">=4" }
 
   axobject-query@4.1.0:
     resolution:
@@ -8493,6 +8526,11 @@ snapshots:
     dependencies:
       yaml: 2.9.1
 
+  "@axe-core/playwright@4.13.0(playwright-core@1.63.0)":
+    dependencies:
+      axe-core: 4.13.0
+      playwright-core: 1.63.0
+
   "@babel/code-frame@7.29.7":
     dependencies:
       "@babel/helper-validator-identifier": 7.29.7
@@ -9865,6 +9903,8 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
+  "@payloadcms/live-preview@3.90.2": {}
+
   "@payloadcms/next@3.90.2(@types/react@19.1.16)(graphql@16.11.0)(monaco-editor@0.57.0)(next@16.3.6(@playwright/test@1.63.0)(@types/node@26.6.4)(babel-plugin-macros@3.1.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(sass@1.77.4))(payload@3.90.2(graphql@16.11.0)(typescript@5.9.3))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@5.9.3)":
     dependencies:
       "@dnd-kit/core": 6.3.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -10221,7 +10261,7 @@ snapshots:
 
   "@types/busboy@1.5.4":
     dependencies:
-      "@types/node": 22.18.6
+      "@types/node": 26.6.4
 
   "@types/chai@5.2.3":
     dependencies:
@@ -10261,6 +10301,7 @@ snapshots:
   "@types/node@22.18.6":
     dependencies:
       undici-types: 6.21.0
+    optional: true
 
   "@types/node@26.6.4":
     dependencies:
@@ -10296,7 +10337,7 @@ snapshots:
 
   "@types/ws@8.18.1":
     dependencies:
-      "@types/node": 22.18.6
+      "@types/node": 26.6.4
 
   "@ungap/structured-clone@1.4.0": {}
 
@@ -10527,6 +10568,8 @@ snapshots:
 
   atomic-sleep@1.0.0: {}
 
+  axe-core@4.13.0: {}
+
   axobject-query@4.1.0: {}
 
   babel-plugin-macros@3.1.0:
@@ -10584,7 +10627,7 @@ snapshots:
 
   buffer-image-size@0.6.4:
     dependencies:
-      "@types/node": 22.18.6
+      "@types/node": 26.6.4
 
   busboy@1.6.0:
     dependencies:
@@ -11216,7 +11259,7 @@ snapshots:
 
   happy-dom@20.14.5:
     dependencies:
-      "@types/node": 22.18.6
+      "@types/node": 26.6.4
       "@types/whatwg-mimetype": 3.0.2
       "@types/ws": 8.18.1
       buffer-image-size: 0.6.4
@@ -12785,7 +12828,8 @@ snapshots:
 
   uncrypto@0.1.3: {}
 
-  undici-types@6.21.0: {}
+  undici-types@6.21.0:
+    optional: true
 
   undici-types@8.9.0: {}
 

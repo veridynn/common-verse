@@ -21,6 +21,7 @@
     "@payloadcms/plugin-mcp": "3.90.2",
     "@payloadcms/richtext-lexical": "3.90.2",
     "@payloadcms/translations": "3.90.2",
+    "@payloadcms/ui": "3.90.2",
     "@poetry/i18n": "workspace:*",
     "cross-env": "7.0.3",
     "dotenv": "16.6.1",
