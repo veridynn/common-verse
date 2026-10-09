@@ -16,6 +16,7 @@ export default defineConfig({
       paraglideVitePlugin({
         project: "./project.inlang",
         outdir: "./src/paraglide",
+        outputStructure: "message-modules",
         emitTsDeclarations: true,
         strategy: ["url", "baseLocale"],
       }),
