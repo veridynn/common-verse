@@ -15,10 +15,6 @@ const suppliedSecret = Astro.url.searchParams.get('previewSecret')
 const previewSecret = getSecret('PREVIEW_SECRET')
 const preview = Boolean(suppliedSecret && previewSecret && suppliedSecret === previewSecret)
 if (suppliedSecret !== null && !preview) return new Response('Invalid preview link', { status: 401 })
-if (preview) {
-  Astro.response.headers.set('Cache-Control', 'no-store')
-  Astro.response.headers.set('Referrer-Policy', 'no-referrer')
-}
 const result = await Promise.allSettled([
   getHomepage(locale, preview ? suppliedSecret! : undefined), getAuthors(locale), getUpcomingWorkshops(locale),
 ])
@@ -45,28 +41,4 @@ const hasUpcoming = sections.some((section) => section.blockType === 'events' &&
   {unavailable && <p class="content-unavailable" role="status">{m.home_unavailable({}, { locale })}</p>}
   <HomeFeature feature={homepage?.feature} {locale} {preview} {hasUpcoming} />
   <HomeSections {sections} {authors} {events} {poems} {locale} />
-  {preview && <div id="homepage-live-preview" data-server-url={import.meta.env.PUBLIC_CMS_URL ?? 'http://localhost:3001'} />}
 </BaseLayout>
-
-<script>
-  import { isDocumentEvent, ready } from '@payloadcms/live-preview'
-  const marker = document.getElementById('homepage-live-preview')
-  if (marker?.dataset.serverUrl) {
-    const serverURL = new URL(marker.dataset.serverUrl).origin
-    const scrollKey = 'homepage-preview-scroll'
-    let savedScroll: string | null = null
-    try { savedScroll = sessionStorage.getItem(scrollKey) } catch { /* Storage can be unavailable in an embedded preview. */ }
-    if (savedScroll) {
-      try { sessionStorage.removeItem(scrollKey) } catch { /* Preview remains usable without storage. */ }
-      const position = Number(savedScroll)
-      if (Number.isFinite(position)) requestAnimationFrame(() => window.scrollTo({ top: position, behavior: 'instant' }))
-    }
-    window.addEventListener('message', (event) => {
-      if ((event.source === window.parent || event.source === window.opener) && isDocumentEvent(event, serverURL)) {
-        try { sessionStorage.setItem(scrollKey, String(window.scrollY)) } catch { /* Saving scroll position is optional. */ }
-        window.location.reload()
-      }
-    })
-    ready({ serverURL })
-  }
-</script>

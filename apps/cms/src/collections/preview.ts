@@ -1,6 +1,23 @@
 import type { Endpoint } from "payload";
+import { isLocale, localizedPath } from "@poetry/i18n";
 
 type PreviewCollection = "workshops" | "poems";
+
+export function collectionPreviewUrl(
+  collection: PreviewCollection,
+  slug: unknown,
+  locale = "de",
+) {
+  const secret = process.env.PREVIEW_SECRET;
+  if (!secret || !isLocale(locale) || typeof slug !== "string" || !slug)
+    return null;
+  const url = new URL(
+    localizedPath(locale, `${collection}/${slug}`),
+    process.env.PUBLIC_SITE_URL ?? "http://localhost:4321",
+  );
+  url.searchParams.set("previewSecret", secret);
+  return url.href;
+}
 
 export function previewEndpoint(collection: PreviewCollection): Endpoint {
   return {
@@ -30,7 +47,9 @@ export function previewEndpoint(collection: PreviewCollection): Endpoint {
         limit: 1,
       });
 
-      return Response.json(result);
+      return Response.json(result, {
+        headers: { "Cache-Control": "no-store" },
+      });
     },
   };
 }

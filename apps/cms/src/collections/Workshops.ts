@@ -1,7 +1,6 @@
 import type { CollectionConfig } from "payload";
-import { isLocale, localizedPath } from "@poetry/i18n";
 import { authenticated, publishedOrAuthenticated } from "./access";
-import { previewEndpoint } from "./preview";
+import { collectionPreviewUrl, previewEndpoint } from "./preview";
 
 export const Workshops: CollectionConfig = {
   slug: "workshops",
@@ -12,18 +11,11 @@ export const Workshops: CollectionConfig = {
     defaultColumns: ["title", "startDate", "_status", "updatedAt"],
     description:
       "Create translated workshop pages and preview them before publishing.",
-    preview: (doc, { locale }) => {
-      const siteUrl = process.env.PUBLIC_SITE_URL ?? "http://localhost:4321";
-      const code = locale ?? "de";
-      if (!isLocale(code)) return null;
-      const slug = typeof doc.slug === "string" ? doc.slug : "";
-      const params = new URLSearchParams({
-        previewSecret: process.env.PREVIEW_SECRET ?? "",
-      });
-      return new URL(
-        `${localizedPath(code, `workshops/${slug}`)}?${params}`,
-        siteUrl,
-      ).href;
+    preview: (doc, { locale }) =>
+      collectionPreviewUrl("workshops", doc.slug, locale),
+    livePreview: {
+      url: ({ data, locale }) =>
+        collectionPreviewUrl("workshops", data.slug, locale?.code),
     },
   },
   access: {

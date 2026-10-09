@@ -33,6 +33,10 @@ const {
   alternateLocales = locales,
   mainClass,
 } = Astro.props
+if (preview) {
+  Astro.response.headers.set('Cache-Control', 'no-store')
+  Astro.response.headers.set('Referrer-Policy', 'no-referrer')
+}
 const { direction } = getLocaleMetadata(locale)
 const siteUrl = import.meta.env.PUBLIC_SITE_URL ?? 'http://localhost:4321'
 const canonical = new URL(localizedPath(locale, canonicalPath), siteUrl)
@@ -72,6 +76,7 @@ const theme = themePreference(Astro.cookies.get('poetry-theme')?.value)
     <a class="skip-link" href="#main">{m.skip_to_content({}, { locale })}</a>
     <Header {locale} themePreference={theme} />
     {preview && <p class="preview-banner" role="status">{m.preview_notice({}, { locale })}</p>}
+    {preview && <div id="payload-live-preview" data-server-url={import.meta.env.PUBLIC_CMS_URL ?? 'http://localhost:3001'} />}
     <main id="main" tabindex="-1" class={mainClass}><slot /></main>
     <footer class="site-footer"><a class="brand" href={localizedPath(locale)}><BrandLogo /><span class="sr-only">The Poetry Project{m.site_title({}, { locale }) !== 'The Poetry Project' ? ` — ${m.site_title({}, { locale })}` : ''}</span></a>
       <nav aria-label={m.home_footer({}, { locale })}>
@@ -83,3 +88,26 @@ const theme = themePreference(Astro.cookies.get('poetry-theme')?.value)
     </footer>
   </body>
 </html>
+
+<script>
+  import { isDocumentEvent, ready } from '@payloadcms/live-preview'
+  const marker = document.getElementById('payload-live-preview')
+  if (marker?.dataset.serverUrl) {
+    const serverURL = new URL(marker.dataset.serverUrl).origin
+    const scrollKey = `payload-preview-scroll:${window.location.pathname}`
+    let savedScroll: string | null = null
+    try { savedScroll = sessionStorage.getItem(scrollKey) } catch { /* Storage can be unavailable in an embedded preview. */ }
+    if (savedScroll) {
+      try { sessionStorage.removeItem(scrollKey) } catch { /* Preview remains usable without storage. */ }
+      const position = Number(savedScroll)
+      if (Number.isFinite(position)) requestAnimationFrame(() => window.scrollTo({ top: position, behavior: 'instant' }))
+    }
+    window.addEventListener('message', (event) => {
+      if ((event.source === window.parent || event.source === window.opener) && isDocumentEvent(event, serverURL)) {
+        try { sessionStorage.setItem(scrollKey, String(window.scrollY)) } catch { /* Saving scroll position is optional. */ }
+        window.location.reload()
+      }
+    })
+    ready({ serverURL })
+  }
+</script>

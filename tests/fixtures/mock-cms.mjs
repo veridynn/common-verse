@@ -122,20 +122,35 @@ function homepage(locale, preview) {
   return { feature, sections, _status: preview ? "draft" : "published" };
 }
 
+const previewTitles = new Map();
+const reversedHomepageLocales = new Set();
+
 const server = http.createServer((request, response) => {
   const url = new URL(request.url ?? "/", "http://127.0.0.1:3001");
   response.setHeader("content-type", "application/json; charset=utf-8");
   if (url.pathname === "/health")
     return response.end(JSON.stringify({ ok: true }));
 
+  if (url.pathname === "/preview-update" && request.method === "POST") {
+    if (url.searchParams.get("document") === "homepage") {
+      reversedHomepageLocales.add(url.searchParams.get("locale"));
+    } else {
+      previewTitles.set(
+        url.searchParams.get("locale"),
+        "Updated workshop draft",
+      );
+    }
+    return response.end(JSON.stringify({ ok: true }));
+  }
+
   if (url.pathname === "/preview-host") {
     const previewURL = new URL(
-      "/en?previewSecret=test-preview",
+      `${url.searchParams.get("path") ?? "/en"}?previewSecret=test-preview`,
       process.env.MOCK_WEB_ORIGIN ?? "http://127.0.0.1:4321",
     );
     response.setHeader("content-type", "text/html; charset=utf-8");
     return response.end(
-      `<script>window.addEventListener('message', (event) => { if (event.data?.ready) document.body.dataset.ready = 'true' })</script><iframe title="Homepage preview" src="${previewURL.href}"></iframe>`,
+      `<script>window.addEventListener('message', (event) => { if (event.data?.ready) document.body.dataset.ready = 'true' })</script><iframe title="Content preview" src="${previewURL.href}"></iframe>`,
     );
   }
 
@@ -147,7 +162,10 @@ const server = http.createServer((request, response) => {
 
   const locale = url.searchParams.get("locale") ?? "de";
   if (url.pathname.startsWith("/api/globals/homepage/")) {
-    return response.end(JSON.stringify(homepage(locale, isPreview)));
+    const document = homepage(locale, isPreview);
+    if (isPreview && reversedHomepageLocales.has(locale))
+      document.sections.reverse();
+    return response.end(JSON.stringify(document));
   }
   if (url.pathname === "/api/authors") {
     return response.end(
@@ -167,6 +185,13 @@ const server = http.createServer((request, response) => {
       ? url.searchParams.get("slug")
       : url.searchParams.get("where[slug][equals]");
     const document = workshop(locale, isPreview);
+    if (
+      isPreview &&
+      requestedSlug === "live-preview" &&
+      previewTitles.has(locale)
+    ) {
+      document.title = previewTitles.get(locale);
+    }
     if (requestedSlug === "partial" && locale === "fa") document.title = null;
     return response.end(JSON.stringify({ docs: [document], totalDocs: 1 }));
   }

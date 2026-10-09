@@ -1,7 +1,6 @@
 import type { CollectionConfig } from "payload";
-import { isLocale, localizedPath } from "@poetry/i18n";
 import { authenticated, publishedOrAuthenticated } from "./access";
-import { previewEndpoint } from "./preview";
+import { collectionPreviewUrl, previewEndpoint } from "./preview";
 
 const languageOptions = [
   { label: "German", value: "de" },
@@ -20,17 +19,11 @@ export const Poems: CollectionConfig = {
     group: "Poetry",
     description:
       "Keep the original poem intact and add only the translations that actually exist.",
-    preview: (doc, { locale }) => {
-      const siteUrl = process.env.PUBLIC_SITE_URL ?? "http://localhost:4321";
-      const code = locale ?? "de";
-      if (!isLocale(code)) return null;
-      const params = new URLSearchParams({
-        previewSecret: process.env.PREVIEW_SECRET ?? "",
-      });
-      return new URL(
-        `${localizedPath(code, `poems/${doc.slug ?? ""}`)}?${params}`,
-        siteUrl,
-      ).href;
+    preview: (doc, { locale }) =>
+      collectionPreviewUrl("poems", doc.slug, locale),
+    livePreview: {
+      url: ({ data, locale }) =>
+        collectionPreviewUrl("poems", data.slug, locale?.code),
     },
   },
   access: {

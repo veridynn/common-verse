@@ -7,7 +7,17 @@ import { defineConfig } from "astro/config";
 export default defineConfig({
   output: "server",
   adapter: node({ mode: "standalone" }),
-  integrations: [svelte()],
+  integrations: [
+    svelte(),
+    {
+      name: "separate-vite-caches",
+      hooks: {
+        "astro:config:setup": ({ command, updateConfig }) => {
+          updateConfig({ vite: { cacheDir: `node_modules/.vite-${command}` } });
+        },
+      },
+    },
+  ],
   server: { port: 4321 },
   vite: {
     envDir: "../../",
