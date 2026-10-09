@@ -11,7 +11,7 @@
 <div
   {...restProps}
   data-slot="card-footer"
-  class={cn('flex flex-wrap items-center gap-2', className)}
+  class={cn('flex flex-wrap items-center gap-fluid-2xs', className)}
 >
   {@render children?.()}
 </div>

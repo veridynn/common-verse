@@ -32,7 +32,7 @@
 
 <style>
   [data-slot='card'] {
-    --card-spacing: 1.5rem;
+    --card-spacing: var(--space-md);
     display: flex;
     flex-direction: column;
     gap: var(--card-spacing);
@@ -46,7 +46,7 @@
     box-shadow: var(--shadow-card);
   }
   [data-size='sm'] {
-    --card-spacing: 1.25rem;
+    --card-spacing: var(--space-sm);
   }
   [data-variant='accent'] {
     border-block-start: 4px solid var(--primary);

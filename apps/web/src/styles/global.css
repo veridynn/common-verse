@@ -67,7 +67,7 @@ a:hover {
   transform: translateY(-200%);
   background: var(--color-ink);
   color: var(--color-paper);
-  padding: 0.75rem 1rem;
+  padding: var(--space-xs) var(--space-sm);
   border-radius: 0.25rem;
   corner-shape: squircle;
 }
@@ -76,17 +76,17 @@ a:hover {
 }
 .site-header {
   --header-scroll-timeline: scroll(root block);
-  --header-padding-expanded: 0.5rem;
-  --header-padding-compact: 0.25rem;
+  --header-padding-expanded: var(--space-2xs);
+  --header-padding-compact: var(--space-3xs);
   position: sticky;
   inset-block-start: 0;
   z-index: 20;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2xs);
   padding-block: var(--header-padding-expanded);
-  padding-inline: max(1.25rem, calc((100vw - 72rem) / 2));
+  padding-inline: max(var(--space-gutter), calc((100vw - 72rem) / 2));
   border-block-end: 1px solid var(--header-border);
   background: var(--header-background);
   color: var(--header-foreground);
@@ -106,7 +106,7 @@ a:hover {
 .header-controls {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2xs);
   grid-column: 2;
   grid-row: 1;
 }
@@ -118,7 +118,7 @@ a:hover {
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: var(--space-xs);
   margin-inline-end: auto;
   font-family: var(--font-serif);
   font-size: var(--font-size-base);
@@ -134,10 +134,10 @@ a:hover {
 }
 nav {
   display: flex;
-  gap: 1.25rem;
+  gap: var(--space-sm-md);
 }
 .site-header nav a {
-  padding-block: 0.4rem;
+  padding-block: var(--space-2xs);
 }
 @supports (animation-timeline: scroll(root block)) and
   (animation-range: 0px 160px) {
@@ -162,13 +162,13 @@ nav {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.25rem;
+  gap: var(--space-3xs);
   min-height: 2rem;
   border: 0;
   border-radius: calc(var(--radius) * 0.5);
   corner-shape: squircle;
   background: transparent;
-  padding: 0.25rem 0.375rem;
+  padding: var(--space-3xs);
   color: var(--header-foreground);
   font-family: var(--font-sans);
   font-size: var(--font-size-sm);
@@ -208,7 +208,7 @@ nav {
 }
 .language-title {
   margin: 0;
-  padding: 0.5rem 0.75rem;
+  padding: var(--space-2xs) var(--space-xs);
   color: var(--muted-foreground);
   font-weight: 600;
   font-size: var(--font-size-sm);
@@ -222,9 +222,9 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--space-sm);
   min-height: 3rem;
-  padding: 0.7rem 0.75rem;
+  padding: var(--space-xs);
   border-radius: calc(var(--radius) * 0.5);
   corner-shape: squircle;
   text-decoration: none;
@@ -252,18 +252,18 @@ nav {
 .language-fallback .language-popover {
   position: absolute;
   inset-inline-end: 0;
-  margin-block-start: 0.5rem;
+  margin-block-start: var(--space-2xs);
   background: var(--popover);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   corner-shape: squircle;
-  padding: 0.6rem;
+  padding: var(--space-2xs);
   box-shadow: var(--shadow-floating);
   z-index: 10;
 }
 .theme-trigger {
   min-width: 2rem;
-  padding: 0.25rem;
+  padding: var(--space-3xs);
 }
 .theme-options {
   border: 0;
@@ -274,9 +274,9 @@ nav {
 .theme-option {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--space-xs);
   min-height: 3rem;
-  padding: 0.7rem 0.75rem;
+  padding: var(--space-xs);
   border-radius: calc(var(--radius) * 0.5);
   corner-shape: squircle;
   cursor: pointer;
@@ -295,7 +295,8 @@ main {
   max-width: 72rem;
   min-height: 70vh;
   margin-inline: auto;
-  padding: clamp(2rem, 6vw, 6rem) 1.25rem;
+  padding-block: var(--space-lg-xxl);
+  padding-inline: var(--space-gutter);
 }
 .hero {
   max-width: 52rem;
@@ -311,7 +312,7 @@ h6 {
   text-wrap: balance;
 }
 h1 {
-  margin-block: 0.5rem 1.5rem;
+  margin-block: var(--space-2xs) var(--space-md);
   font-size: var(--font-size-xxxl);
   font-weight: 500;
 }
@@ -332,13 +333,13 @@ h6 {
   margin: 0;
   background: var(--warning-subtle);
   color: var(--warning);
-  padding: 0.6rem 1.25rem;
+  padding: var(--space-2xs) var(--space-sm-md);
   text-align: center;
   font-weight: 700;
 }
 .content-grid {
   display: grid;
-  gap: 2rem;
+  gap: var(--space-lg);
   grid-template-columns: minmax(0, 2fr) minmax(14rem, 1fr);
 }
 .hero-image {
@@ -346,7 +347,7 @@ h6 {
   width: 100%;
   height: auto;
   max-height: 40rem;
-  margin-block: 2rem;
+  margin-block: var(--space-lg);
   object-fit: cover;
   border-radius: 0.5rem;
   corner-shape: squircle;
@@ -357,30 +358,30 @@ h6 {
   font-size: var(--font-size-md);
 }
 .translation {
-  margin-block: 3rem;
-  padding-block-start: 2rem;
+  margin-block: var(--space-xl);
+  padding-block-start: var(--space-lg);
   border-block-start: 1px solid var(--color-soft);
 }
 .content-list {
   display: grid;
-  gap: 1rem;
+  gap: var(--space-sm);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 .content-list article {
   border-block-start: 1px solid var(--color-soft);
-  padding-block: 1.5rem;
+  padding-block: var(--space-md);
 }
 .content-list h2 {
-  margin-block: 0 0.5rem;
+  margin-block: 0 var(--space-2xs);
   font-size: var(--font-size-xl);
 }
 .content-list p {
   max-width: 46rem;
 }
 footer {
-  padding: 2rem max(1.25rem, calc((100vw - 72rem) / 2));
+  padding: var(--space-lg) max(var(--space-gutter), calc((100vw - 72rem) / 2));
   border-block-start: 1px solid var(--color-soft);
 }
 @media (max-width: 48rem) {
@@ -409,28 +410,28 @@ footer {
 /* Homepage: a quiet reading space, with the poem as the visual centre. */
 .homepage {
   max-width: 76rem;
-  padding-block: clamp(2rem, 5vw, 4.5rem) 3rem;
+  padding-block: var(--space-lg-xl) var(--space-xl);
 }
 .home-feature {
   display: grid;
-  gap: 2.5rem;
-  padding-block-end: clamp(3rem, 7vw, 6rem);
+  gap: var(--space-lg-xl);
+  padding-block-end: var(--space-xl-xxl);
   align-items: center;
 }
 .home-feature h1 {
   font-size: var(--font-size-xxxl);
   line-height: 1.09;
-  margin-block: 1rem 1.4rem;
+  margin-block: var(--space-sm) var(--space-md);
   max-width: 12ch;
 }
 .home-feature .lede {
   font-size: var(--font-size-md);
   max-width: 36ch;
-  margin-block-end: 1.75rem;
+  margin-block-end: var(--space-md-lg);
 }
 .feature-note {
   font-size: var(--font-size-sm);
-  margin-block: 0 1.25rem;
+  margin-block: 0 var(--space-sm-md);
   color: var(--secondary-text);
   font-weight: 600;
 }
@@ -438,12 +439,12 @@ footer {
   color: var(--secondary-text);
   display: block;
   width: fit-content;
-  padding-block: 0.85rem;
-  margin-block-start: 0.5rem;
+  padding-block: var(--space-xs);
+  margin-block-start: var(--space-2xs);
 }
 .featured-poem {
   background: var(--color-white);
-  padding: clamp(1.5rem, 4vw, 3rem);
+  padding: var(--space-md-lg);
   border-radius: 1rem 1rem 3rem 1rem;
   corner-shape: squircle;
   box-shadow: var(--shadow-card);
@@ -451,7 +452,7 @@ footer {
 }
 .featured-poem h2 {
   font-size: var(--font-size-lg);
-  margin-block: 1rem;
+  margin-block: var(--space-sm);
   line-height: 1.35;
 }
 .featured-poem blockquote {
@@ -462,34 +463,34 @@ footer {
   white-space: pre-wrap;
 }
 .feature-translation {
-  margin-block-start: 1.75rem;
-  padding-block-start: 1.25rem;
+  margin-block-start: var(--space-md-lg);
+  padding-block-start: var(--space-sm-md);
   border-block-start: 1px solid var(--color-soft);
 }
 .feature-translation h3 {
   font-size: var(--font-size-md);
   line-height: 1.4;
-  margin-block: 0 0.65rem;
+  margin-block: 0 var(--space-xs);
 }
 .verse {
   font-family: var(--font-serif);
   font-size: var(--font-size-md);
   white-space: pre-wrap;
-  margin-block: 0.5rem;
+  margin-block: var(--space-2xs);
 }
 .translation-credit {
   font-size: var(--font-size-sm);
 }
 .feature-author {
   font-weight: 600;
-  margin-block: 1.5rem 0.25rem;
+  margin-block: var(--space-md) var(--space-3xs);
 }
 .feature-read {
   display: inline-block;
-  padding-block: 0.5rem;
+  padding-block: var(--space-2xs);
 }
 .featured-event {
-  padding: 1.5rem;
+  padding: var(--space-md);
   background: var(--color-white);
   border-radius: 1rem;
   corner-shape: squircle;
@@ -499,35 +500,35 @@ footer {
   line-height: 1.2;
 }
 .featured-event .feature-note {
-  margin-block-start: 1.5rem;
+  margin-block-start: var(--space-md);
 }
 .home-section {
   padding-block: var(--space-section);
-  scroll-margin-block-start: 2rem;
+  scroll-margin-block-start: var(--space-lg);
 }
 .home-section h2 {
   font-size: var(--font-size-xxl);
   line-height: 1.18;
-  margin-block: 0 1rem;
+  margin-block: 0 var(--space-sm);
   inline-size: 100%;
 }
 .home-section h3 {
   font-size: var(--font-size-lg);
   line-height: 1.35;
-  margin-block: 1rem 0.5rem;
+  margin-block: var(--space-sm) var(--space-2xs);
 }
 .home-section p {
   max-width: 60ch;
 }
 .section-introduction {
   background: var(--color-white);
-  padding: clamp(1.5rem, 4vw, 3.5rem);
+  padding: var(--space-md-xl);
   border-radius: 1.25rem;
   corner-shape: squircle;
 }
 .introduction-layout {
   display: grid;
-  gap: 2rem;
+  gap: var(--space-lg);
   align-items: center;
 }
 .section-prose {
@@ -539,19 +540,19 @@ footer {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 0.25rem;
-  margin-block-end: 1.5rem;
+  gap: var(--space-3xs);
+  margin-block-end: var(--space-md);
 }
 .section-heading > div {
   flex: 1;
   min-inline-size: 0;
 }
 .section-heading p {
-  margin-block: 0.5rem;
+  margin-block: var(--space-2xs);
 }
 .text-link {
   display: inline-block;
-  padding-block: 0.75rem;
+  padding-block: var(--space-xs);
   flex-shrink: 0;
 }
 .poet-grid,
@@ -561,7 +562,7 @@ footer {
   padding: 0;
   margin: 0;
   display: grid;
-  gap: 1.5rem;
+  gap: var(--space-md);
 }
 .poet-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -574,7 +575,7 @@ footer {
 }
 .poet-grid h3 a {
   display: inline-block;
-  padding-block: 0.5rem;
+  padding-block: var(--space-2xs);
 }
 .poet-excerpt {
   white-space: pre-wrap;
@@ -589,8 +590,8 @@ footer {
 }
 .event-list article {
   display: grid;
-  gap: 0.5rem 2rem;
-  padding-block: 1.5rem;
+  gap: var(--space-2xs) var(--space-lg);
+  padding-block: var(--space-md);
   border-block-start: 1px solid var(--color-soft);
 }
 .event-date {
@@ -604,28 +605,28 @@ footer {
   margin-block: 0;
 }
 .event-copy h3 {
-  margin-block: 0.5rem;
+  margin-block: var(--space-2xs);
   font-size: var(--font-size-lg);
 }
 .event-copy p {
-  margin-block: 0.5rem;
+  margin-block: var(--space-2xs);
 }
 .event-details {
   align-self: center;
-  padding-block: 0.75rem;
+  padding-block: var(--space-xs);
   width: fit-content;
 }
 .participation-grid {
-  margin-block-start: 2rem;
+  margin-block-start: var(--space-lg);
 }
 .participation-grid > li {
-  padding: 1.5rem;
+  padding: var(--space-md);
   border-radius: 0.75rem;
   corner-shape: squircle;
   background: var(--color-white);
 }
 .participation-grid h3 {
-  margin-block: 0 1rem;
+  margin-block: 0 var(--space-sm);
 }
 .participation-grid h3 a {
   display: inline-block;
@@ -636,13 +637,13 @@ footer {
   color: var(--newsletter-foreground);
   border-radius: 1.25rem;
   corner-shape: squircle;
-  padding: clamp(1.5rem, 4vw, 3.5rem);
-  margin-block: 1rem 2rem;
+  padding: var(--space-md-xl);
+  margin-block: var(--space-sm) var(--space-lg);
 }
 .newsletter-layout {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--space-md);
   align-items: start;
 }
 .newsletter-link {
@@ -650,7 +651,7 @@ footer {
   align-items: center;
   justify-content: center;
   min-height: 3rem;
-  padding: 0.75rem 1.5rem;
+  padding: var(--space-xs) var(--space-md);
   background: var(--primary);
   color: var(--primary-foreground);
   border-radius: 999px;
@@ -666,15 +667,15 @@ footer {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 1.5rem;
+  gap: var(--space-md);
 }
 .site-footer nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;
+  gap: var(--space-2xs) var(--space-md);
 }
 .site-footer nav a {
-  padding-block: 0.65rem;
+  padding-block: var(--space-xs);
 }
 .site-footer p {
   width: 100%;
@@ -684,10 +685,10 @@ footer {
   border-inline-start: 3px solid var(--error);
   color: var(--error);
   background: var(--error-subtle);
-  padding: 1rem;
+  padding: var(--space-sm);
 }
 .empty-message {
-  padding-block: 1rem;
+  padding-block: var(--space-sm);
 }
 .homepage,
 .site-header,
@@ -696,10 +697,10 @@ footer {
 }
 @media (min-width: 48rem) {
   .site-header {
-    --header-padding-expanded: 0.75rem;
-    --header-padding-compact: 0.375rem;
+    --header-padding-expanded: var(--space-xs);
+    --header-padding-compact: var(--space-3xs);
     display: flex;
-    gap: clamp(1.5rem, 4vw, 3rem);
+    gap: var(--space-md-lg);
   }
   .site-header .brand {
     --brand-logo-size: 4.25rem;
@@ -711,21 +712,21 @@ footer {
   }
   .home-feature.has-feature {
     grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-    gap: clamp(2rem, 5vw, 5rem);
+    gap: var(--space-lg-xxl);
     align-items: start;
   }
   .home-feature.has-feature .home-feature-intro {
-    padding-block-start: 1.5rem;
+    padding-block-start: var(--space-md);
   }
   .introduction-layout.has-image {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 3rem;
+    gap: var(--space-xl);
   }
   .section-heading {
     flex-direction: row;
     align-items: end;
     justify-content: space-between;
-    gap: 2rem;
+    gap: var(--space-lg);
   }
   .poet-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -740,18 +741,18 @@ footer {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    gap: 3rem;
+    gap: var(--space-xl);
   }
 }
 @media (max-width: 24rem) {
   .header-controls {
-    gap: 0.375rem;
+    gap: var(--space-3xs);
   }
   .brand {
-    gap: 0.5rem;
+    gap: var(--space-2xs);
   }
   .site-header {
-    gap: 0.5rem;
+    gap: var(--space-2xs);
   }
   .poet-grid {
     grid-template-columns: 1fr;

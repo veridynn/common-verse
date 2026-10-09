@@ -8,7 +8,7 @@
   }: HTMLAttributes<HTMLDivElement> = $props()
 </script>
 
-<div {...restProps} data-slot="card-header" class={cn('grid gap-2', className)}>
+<div {...restProps} data-slot="card-header" class={cn('grid gap-fluid-2xs', className)}>
   {@render children?.()}
 </div>
 

@@ -61,6 +61,21 @@
   /* Tailwind compatibility names use the same seven-step scale. */
   --text-2xl: var(--font-size-xxl);
   --text-3xl: var(--font-size-xxxl);
+  --spacing-fluid-3xs: var(--space-3xs);
+  --spacing-fluid-2xs: var(--space-2xs);
+  --spacing-fluid-xs: var(--space-xs);
+  --spacing-fluid-sm: var(--space-sm);
+  --spacing-fluid-md: var(--space-md);
+  --spacing-fluid-lg: var(--space-lg);
+  --spacing-fluid-xl: var(--space-xl);
+  --spacing-fluid-xxl: var(--space-xxl);
+  --spacing-fluid-xxxl: var(--space-xxxl);
+  --spacing-fluid-sm-md: var(--space-sm-md);
+  --spacing-fluid-md-lg: var(--space-md-lg);
+  --spacing-fluid-md-xl: var(--space-md-xl);
+  --spacing-fluid-lg-xl: var(--space-lg-xl);
+  --spacing-fluid-lg-xxl: var(--space-lg-xxl);
+  --spacing-fluid-xl-xxl: var(--space-xl-xxl);
   --radius-sm: calc(var(--radius) * 0.5);
   --radius-md: calc(var(--radius) * 0.75);
   --radius-lg: var(--radius);
@@ -76,6 +91,23 @@
   --font-size-xl: clamp(1.95rem, 1.56vw + 1.56rem, 2.81rem);
   --font-size-xxl: clamp(2.44rem, 2.38vw + 1.85rem, 3.75rem);
   --font-size-xxxl: clamp(3.05rem, 3.54vw + 2.17rem, 5rem);
+
+  /* Fluid space: 400–1280px, scaled from the 16–19px type base. */
+  --space-3xs: clamp(0.25rem, 0.22869rem + 0.08523vw, 0.296875rem);
+  --space-2xs: clamp(0.5rem, 0.45739rem + 0.17045vw, 0.59375rem);
+  --space-xs: clamp(0.75rem, 0.68608rem + 0.25568vw, 0.890625rem);
+  --space-sm: clamp(1rem, 0.91477rem + 0.34091vw, 1.1875rem);
+  --space-md: clamp(1.5rem, 1.37216rem + 0.51136vw, 1.78125rem);
+  --space-lg: clamp(2rem, 1.82955rem + 0.68182vw, 2.375rem);
+  --space-xl: clamp(3rem, 2.74432rem + 1.02273vw, 3.5625rem);
+  --space-xxl: clamp(4rem, 3.65909rem + 1.36364vw, 4.75rem);
+  --space-xxxl: clamp(6rem, 5.48864rem + 2.04545vw, 7.125rem);
+  --space-sm-md: clamp(1rem, 0.64489rem + 1.42045vw, 1.78125rem);
+  --space-md-lg: clamp(1.5rem, 1.10227rem + 1.59091vw, 2.375rem);
+  --space-md-xl: clamp(1.5rem, 0.5625rem + 3.75vw, 3.5625rem);
+  --space-lg-xl: clamp(2rem, 1.28977rem + 2.84091vw, 3.5625rem);
+  --space-lg-xxl: clamp(2rem, 0.75rem + 5vw, 4.75rem);
+  --space-xl-xxl: clamp(3rem, 2.20455rem + 3.18182vw, 4.75rem);
 
   --black: #101010;
   --white: #fdfdfc;
@@ -221,8 +253,8 @@
   --newsletter-foreground: var(--accent-foreground);
 
   --radius: 1rem;
-  --space-section: clamp(2.5rem, 6vw, 5rem);
-  --space-gutter: clamp(1rem, 4vw, 1.5rem);
+  --space-section: var(--space-xl-xxl);
+  --space-gutter: var(--space-sm-md);
   --shadow-color: light-dark(oklch(from var(--black) l c h / 8%), transparent);
   --shadow-card: 0 2px 6px var(--shadow-color);
   --shadow-raised: 0 6px 20px var(--shadow-color);
