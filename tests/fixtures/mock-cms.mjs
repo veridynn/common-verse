@@ -1,4 +1,5 @@
 import http from "node:http";
+import { homepageContent } from "../../apps/cms/scripts/seed/homepage-content.ts";
 
 const workshops = {
   de: [
@@ -74,6 +75,9 @@ const poem = {
 const authors = [poem.author, { id: 4, name: "Workshop Collective" }];
 
 function homepage(locale, preview) {
+  const content = structuredClone(
+    homepageContent[locale] ?? homepageContent.de,
+  );
   const feature =
     locale === "de"
       ? { kind: "event", event: workshop(locale, false) }
@@ -88,14 +92,29 @@ function homepage(locale, preview) {
             },
           }
         : { kind: "poem", poem };
-  const sections = [
-    { blockType: "introduction" },
-    { blockType: "poets", poets: authors },
-    { blockType: "events", pinnedEvents: [], limit: 3 },
-    { blockType: "participation" },
-    { blockType: "newsletter" },
-    { blockType: "newsletter", enabled: false, heading: "Hidden section" },
-  ];
+  Object.assign(feature, content.feature, { kind: feature.kind });
+  const sections = content.sections.map((section) => ({
+    ...section,
+    ...(section.blockType === "poets" ? { poets: authors } : {}),
+  }));
+  sections.push({
+    blockType: "newsletter",
+    enabled: false,
+    heading: "Hidden section",
+  });
+  if (["ar", "ku"].includes(locale)) {
+    feature.heading = null;
+    feature.description = null;
+    sections.find(
+      (section) => section.blockType === "introduction",
+    ).description = null;
+    const participation = sections.find(
+      (section) => section.blockType === "participation",
+    );
+    participation.links = [];
+    sections.find((section) => section.blockType === "newsletter").heading =
+      null;
+  }
   if (preview) {
     feature.heading = "Draft homepage";
     sections.splice(0, 2, sections[1], sections[0]);

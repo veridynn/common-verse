@@ -164,3 +164,25 @@ test("homepage remains useful without JavaScript", async ({ browser }) => {
   await expect(page).toHaveURL(/\/en\/poems\/test-poem$/);
   await context.close();
 });
+
+for (const locale of ["ar", "ku"]) {
+  test(`${locale} missing homepage translations do not invent editorial copy`, async ({
+    page,
+  }) => {
+    await page.goto(`/${locale}`);
+    await expect(page.locator("main h1")).toHaveText(
+      locale === "ar" ? "مشروع الشعر" : "Projeya Helbestê",
+    );
+    await expect(page.locator(".home-feature .lede")).toHaveCount(0);
+    await expect(page.locator(".home-feature [role=status]")).toBeVisible();
+    await expect(
+      page.locator(".section-introduction .section-prose"),
+    ).toHaveCount(0);
+    await expect(page.locator(".participation-grid > li")).toHaveCount(0);
+    const newsletter = page.locator(".section-newsletter");
+    await expect(newsletter.locator("[role=status]")).toBeVisible();
+    await expect(newsletter.getByRole("heading")).toHaveCount(0);
+    await expect(newsletter.getByRole("link")).toHaveCount(0);
+    await expect(newsletter).not.toHaveAttribute("aria-labelledby");
+  });
+}

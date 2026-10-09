@@ -2,7 +2,6 @@
 import PersonPortrait from '../../../components/PersonPortrait.svelte'
 import { authorDisplayName } from '../../../lib/editorial'
 import { Heading } from '$lib/components/ui/heading'
-import { Text } from '$lib/components/ui/text'
 import { Link } from '$lib/components/ui/link'
 import { isLocale, localizedPath } from '@poetry/i18n'
 import { getAuthors } from '../../../lib/cms'
@@ -12,11 +11,10 @@ const { locale: rawLocale } = Astro.params
 if (!isLocale(rawLocale)) return new Response('Not found', { status: 404 })
 const locale = rawLocale
 const authors = await getAuthors(locale)
-const title = m.home_poets_heading({}, { locale })
+const title = m.home_all_poets({}, { locale })
 ---
 <BaseLayout {locale} {title} canonicalPath="poets">
   <Heading level={1}>{title}</Heading>
-  <Text variant="lead" class="lede">{m.home_poets_description({}, { locale })}</Text>
   <ul class="poet-grid">{authors.map((author) => <li><article>
     <PersonPortrait userId={author.id} image={author.portrait} />
     <Heading level={2} variant="subtitle"><Link variant="heading" href={localizedPath(locale, `poets/${author.id}`)}>{authorDisplayName(author.name)}</Link></Heading>

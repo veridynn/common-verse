@@ -22,8 +22,9 @@ const o = { locale }
 <section class:list={['home-feature', { 'has-feature': poem || event || announcement }]} aria-labelledby="home-heading">
   <div class="home-feature-intro">
     <p class="feature-note">{m.home_welcome({}, o)}</p>
-    <Heading level={1} id="home-heading">{feature?.heading || m.home_heading({}, o)}</Heading>
-    <Text variant="lead" class="lede">{feature?.description || m.home_intro({}, o)}</Text>
+    <Heading level={1} id="home-heading">{feature?.heading || m.site_title({}, o)}</Heading>
+    {!feature?.heading && <p class="content-unavailable" role="status">{m.home_translation_missing({}, o)}</p>}
+    {feature?.description && <Text variant="lead" class="lede">{feature.description}</Text>}
     <Button href={localizedPath(locale, 'poems')}>{m.home_explore({}, o)}</Button>
     <a class="secondary-link" href={hasUpcoming ? '#upcoming' : localizedPath(locale, 'workshops')}>{m.home_events_link({}, o)}</a>
   </div>

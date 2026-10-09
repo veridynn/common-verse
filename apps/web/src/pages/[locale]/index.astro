@@ -5,7 +5,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro'
 import HomeFeature from '../../components/HomeFeature.astro'
 import HomeSections from '../../components/HomeSections.astro'
 import { getAuthors, getAuthorPoems, getHomepage, getUpcomingWorkshops } from '../../lib/cms'
-import { defaultSections, mediaObject } from '../../lib/homepage'
+import { mediaObject } from '../../lib/homepage'
 import * as m from '../../paraglide/messages.js'
 
 const { locale: rawLocale } = Astro.params
@@ -25,7 +25,7 @@ const result = await Promise.allSettled([
 const homepage = result[0].status === 'fulfilled' ? result[0].value : null
 const authors = result[1].status === 'fulfilled' ? result[1].value : []
 const events = result[2].status === 'fulfilled' ? result[2].value : []
-const sections = homepage?.sections?.length ? homepage.sections : defaultSections
+const sections = homepage?.sections ?? []
 const poetIds = [...new Set(sections.filter((section) => section.blockType === 'poets' && section.enabled !== false).flatMap((section) => {
   const selected = section.poets?.filter((author) => typeof author === 'object') ?? []
   return (selected.length ? selected : authors).slice(0, 4).map((author) => String(author.id))

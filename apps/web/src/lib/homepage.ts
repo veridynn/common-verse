@@ -84,11 +84,3 @@ export function poemExcerpt(poem: Poem, locale: Locale) {
     translation,
   };
 }
-
-export const defaultSections: HomepageSection[] = [
-  { blockType: "introduction" },
-  { blockType: "poets" },
-  { blockType: "events", limit: 3 },
-  { blockType: "participation" },
-  { blockType: "newsletter" },
-];
