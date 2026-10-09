@@ -13,8 +13,6 @@ documented in [design-tokens.md](design-tokens.md).
 - **Opening feature:** choose a poem, workshop/event, or project announcement.
   The headline and short introduction are translated independently. Poems keep
   their original language and show a translation only when one actually exists.
-- **Page order:** use the custom Move up / Move down buttons, or Payload's block
-  controls. Buttons provide an alternative to dragging.
 - **Project introduction:** exactly one is required for publication. Its heading,
   text, image, link, and position are editable.
 - **Featured poets:** select up to four profiles in order. An empty selection uses

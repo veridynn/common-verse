@@ -276,13 +276,6 @@ export const Homepage: GlobalConfig = {
       ],
     },
     {
-      name: "sectionOutline",
-      type: "ui",
-      admin: {
-        components: { Field: "/components/HomepageOutline#HomepageOutline" },
-      },
-    },
-    {
       name: "sections",
       type: "blocks",
       blocks,
