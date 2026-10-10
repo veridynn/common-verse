@@ -1,5 +1,6 @@
 ---
-import { getLocaleMetadata, isLocale, locales, localizedPath, type Locale } from '@poetry/i18n'
+import { getLocaleMetadata, locales, localizedPath, type Locale } from '@poetry/i18n'
+import { editorLocale, message } from '@poetry/cms-ui'
 import Header from '../components/Header.astro'
 import BrandLogo from '../components/BrandLogo.astro'
 import * as m from '../paraglide/messages.js'
@@ -39,7 +40,7 @@ if (preview) {
 }
 const { direction } = getLocaleMetadata(locale)
 const suppliedEditorLanguage = Astro.url.searchParams.get('editorLanguage') ?? undefined
-const editorLanguage = isLocale(suppliedEditorLanguage) ? suppliedEditorLanguage : 'en'
+const editorLanguage = editorLocale(suppliedEditorLanguage)
 const siteUrl = import.meta.env.PUBLIC_SITE_URL ?? 'http://localhost:4321'
 const canonical = new URL(localizedPath(locale, canonicalPath), siteUrl)
 const socialImage = image ? new URL(image, siteUrl) : undefined
@@ -77,7 +78,7 @@ const theme = themePreference(Astro.cookies.get('poetry-theme')?.value)
   <body>
     <a class="skip-link" href="#main">{m.skip_to_content({}, { locale })}</a>
     <Header {locale} themePreference={theme} />
-    {preview && <p class="preview-banner" role="status" lang={editorLanguage} dir={getLocaleMetadata(editorLanguage).direction}>{m.preview_notice({}, { locale: editorLanguage })}</p>}
+    {preview && <p class="preview-banner" role="status" lang={editorLanguage} dir={getLocaleMetadata(editorLanguage).direction}>{message('draft_preview', editorLanguage)}</p>}
     {preview && <div id="payload-live-preview" data-server-url={import.meta.env.PUBLIC_CMS_URL ?? 'http://localhost:3001'} />}
     <main id="main" tabindex="-1" class={mainClass}><slot /></main>
     <footer class="site-footer"><a class="brand" href={localizedPath(locale)}><BrandLogo /><span class="sr-only">The Poetry Project{m.site_title({}, { locale }) !== 'The Poetry Project' ? ` — ${m.site_title({}, { locale })}` : ''}</span></a>

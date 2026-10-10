@@ -4,11 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
+    "dev": "node ../../scripts/check-ui-catalogs.mjs project.inlang/settings.json && pnpm --filter @poetry/cms-ui compile && astro dev",
+    "build": "node ../../scripts/check-ui-catalogs.mjs project.inlang/settings.json && pnpm --filter @poetry/cms-ui compile && astro build",
     "preview": "astro preview",
-    "check": "astro check",
-    "test": "vitest run"
+    "check": "node ../../scripts/check-ui-catalogs.mjs project.inlang/settings.json && pnpm --filter @poetry/cms-ui compile && astro check",
+    "test": "pnpm compile:ui && pnpm --filter @poetry/cms-ui compile && vitest run",
+    "compile:ui": "node ../../scripts/check-ui-catalogs.mjs project.inlang/settings.json && node scripts/compile-ui.mjs"
   },
   "dependencies": {
     "@astrojs/node": "11.1.6",
@@ -27,7 +28,8 @@
     "svelte": "5.57.1",
     "tailwind-merge": "3.7.0",
     "tailwind-variants": "3.3.1",
-    "tailwindcss": "4.3.3"
+    "tailwindcss": "4.3.3",
+    "@poetry/cms-ui": "workspace:*"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.8",

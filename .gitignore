@@ -18,3 +18,4 @@ apps/web/src/paraglide/
 
 # Local Payload uploads; seed artwork is source-controlled separately.
 apps/cms/media/
+packages/cms-ui/src/paraglide/

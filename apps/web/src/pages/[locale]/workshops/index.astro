@@ -14,7 +14,7 @@ const workshops = await getWorkshops(locale)
 const title = m.nav_workshops({}, { locale })
 ---
 
-<BaseLayout {locale} {title}>
+<BaseLayout {locale} {title} canonicalPath="workshops">
   <section>
     <Eyebrow>{m.site_title({}, { locale })}</Eyebrow>
     <Heading level={1}>{title}</Heading>

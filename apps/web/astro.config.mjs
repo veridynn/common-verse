@@ -1,3 +1,4 @@
+import paraglideConfig from "./paraglide.config.mjs";
 import node from "@astrojs/node";
 import svelte from "@astrojs/svelte";
 import { paraglideVitePlugin } from "@inlang/paraglide-js";
@@ -21,15 +22,6 @@ export default defineConfig({
   server: { port: 4321 },
   vite: {
     envDir: "../../",
-    plugins: [
-      tailwindcss(),
-      paraglideVitePlugin({
-        project: "./project.inlang",
-        outdir: "./src/paraglide",
-        outputStructure: "message-modules",
-        emitTsDeclarations: true,
-        strategy: ["url", "baseLocale"],
-      }),
-    ],
+    plugins: [tailwindcss(), paraglideVitePlugin(paraglideConfig)],
   },
 });

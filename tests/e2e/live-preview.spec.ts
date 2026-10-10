@@ -25,7 +25,11 @@ for (const [contentLocale, editorLanguage, notice, direction] of [
 test("preview notice falls back to English without a supported editor language", async ({
   page,
 }) => {
-  for (const editorQuery of ["", "&editorLanguage=unknown"]) {
+  for (const editorQuery of [
+    "",
+    "&editorLanguage=unknown",
+    "&editorLanguage=ku",
+  ]) {
     await page.goto(`/ar?previewSecret=test-preview${editorQuery}`);
     await expect(page.locator(".preview-banner")).toHaveText("Draft preview");
     await expect(page.locator(".preview-banner")).toHaveAttribute("lang", "en");

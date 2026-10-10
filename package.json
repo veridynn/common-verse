@@ -14,7 +14,7 @@
     "build": "pnpm -r --if-present build",
     "check": "pnpm -r --if-present check",
     "lint": "prettier --check .",
-    "test": "node --test scripts/setup.test.mjs && pnpm -r --if-present test",
+    "test": "node --test scripts/*.test.mjs && pnpm -r --if-present test",
     "test:e2e": "playwright test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

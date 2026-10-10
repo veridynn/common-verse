@@ -66,6 +66,8 @@ test("local setup waits for health, conditionally seeds, then generates types", 
   await setup(c.args);
   assert.deepEqual(c.calls, [
     ["pnpm", "install", "--frozen-lockfile"],
+    ["pnpm", "--filter", "@poetry/cms-ui", "compile"],
+    ["pnpm", "--filter", "@poetry/web", "compile:ui"],
     [
       "docker",
       "compose",

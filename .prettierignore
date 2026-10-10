@@ -10,5 +10,7 @@ test-results
 apps/web/src/paraglide
 apps/web/project.inlang/.lix
 apps/web/project.inlang/cache
+packages/cms-ui/src/paraglide
+packages/cms-ui/project.inlang/.lix
 apps/cms/src/payload-types.ts
 apps/cms/src/app/(payload)/admin/importMap.js

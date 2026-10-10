@@ -66,7 +66,7 @@ describe("homepage editorial behaviour", () => {
   });
   it("localises internal links and rejects executable or disguised URLs", () => {
     expect(safeHref("/workshops", "ar")).toBe("/ar/workshops");
-    expect(safeHref("/de/poems", "ar")).toBe("/poems");
+    expect(safeHref("/de/poems", "ar")).toBe("/gedichte");
     for (const value of [
       "javascript:alert(1)",
       "//evil.test",

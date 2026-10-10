@@ -180,6 +180,8 @@ export async function setup({
     );
   console.log("Checking locked workspace dependencies…");
   await pnpm(["install", "--frozen-lockfile"]);
+  await pnpm(["--filter", "@poetry/cms-ui", "compile"]);
+  await pnpm(["--filter", "@poetry/web", "compile:ui"]);
   if (!externalDatabase) {
     console.log(
       "Starting PostgreSQL and waiting for health (Docker must be running)…",

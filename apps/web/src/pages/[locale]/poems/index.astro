@@ -15,7 +15,7 @@ const poems = await getPoems(locale)
 const title = m.nav_poems({}, { locale })
 ---
 
-<BaseLayout {locale} {title}>
+<BaseLayout {locale} {title} canonicalPath="poems">
   <section>
     <Eyebrow>{m.site_title({}, { locale })}</Eyebrow>
     <Heading level={1}>{title}</Heading>

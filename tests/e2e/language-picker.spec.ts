@@ -90,3 +90,30 @@ test("language selection remains available without JavaScript", async ({
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await context.close();
 });
+
+test("German page names share route identity, alternates, and query/hash with other languages", async ({
+  page,
+  baseURL,
+}) => {
+  const legacy = await page.request.get("/poems/test-poem?ref=legacy", {
+    maxRedirects: 0,
+  });
+  expect(legacy.status()).toBe(308);
+  expect(legacy.headers().location).toBe("/gedichte/test-poem?ref=legacy");
+  await page.goto("/gedichte/test-poem?ref=invite#main");
+  await expect(page.locator("html")).toHaveAttribute("lang", "de");
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    "href",
+    `${baseURL}/gedichte/test-poem`,
+  );
+  await expect(page.locator('link[hreflang="ar"]')).toHaveAttribute(
+    "href",
+    `${baseURL}/ar/poems/test-poem`,
+  );
+  await page.getByRole("button", { name: "Sprache: Deutsch" }).click();
+  await page.getByRole("link", { name: "العربية", exact: true }).click();
+  await expect(page).toHaveURL(/\/ar\/poems\/test-poem\?ref=invite#main$/);
+  await page.getByRole("button", { name: /العربية$/ }).click();
+  await page.getByRole("link", { name: "Deutsch", exact: true }).click();
+  await expect(page).toHaveURL(/\/gedichte\/test-poem\?ref=invite#main$/);
+});

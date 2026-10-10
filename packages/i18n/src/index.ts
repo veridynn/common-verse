@@ -54,15 +54,39 @@ export function getLocaleMetadata(locale: Locale): LocaleMetadata {
   return localeMetadata[locale];
 }
 
-export function localizedPath(locale: Locale, path = ""): string {
-  const normalized = path.replace(/^\/+|\/+$/g, "");
-  const suffix = normalized ? `/${normalized}` : "";
-  return locale === defaultLocale ? suffix || "/" : `/${locale}${suffix}`;
-}
+/** Stable page identities; editorial record slugs are left untouched. */
+export const routeSegments = {
+  poems: { de: "gedichte", international: "poems" },
+  poets: { de: "poeten", international: "poets" },
+  workshops: { de: "workshops", international: "workshops" },
+  contact: { de: "kontakt", international: "contact" },
+  privacy: { de: "datenschutz", international: "privacy" },
+  legal: { de: "impressum", international: "legal" },
+} as const;
 
-/** Removes an optional locale prefix from a public pathname. */
+/** Resolves a public pathname back to its stable page identity. */
 export function unlocalizedPath(pathname: string): string {
   const segments = pathname.split("/").filter(Boolean);
   if (isLocale(segments[0])) segments.shift();
+  const route = Object.entries(routeSegments).find(
+    ([key, value]) => segments[0] === key || segments[0] === value.de,
+  );
+  if (route) segments[0] = route[0];
   return segments.length ? `/${segments.join("/")}` : "/";
+}
+
+export function localizedPath(locale: Locale, path = ""): string {
+  const suffixIndex = path.search(/[?#]/);
+  const pathname = suffixIndex === -1 ? path : path.slice(0, suffixIndex);
+  const queryAndHash = suffixIndex === -1 ? "" : path.slice(suffixIndex);
+  const segments = unlocalizedPath(pathname).split("/").filter(Boolean);
+  const route = Object.hasOwn(routeSegments, segments[0])
+    ? routeSegments[segments[0] as keyof typeof routeSegments]
+    : undefined;
+  if (route) segments[0] = locale === "de" ? route.de : route.international;
+  const suffix = segments.length ? `/${segments.join("/")}` : "";
+  return (
+    (locale === defaultLocale ? suffix || "/" : `/${locale}${suffix}`) +
+    queryAndHash
+  );
 }

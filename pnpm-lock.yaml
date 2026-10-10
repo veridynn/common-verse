@@ -168,6 +168,9 @@ importers:
       "@payloadcms/ui":
         specifier: 3.90.2
         version: 3.90.2(@types/react@19.1.16)(monaco-editor@0.57.0)(next@16.3.6(@playwright/test@1.63.0)(@types/node@26.6.4)(babel-plugin-macros@3.1.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(sass@1.77.4))(payload@3.90.2(graphql@16.11.0)(typescript@5.9.3))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@5.9.3)
+      "@poetry/cms-ui":
+        specifier: workspace:*
+        version: link:../../packages/cms-ui
       "@poetry/i18n":
         specifier: workspace:*
         version: link:../../packages/i18n
@@ -238,6 +241,9 @@ importers:
       "@payloadcms/live-preview":
         specifier: 3.90.2
         version: 3.90.2
+      "@poetry/cms-ui":
+        specifier: workspace:*
+        version: link:../../packages/cms-ui
       "@poetry/i18n":
         specifier: workspace:*
         version: link:../../packages/i18n
@@ -293,6 +299,22 @@ importers:
       vitest:
         specifier: 5.0.2
         version: 5.0.2(@types/node@22.18.6)(happy-dom@20.14.5)(vite@8.3.1(@types/node@22.18.6)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.77.4)(tsx@4.22.4)(yaml@2.9.1))
+
+  packages/cms-ui:
+    dependencies:
+      "@poetry/i18n":
+        specifier: workspace:*
+        version: link:../i18n
+    devDependencies:
+      "@inlang/paraglide-js":
+        specifier: 2.25.4
+        version: 2.25.4(typescript@5.9.3)(vite@8.3.1(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.77.4)(tsx@4.22.4)(yaml@2.9.1))
+      "@inlang/plugin-message-format":
+        specifier: 4.4.4
+        version: 4.4.4
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
 
   packages/config:
     devDependencies:
@@ -9354,6 +9376,21 @@ snapshots:
       typescript: 5.9.3
       vite: 8.3.1(@types/node@22.18.6)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.77.4)(tsx@4.22.4)(yaml@2.9.1)
 
+  "@inlang/paraglide-js@2.25.4(typescript@5.9.3)(vite@8.3.1(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.77.4)(tsx@4.22.4)(yaml@2.9.1))":
+    dependencies:
+      "@inlang/recommend-sherlock": 0.2.1
+      "@inlang/sdk": 3.0.6
+      commander: 11.1.0
+      consola: 3.4.0
+      jiti: 2.7.0
+      json5: 2.2.3
+      unplugin: 2.3.11
+      urlpattern-polyfill: 10.1.0
+      valibot: 1.5.0(typescript@5.9.3)
+    optionalDependencies:
+      typescript: 5.9.3
+      vite: 8.3.1(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.77.4)(tsx@4.22.4)(yaml@2.9.1)
+
   "@inlang/plugin-m-function-matcher@2.2.6(babel-plugin-macros@3.1.0)":
     dependencies:
       "@inlang/sdk": 2.9.3(babel-plugin-macros@3.1.0)
@@ -12991,6 +13028,23 @@ snapshots:
       sass: 1.77.4
       tsx: 4.22.4
       yaml: 2.9.1
+
+  vite@8.3.1(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.77.4)(tsx@4.22.4)(yaml@2.9.1):
+    dependencies:
+      lightningcss: 1.33.0
+      picomatch: 4.0.7
+      postcss: 8.5.28
+      rolldown: 1.2.11
+      tinyglobby: 0.2.17
+    optionalDependencies:
+      "@types/node": 26.6.4
+      esbuild: 0.28.2
+      fsevents: 2.3.3
+      jiti: 2.7.0
+      sass: 1.77.4
+      tsx: 4.22.4
+      yaml: 2.9.1
+    optional: true
 
   vitefu@1.1.3(vite@8.3.1(@types/node@22.18.6)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.77.4)(tsx@4.22.4)(yaml@2.9.1)):
     optionalDependencies:

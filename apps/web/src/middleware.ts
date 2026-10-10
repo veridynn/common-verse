@@ -1,24 +1,32 @@
 import { defineMiddleware } from "astro:middleware";
-import { defaultLocale, localizedPath, unlocalizedPath } from "@poetry/i18n";
+import {
+  defaultLocale,
+  isLocale,
+  localizedPath,
+  unlocalizedPath,
+} from "@poetry/i18n";
 
-/** German is canonical at /; existing locale templates still own rendering. */
+/** Resolve public names centrally; locale templates still own rendering. */
 export const onRequest = defineMiddleware((context, next) => {
   const { pathname, search } = context.url;
-  if (pathname === "/de" || pathname.startsWith("/de/")) {
-    return context.redirect(
-      `${localizedPath(defaultLocale, unlocalizedPath(pathname))}${search}`,
-      308,
-    );
+  const prefix = pathname.split("/")[1];
+  const locale = isLocale(prefix) ? prefix : defaultLocale;
+  const identity = unlocalizedPath(pathname);
+  const canonical = localizedPath(locale, identity);
+  if (
+    (prefix === "de" ||
+      /^\/(workshops|poems|poets)(\/[^/]+)?\/?$/.test(identity)) &&
+    pathname !== canonical
+  ) {
+    return context.redirect(`${canonical}${search}`, 308);
   }
   if (
-    pathname === "/" ||
-    /^\/(workshops|poems|poets)(\/[^/]+)?\/?$/.test(pathname)
+    locale === defaultLocale &&
+    (identity === "/" ||
+      /^\/(workshops|poems|poets)(\/[^/]+)?\/?$/.test(identity))
   ) {
     return next(
-      new URL(
-        `/${defaultLocale}${pathname === "/" ? "" : pathname}${search}`,
-        context.url,
-      ),
+      new URL(`/de${identity === "/" ? "" : identity}${search}`, context.url),
     );
   }
   return next();
