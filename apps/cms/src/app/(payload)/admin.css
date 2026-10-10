@@ -1,0 +1,4 @@
+/* The editor’s locale selector already identifies the active language. */
+.field-label > .localized {
+  display: none;
+}
