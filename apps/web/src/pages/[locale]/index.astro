@@ -1,10 +1,11 @@
 ---
 import { getSecret } from 'astro:env/server'
 import { isLocale } from '@poetry/i18n'
+import type { Author } from '@poetry/types'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import HomeFeature from '../../components/HomeFeature.astro'
 import HomeSections from '../../components/HomeSections.astro'
-import { getAuthors, getAuthorPoems, getHomepage, getUpcomingWorkshops } from '../../lib/cms'
+import { getActivePoets, getAuthorPoems, getHomepage, getUpcomingWorkshops, getRecentPoems } from '../../lib/cms'
 import { mediaObject } from '../../lib/homepage'
 import * as m from '../../paraglide/messages.js'
 
@@ -15,20 +16,27 @@ const suppliedSecret = Astro.url.searchParams.get('previewSecret')
 const previewSecret = getSecret('PREVIEW_SECRET')
 const preview = Boolean(suppliedSecret && previewSecret && suppliedSecret === previewSecret)
 if (suppliedSecret !== null && !preview) return new Response('Invalid preview link', { status: 401 })
-const result = await Promise.allSettled([
-  getHomepage(locale, preview ? suppliedSecret! : undefined), getAuthors(locale), getUpcomingWorkshops(locale),
-])
-const homepage = result[0].status === 'fulfilled' ? result[0].value : null
-const authors = result[1].status === 'fulfilled' ? result[1].value : []
-const events = result[2].status === 'fulfilled' ? result[2].value : []
+const homepageResult = await Promise.allSettled([getHomepage(locale, preview ? suppliedSecret! : undefined)])
+const homepage = homepageResult[0].status === 'fulfilled' ? homepageResult[0].value : null
 const sections = homepage?.sections ?? []
-const poetIds = [...new Set(sections.filter((section) => section.blockType === 'poets' && section.enabled !== false).flatMap((section) => {
-  const selected = section.poets?.filter((author) => typeof author === 'object') ?? []
-  return (selected.length ? selected : authors).slice(0, 4).map((author) => String(author.id))
-}))]
+const visible = sections.filter((section) => section.enabled !== false)
+const autoPoets = visible.some((section) => section.blockType === 'poets' && (section.selectionMode === 'auto' || (!section.selectionMode && !section.poets?.length)))
+const autoPoems = visible.some((section) => section.blockType === 'poems' && section.selectionMode !== 'manual')
+const result = await Promise.allSettled([
+  autoPoets ? getActivePoets(locale) : Promise.resolve({ authors: [], poems: [] }),
+  visible.some((section) => section.blockType === 'events' && section.selectionMode !== 'manual') ? getUpcomingWorkshops(locale) : Promise.resolve([]),
+  autoPoems ? getRecentPoems(locale) : Promise.resolve([]),
+])
+const active = result[0].status === 'fulfilled' ? result[0].value : { authors: [], poems: [] }
+const authors = active.authors
+const events = result[1].status === 'fulfilled' ? result[1].value : []
+const recentPoems = result[2].status === 'fulfilled' ? result[2].value : []
+const poetIds = [...new Set(visible.filter((section) => section.blockType === 'poets' && section.selectionMode !== 'auto').flatMap((section) =>
+  (section.poets ?? []).filter((author): author is Author => Boolean(author) && typeof author === 'object').slice(0, 4).map((author) => String(author.id))
+))].filter((id) => !authors.some((author) => String(author.id) === id))
 const samples = await Promise.allSettled(poetIds.map((id) => getAuthorPoems(id, locale, 1)))
-const poems = samples.flatMap((sample) => sample.status === 'fulfilled' ? sample.value : [])
-const unavailable = [...result, ...samples].some((entry) => entry.status === 'rejected')
+const poems = [...active.poems, ...samples.flatMap((sample) => sample.status === 'fulfilled' ? sample.value : [])]
+const unavailable = [...homepageResult, ...result, ...samples].some((entry) => entry.status === 'rejected')
 if (unavailable) Astro.response.status = 503
 const title = homepage?.seo?.title || m.site_title({}, { locale })
 const description = homepage?.seo?.description || m.site_description({}, { locale })
@@ -40,5 +48,5 @@ const hasUpcoming = sections.some((section) => section.blockType === 'events' &&
 <BaseLayout {locale} {title} {description} {image} {preview} mainClass="homepage">
   {unavailable && <p class="content-unavailable" role="status">{m.home_unavailable({}, { locale })}</p>}
   <HomeFeature feature={homepage?.feature} {locale} {preview} {hasUpcoming} />
-  <HomeSections {sections} {authors} {events} {poems} {locale} />
+  <HomeSections {sections} {authors} {events} {poems} {recentPoems} {locale} {preview} />
 </BaseLayout>

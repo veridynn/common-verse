@@ -33,5 +33,6 @@
   "theme_light": "Ronahî",
   "theme_dark": "Tarî",
   "theme_system": "Sîstem",
-  "home_translation_missing": "Ev naverok hê bi vî zimanî ne berdest e."
+  "home_translation_missing": "Ev naverok hê bi vî zimanî ne berdest e.",
+  "home_no_poems": "Helbestên weşandî dê di demeke nêz de li vir xuya bibin."
 }

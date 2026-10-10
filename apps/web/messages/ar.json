@@ -33,5 +33,6 @@
   "theme_light": "فاتح",
   "theme_dark": "داكن",
   "theme_system": "النظام",
-  "home_translation_missing": "هذا المحتوى غير متاح بهذه اللغة بعد."
+  "home_translation_missing": "هذا المحتوى غير متاح بهذه اللغة بعد.",
+  "home_no_poems": "ستظهر القصائد المنشورة هنا قريبًا."
 }

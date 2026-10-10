@@ -1,73 +1,42 @@
 ---
-import PersonPortrait from './PersonPortrait.svelte'
-import { authorDisplayName } from '../lib/editorial'
 import { Heading } from '$lib/components/ui/heading'
-import { Link } from '$lib/components/ui/link'
+import { Section, PoetCard, PoemCard, ProgrammeItem } from '$lib/components/sections'
 import { localizedPath, type Locale } from '@poetry/i18n'
 import type { Author, HomepageSection, Poem, Workshop } from '@poetry/types'
-import { contentDirection, mediaObject, safeHref, upcomingEvents } from '../lib/homepage'
+import { mediaObject, safeHref, upcomingEvents, sectionItems, featuredItem } from '../lib/homepage'
 import EditorialImage from './EditorialImage.astro'
+import FeaturedContent from './FeaturedContent.astro'
 import * as m from '../paraglide/messages.js'
-interface Props { sections: HomepageSection[]; authors: Author[]; events: Workshop[]; poems: Poem[]; locale: Locale }
-const { sections, authors, events, poems, locale } = Astro.props
+interface Props { sections: HomepageSection[]; authors: Author[]; events: Workshop[]; poems: Poem[]; recentPoems: Poem[]; locale: Locale; preview?: boolean }
+const { sections, authors, events, poems, recentPoems, locale, preview = false } = Astro.props
 const o = { locale }
-const dateFormat = new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeStyle: 'short', timeZone: 'Europe/Berlin' })
 ---
 {sections.filter((section) => section.blockType === 'introduction' || section.enabled !== false).map((section, index) => {
   const id = section.blockType === 'events' ? (sections.findIndex((entry) => entry.blockType === 'events' && entry.enabled !== false) === sections.indexOf(section) ? 'upcoming' : `upcoming-${index}`) : `home-${section.blockType}-${index}`
   const headingId = `${id}-heading`
-  const selectedPoets = section.poets?.filter((author): author is Author => typeof author === 'object') ?? []
-  const poets = (selectedPoets.length ? selectedPoets : authors).slice(0, 4)
-  const upcoming = upcomingEvents(events, section.pinnedEvents, section.limit ?? 3)
+  const poets = sectionItems(authors, section.poets, section.selectionMode)
+  const selectedPoems = sectionItems(recentPoems, section.poems, section.selectionMode, preview)
+  const upcoming = upcomingEvents(events, section.pinnedEvents, section.selectionMode ? 4 : section.limit ?? 4, new Date(), section.selectionMode, preview)
   const links = (section.links ?? []).filter((link) => link.title && safeHref(link.url, locale))
-  return <section id={id} class:list={['home-section', `section-${section.blockType}`]} aria-labelledby={section.heading ? headingId : undefined}>
-    {!section.heading && <p class="content-unavailable" role="status">{m.home_translation_missing({}, o)}</p>}
-    {section.heading && section.blockType === 'introduction' && <div class:list={['introduction-layout', { 'has-image': mediaObject(section.image) }]}>
-      <div>
-        <Heading level={2} id={headingId}>{section.heading}</Heading>
+  const collection = section.blockType === 'poets' ? 'poets' : section.blockType === 'poems' ? 'poems' : section.blockType === 'events' ? 'workshops' : undefined
+  const archiveLabel = section.blockType === 'poets' ? m.home_all_poets({}, o) : section.blockType === 'poems' ? m.home_explore({}, o) : m.home_all_events({}, o)
+  return <>
+    {(section.blockType === 'introduction' || section.blockType === 'newsletter') ? <section id={id} class:list={['home-section', `section-${section.blockType}`]} aria-labelledby={section.heading ? headingId : undefined}>
+      {!section.heading && <p class="content-unavailable" role="status">{m.home_translation_missing({}, o)}</p>}
+      {section.heading && <div class:list={[section.blockType === 'introduction' ? 'introduction-layout' : 'newsletter-layout', { 'has-image': section.blockType === 'introduction' && mediaObject(section.image) }]}>
+        <div><Heading level={2} id={headingId}>{section.heading}</Heading>
         {section.description && <p class="section-prose">{section.description}</p>}
-        {section.linkLabel && safeHref(section.linkUrl, locale) && <a class="text-link" href={safeHref(section.linkUrl, locale)}>{section.linkLabel}</a>}
-      </div>
-      <EditorialImage image={section.image} {locale} />
-    </div>}
-    {section.heading && section.blockType === 'poets' && <>
-      <div class="section-heading"><div>
-        <Heading level={2} id={headingId}>{section.heading}</Heading>
-        {section.description && <p>{section.description}</p>}
-      </div><a class="text-link" href={localizedPath(locale, 'poets')}>{m.home_all_poets({}, o)}</a></div>
-      {poets.length ? <ul class="poet-grid">{poets.map((author) => {
-        const poem = poems.find((entry) => typeof entry.author === 'object' && String(entry.author?.id) === String(author.id))
-        const translation = poem?.translations?.find((entry) => entry.language === locale)
-        return <li><article>
-          <PersonPortrait userId={author.id} image={author.portrait} />
-          <Heading level={3}><Link variant="heading" href={localizedPath(locale, `poets/${author.id}`)}>{authorDisplayName(author.name)}</Link></Heading>
-          {poem && <p class="poet-excerpt" lang={translation ? locale : poem.originalLanguage === 'other' ? 'und' : poem.originalLanguage} dir={contentDirection(translation ? locale : poem.originalLanguage)}>{(translation?.text ?? poem.originalText).split('\n').slice(0, 2).join('\n')}</p>}
-        </article></li>
-      })}</ul> : <p class="empty-message">{m.home_no_poets({}, o)}</p>}
-    </>}
-    {section.heading && section.blockType === 'events' && <>
-      <div class="section-heading"><div>
-        <Heading level={2} id={headingId}>{section.heading}</Heading>
-        {section.description && <p>{section.description}</p>}
-      </div><a class="text-link" href={localizedPath(locale, 'workshops')}>{m.home_all_events({}, o)}</a></div>
-      {upcoming.length ? <ul class="event-list">{upcoming.map((event) => <li><article>
-        <div class="event-date"><time datetime={event.startDate}>{dateFormat.format(new Date(event.startDate))}</time></div>
-        <div class="event-copy"><p class="event-kind">{event.kind === 'event' ? m.home_event({}, o) : m.workshop_label({}, o)}</p>
-          <Heading level={3}><Link variant="heading" href={localizedPath(locale, `workshops/${event.slug}`)}>{event.title}</Link></Heading>
-          {event.location && <p>{event.location}</p>}
-          {event.description && <p>{event.description}</p>}
-        </div>
-        <a class="event-details" href={localizedPath(locale, `workshops/${event.slug}`)} aria-label={`${m.home_event_details({}, o)}: ${event.title}`}>{m.home_event_details({}, o)}</a>
-      </article></li>)}</ul> : <p class="empty-message">{m.home_no_events({}, o)}</p>}
-    </>}
-    {section.heading && section.blockType === 'participation' && <>
-      <Heading level={2} id={headingId}>{section.heading}</Heading>
-      {section.description && <p class="section-prose">{section.description}</p>}
-      <ul class="participation-grid">{links.map((link) => <li><Heading level={3}><a href={safeHref(link.url, locale)}>{link.title}</a></Heading>{link.description && <p>{link.description}</p>}</li>)}</ul>
-    </>}
-    {section.heading && section.blockType === 'newsletter' && <div class="newsletter-layout">
-      <div><Heading level={2} id={headingId}>{section.heading}</Heading>{section.description && <p>{section.description}</p>}</div>
-      {section.linkLabel && safeHref(section.linkUrl, locale) && <a class="newsletter-link" href={safeHref(section.linkUrl, locale)}>{section.linkLabel}</a>}
-    </div>}
-  </section>
+        {section.blockType === 'introduction' && section.linkLabel && safeHref(section.linkUrl, locale) && <a class="text-link" href={safeHref(section.linkUrl, locale)}>{section.linkLabel}</a>}</div>
+        {section.blockType === 'introduction' && <EditorialImage image={section.image} {locale} />}
+        {section.blockType === 'newsletter' && section.linkLabel && safeHref(section.linkUrl, locale) && <a class="newsletter-link" href={safeHref(section.linkUrl, locale)}>{section.linkLabel}</a>}
+      </div>}
+    </section> : <Section {id} kind={section.blockType} heading={section.heading} description={section.description} missingMessage={m.home_translation_missing({}, o)}>
+      <Fragment slot="headerAction">{collection && <a class="text-link" href={localizedPath(locale, collection)}>{archiveLabel}</a>}</Fragment>
+      {section.blockType === 'featured' && (featuredItem(section, preview) ? <FeaturedContent {section} {locale} {preview} /> : <p class="empty-message">{m.home_translation_missing({}, o)}</p>)}
+      {section.blockType === 'poets' && (poets.length ? <ul class="poet-grid">{poets.map((author) => <li><PoetCard {author} poem={poems.find((entry) => typeof entry.author === 'object' && String(entry.author?.id) === String(author.id))} {locale} /></li>)}</ul> : <p class="empty-message">{m.home_no_poets({}, o)}</p>)}
+      {section.blockType === 'poems' && (selectedPoems.length ? <ul class="poem-grid">{selectedPoems.map((poem) => <li><PoemCard {poem} {locale} /></li>)}</ul> : <p class="empty-message">{m.home_no_poems({}, o)}</p>)}
+      {section.blockType === 'events' && (upcoming.length ? <ul class="event-list">{upcoming.map((event) => <li><ProgrammeItem {event} {locale} /></li>)}</ul> : <p class="empty-message">{m.home_no_events({}, o)}</p>)}
+      {section.blockType === 'participation' && <ul class="participation-grid">{links.map((link) => <li><Heading level={3}><a href={safeHref(link.url, locale)}>{link.title}</a></Heading>{link.description && <p>{link.description}</p>}</li>)}</ul>}
+    </Section>}
+  </>
 })}

@@ -33,5 +33,6 @@
   "theme_light": "Light",
   "theme_dark": "Dark",
   "theme_system": "System",
-  "home_translation_missing": "This content is not yet available in this language."
+  "home_translation_missing": "This content is not yet available in this language.",
+  "home_no_poems": "Published poems will appear here soon."
 }

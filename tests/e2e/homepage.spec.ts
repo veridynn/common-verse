@@ -79,6 +79,7 @@ for (const locale of ["en", "ar"]) {
     await page.keyboard.press("Enter");
     await expect(page.locator("#main")).toBeFocused();
     await page
+      .locator(".poet-grid")
       .getByRole("link", { name: "Prototype Collective", exact: true })
       .click();
     await expect(page).toHaveURL(new RegExp(`/${locale}/poets/3$`));
@@ -88,14 +89,14 @@ for (const locale of ["en", "ar"]) {
   });
 }
 
-test("all opening feature types render their correct content and destination", async ({
+test("all hero types render their correct content and destination", async ({
   page,
 }) => {
   await page.goto("/en");
   await expect(page.locator(".featured-poem")).toBeVisible();
-  await expect(page.locator(".feature-translation")).toContainText(
-    "A Shared Morning",
-  );
+  await expect(
+    page.locator(".home-feature .feature-translation"),
+  ).toContainText("A Shared Morning");
   await page.goto("/de");
   await expect(page.locator(".featured-event")).toContainText(
     "Poesie über Grenzen",
@@ -131,9 +132,15 @@ test("homepage preview requires runtime authorization, respects order and stays 
   ).toEqual([
     "home-poets-0",
     "home-introduction-1",
+    "home-poems-2",
     "upcoming",
-    "home-participation-3",
-    "home-newsletter-4",
+    "home-participation-4",
+    "home-newsletter-5",
+    "home-featured-6",
+    "home-featured-7",
+    "home-featured-8",
+    "home-poems-9",
+    "home-poems-10",
   ]);
   await page.goto("/en");
   await expect(page.getByText("Draft homepage")).toHaveCount(0);
@@ -184,5 +191,47 @@ for (const locale of ["ar", "ku"]) {
     await expect(newsletter.getByRole("heading")).toHaveCount(0);
     await expect(newsletter.getByRole("link")).toHaveCount(0);
     await expect(newsletter).not.toHaveAttribute("aria-labelledby");
+  });
+}
+
+for (const locale of ["en", "ar"]) {
+  test(`${locale} composed sections inherit item content and respect automatic/manual choices`, async ({
+    page,
+  }) => {
+    await page.goto(`/${locale}`);
+    const automatic = page.locator("#home-poems-2");
+    await expect(automatic.locator(".poem-grid > li")).toHaveCount(4);
+    await expect(automatic).toContainText("Recent poem 0");
+    await expect(automatic).not.toContainText("Recent poem 4");
+    const selected = page.locator("#home-poems-9");
+    expect(await selected.locator("h3").allTextContents()).toEqual([
+      "Recent poem 4",
+      "Recent poem 1",
+    ]);
+    await expect(page.locator("#home-poems-10 .poem-grid")).toHaveCount(0);
+    await expect(page.locator("#home-featured-6")).toContainText(
+      "The biography comes from the poet profile.",
+    );
+    await expect(
+      page.locator(`#home-featured-6 a[href="/${locale}/poets/3"]`),
+    ).toBeVisible();
+    await expect(
+      page.locator(`#home-featured-7 a[href="/${locale}/workshops/test"]`),
+    ).toBeVisible();
+    await expect(
+      page
+        .locator(`#home-featured-8 a[href="/${locale}/poems/test-poem"]`)
+        .first(),
+    ).toBeVisible();
+    await expect(
+      page.locator('#home-featured-8 [lang="fa"][dir="rtl"]'),
+    ).toContainText("صبح");
+    await expect(page.locator("#home-featured-8 img")).toHaveAttribute(
+      "alt",
+      "Layered colourful paper shapes",
+    );
+    await expect(page.locator(".section-poets .text-link")).toContainText(
+      locale === "en" ? "Meet all poets" : "تعرّف",
+    );
   });
 }

@@ -22,19 +22,27 @@ export const homepageContent = {
       {
         id: "homepage-poets",
         blockType: "poets",
+        selectionMode: "manual",
         enabled: true,
         heading: "Die Menschen hinter den Worten",
         description:
           "Lerne die Poet*innen und ihre Geschichten in ihren eigenen Worten kennen.",
       },
       {
+        id: "homepage-poems",
+        blockType: "poems",
+        enabled: true,
+        selectionMode: "auto",
+        heading: "Gedichte entdecken",
+      },
+      {
         id: "homepage-events",
         blockType: "events",
+        selectionMode: "auto",
         enabled: true,
         heading: "Schreib mit. Hör zu.",
         description:
           "Komm zu einem Schreibworkshop oder erlebe unsere Poet*innen bei einer öffentlichen Lesung.",
-        limit: 3,
       },
       {
         id: "homepage-participation",
@@ -94,19 +102,27 @@ export const homepageContent = {
       {
         id: "homepage-poets",
         blockType: "poets",
+        selectionMode: "manual",
         enabled: true,
         heading: "Люди за словами",
         description:
           "Знайомтеся з поетами та їхніми історіями, розказаними власними словами.",
       },
       {
+        id: "homepage-poems",
+        blockType: "poems",
+        enabled: true,
+        selectionMode: "auto",
+        heading: "Час для поезії",
+      },
+      {
         id: "homepage-events",
         blockType: "events",
+        selectionMode: "auto",
         enabled: true,
         heading: "Приходьте писати. Приходьте слухати.",
         description:
           "Долучайтеся до майстерні письма або слухайте наших поетів на відкритих читаннях.",
-        limit: 3,
       },
       {
         id: "homepage-participation",
@@ -165,18 +181,26 @@ export const homepageContent = {
       {
         id: "homepage-poets",
         blockType: "poets",
+        selectionMode: "manual",
         enabled: true,
         heading: "Mirovên li pişt peyvan",
         description: "Helbestvan û çîrokên wan bi peyvên wan nas bike.",
       },
       {
+        id: "homepage-poems",
+        blockType: "poems",
+        enabled: true,
+        selectionMode: "auto",
+        heading: "Demek ji bo helbestê",
+      },
+      {
         id: "homepage-events",
         blockType: "events",
+        selectionMode: "auto",
         enabled: true,
         heading: "Were binivîse. Were guhdarî bike.",
         description:
           "Beşdarî atolyeya nivîsandinê bibe an di xwendineke vekirî de li helbestvanên me guhdarî bike.",
-        limit: 3,
       },
       {
         id: "homepage-participation",
@@ -235,19 +259,27 @@ export const homepageContent = {
       {
         id: "homepage-poets",
         blockType: "poets",
+        selectionMode: "manual",
         enabled: true,
         heading: "The people behind the words",
         description:
           "Meet the poets and discover the stories in their own words.",
       },
       {
+        id: "homepage-poems",
+        blockType: "poems",
+        enabled: true,
+        selectionMode: "auto",
+        heading: "Poems to spend time with",
+      },
+      {
         id: "homepage-events",
         blockType: "events",
+        selectionMode: "auto",
         enabled: true,
         heading: "Poetry workshops",
         description:
           "Join a writing workshop or hear our poets at a public reading.",
-        limit: 3,
       },
       {
         id: "homepage-participation",
@@ -307,18 +339,26 @@ export const homepageContent = {
       {
         id: "homepage-poets",
         blockType: "poets",
+        selectionMode: "manual",
         enabled: true,
         heading: "آدم‌های پشت واژه‌ها",
         description: "با شاعران و داستان‌هایشان از زبان خودشان آشنا شوید.",
       },
       {
+        id: "homepage-poems",
+        blockType: "poems",
+        enabled: true,
+        selectionMode: "auto",
+        heading: "زمانی برای شعر",
+      },
+      {
         id: "homepage-events",
         blockType: "events",
+        selectionMode: "auto",
         enabled: true,
         heading: "بیایید بنویسید. بیایید بشنوید.",
         description:
           "به یک کارگاه نوشتن بپیوندید یا در شعرخوانی عمومی به شاعران ما گوش دهید.",
-        limit: 3,
       },
       {
         id: "homepage-participation",
@@ -378,17 +418,25 @@ export const homepageContent = {
       {
         id: "homepage-poets",
         blockType: "poets",
+        selectionMode: "manual",
         enabled: true,
         heading: "الأشخاص وراء الكلمات",
         description: "تعرّف إلى الشعراء وحكاياتهم بكلماتهم الخاصة.",
       },
       {
+        id: "homepage-poems",
+        blockType: "poems",
+        enabled: true,
+        selectionMode: "auto",
+        heading: "قصائد نقرأها معًا",
+      },
+      {
         id: "homepage-events",
         blockType: "events",
+        selectionMode: "auto",
         enabled: true,
         heading: "تعال لتكتب. تعال لتستمع.",
         description: "شارك في ورشة كتابة أو استمع إلى شعرائنا في قراءة عامة.",
-        limit: 3,
       },
       {
         id: "homepage-participation",

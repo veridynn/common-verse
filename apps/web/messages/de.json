@@ -33,5 +33,6 @@
   "theme_light": "Hell",
   "theme_dark": "Dunkel",
   "theme_system": "System",
-  "home_translation_missing": "Dieser Inhalt ist in dieser Sprache noch nicht verfügbar."
+  "home_translation_missing": "Dieser Inhalt ist in dieser Sprache noch nicht verfügbar.",
+  "home_no_poems": "Hier erscheinen bald neue Gedichte."
 }

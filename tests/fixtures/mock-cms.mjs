@@ -73,6 +73,15 @@ const poem = {
 };
 
 const authors = [poem.author, { id: 4, name: "Workshop Collective" }];
+const recentPoems = Array.from({ length: 5 }, (_, index) => ({
+  ...poem,
+  id: 20 + index,
+  slug: `recent-${index}`,
+  title: `Recent poem ${index}`,
+  originalLanguage: "en",
+  originalText: `Recent verse ${index}`,
+  translations: [],
+}));
 
 function homepage(locale, preview) {
   const content = structuredClone(
@@ -97,6 +106,48 @@ function homepage(locale, preview) {
     ...section,
     ...(section.blockType === "poets" ? { poets: authors } : {}),
   }));
+  sections.push(
+    {
+      blockType: "featured",
+      enabled: true,
+      heading: "Featured poet",
+      description: "A voice from our project",
+      item: {
+        relationTo: "authors",
+        value: {
+          ...authors[0],
+          biography: "The biography comes from the poet profile.",
+          portrait: media,
+        },
+      },
+    },
+    {
+      blockType: "featured",
+      enabled: true,
+      heading: "Featured programme",
+      item: { relationTo: "workshops", value: workshop(locale, false) },
+    },
+    {
+      blockType: "featured",
+      enabled: true,
+      heading: "Featured poetry",
+      item: { relationTo: "poems", value: { ...poem, media: [media] } },
+    },
+    {
+      blockType: "poems",
+      enabled: true,
+      heading: "Selected poems",
+      selectionMode: "manual",
+      poems: [recentPoems[4], recentPoems[1]],
+    },
+    {
+      blockType: "poems",
+      enabled: true,
+      heading: "Empty selection",
+      selectionMode: "manual",
+      poems: [],
+    },
+  );
   sections.push({
     blockType: "newsletter",
     enabled: false,
@@ -196,6 +247,10 @@ const server = http.createServer((request, response) => {
     return response.end(JSON.stringify({ docs: [document], totalDocs: 1 }));
   }
   if (url.pathname.startsWith("/api/poems")) {
+    if (url.searchParams.get("sort") === "-createdAt")
+      return response.end(
+        JSON.stringify({ docs: recentPoems, totalDocs: recentPoems.length }),
+      );
     const author = url.searchParams.get("where[author][equals]");
     if (author === "4") {
       if (url.searchParams.get("page") === "2") {

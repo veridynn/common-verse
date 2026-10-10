@@ -33,5 +33,6 @@
   "theme_light": "Світле",
   "theme_dark": "Темне",
   "theme_system": "Система",
-  "home_translation_missing": "Цей вміст поки що недоступний цією мовою."
+  "home_translation_missing": "Цей вміст поки що недоступний цією мовою.",
+  "home_no_poems": "Опубліковані вірші незабаром з’являться тут."
 }

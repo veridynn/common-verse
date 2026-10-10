@@ -33,5 +33,6 @@
   "theme_light": "روشن",
   "theme_dark": "تیره",
   "theme_system": "سیستم",
-  "home_translation_missing": "این محتوا هنوز به این زبان در دسترس نیست."
+  "home_translation_missing": "این محتوا هنوز به این زبان در دسترس نیست.",
+  "home_no_poems": "شعرهای منتشرشده به‌زودی اینجا نمایش داده می‌شوند."
 }
