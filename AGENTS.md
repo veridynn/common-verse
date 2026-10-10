@@ -10,7 +10,10 @@ skills unchanged; maintain project-specific rules here and in the linked guide.
 - Astro owns public routing, rendering, layouts, SEO, and locale URLs.
 - Svelte 5 owns reusable UI and interactive islands. Hydrate only interactive components.
 - Payload owns editorial data, drafts, media, admin, APIs, and later ecommerce.
-- Paraglide/inlang owns UI messages stored in Git.
+- Paraglide/inlang owns project UI messages stored in Git, with separate catalogs
+  for Payload UI and website UI. Payload's built-in controls retain its translation
+  packs; editorial content translations stay in Payload. Follow
+  [translation and routing rules](docs/translations-and-routing.md).
 - PostgreSQL is the only application database.
 - Stripe will own payments in the later ecommerce milestone; ecommerce is currently out of scope.
 

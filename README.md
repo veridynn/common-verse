@@ -36,6 +36,7 @@ For browser tests, run `pnpm exec playwright install chromium` once, then
 ## Project guidance
 
 - [Agent guide](AGENTS.md) and [implementation guidance](docs/project-guidance.md).
+- [Translation ownership, language choices, and URL conventions](docs/translations-and-routing.md).
 - [Architecture review](docs/architecture-review.md).
 - [Accessible UI library research](docs/ui-library-research.md).
 - Skills are committed in `.agents/skills/` with `skills-lock.json`.

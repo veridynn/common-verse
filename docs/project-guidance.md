@@ -34,8 +34,9 @@ Poems preserve one original title, language, and text, plus zero or more explici
 translation records, each with language, title, text, and translator attribution.
 Never require one translation per site locale or hide the original based on the
 UI locale. Keep shared facts such as dates, media relationships, and IDs
-unlocalized. Localize editorial prose and labels where independent translations
-make sense.
+unlocalized. Localize editorial prose and editor-authored link labels where
+independent translations make sense. Field labels and other editor controls are
+UI, not editorial content.
 
 ## Locales and translation domains
 
@@ -43,16 +44,30 @@ Supported locales are `de`, `en`, `ar`, `fa`, `uk`, and `ku` (Kurmanji). Locale
 direction and labels live in `@poetry/i18n`; do not duplicate direction
 conditionals. Arabic and Persian are RTL; Kurmanji is LTR.
 
-German is the default language at `/`, with unprefixed content URLs. Other
-languages use their locale prefix. Legacy `/de` URLs redirect permanently to the
-unprefixed equivalent. Build links, canonicals, and preview URLs with
-`localizedPath`; the language picker preserves the content path, query, and anchor.
+The authoritative rules, examples, and implementation plan are in
+[translations-and-routing.md](translations-and-routing.md). Keep three buckets
+separate:
 
-Keep three translation domains separate:
+- Payload UI we define: its own Paraglide/inlang catalog in Git. Payload's standard
+  controls retain its built-in translation packs.
+- Website UI: a separate Paraglide/inlang catalog in Git.
+- Website content: Payload localization and explicit optional poem translations,
+  with editorial fallback disabled.
 
-- UI messages: Paraglide message JSON in Git.
-- Ordinary editorial fields: Payload field localization with fallback disabled.
-- Poems: the original and explicit optional translations described above.
+The Payload user's interface language is independent of the content language they
+edit. Use English as UI default/fallback, including for unsupported Kurmanji
+editor UI. Keep Kurmanji website UI and content supported. Translate displayed
+labels and preserve stored field names, option values, and block identifiers.
+
+German is the default content locale and website language at `/`, with unprefixed
+German page names. Other languages use locale prefixes and English page names:
+the agreed contact example is `/kontakt`, `/ar/contact`, and `/uk/contact`.
+Public paths use Latin ASCII characters. Use explicit route mappings rather than
+translated UI labels. Current `localizedPath` only adds prefixes; extend route
+resolution when implementing mapped pages. Links, canonicals, language alternates,
+and previews must agree. The language picker resolves the same page and preserves
+query and anchor. Redirect changed published paths and legacy `/de` paths
+permanently to their canonical equivalent.
 
 Never imply untranslated content is translated. Missing editorial translations
 must be visible as missing or handled by an explicitly designed fallback. Adding

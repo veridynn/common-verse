@@ -8,27 +8,50 @@ German lives at `/`; other languages keep their locale prefix. Visitors can choo
 Light, Dark, or System appearance in the header. Colour and UI foundations are
 documented in [design-tokens.md](design-tokens.md).
 
+Your Payload interface language is your account's preferred language for editor
+controls. It is independent of the content language selected for editing: you can
+use Ukrainian controls while editing English content. English is the agreed UI
+default/fallback, including for unsupported Kurmanji editor UI. Website Kurmanji
+content and UI remain supported. Project-defined editor labels still need the
+translation work described in
+[translations-and-routing.md](translations-and-routing.md).
+
 ## Editorial controls
 
-- **Opening feature:** choose a poem, workshop/event, or project announcement.
+- **Hero:** choose a poem, workshop/event, or project announcement.
   The headline and short introduction are translated independently. Poems keep
   their original language and show a translation only when one actually exists.
-- **Project introduction:** exactly one is required for publication. Its heading,
-  text, image, link, and position are editable.
-- **Featured poets:** select up to four profiles in order. An empty selection uses
-  the latest profiles. Names are shared; biographies and image descriptions are
-  localised. Profiles link to their own public pages and published poems.
-- **Upcoming events and workshops:** automatic dates come from published workshop
-  records. Set their type to Workshop or Reading/event. Optional pins appear
-  first; duplicate, past, untranslated, and draft events are excluded. An event
-  underway remains listed until its end time. Dates use Europe/Berlin time.
+- **Featured:** add a promotion anywhere in the section order. Choose a poem,
+  poet, or event/workshop, then give the section a translated title and short
+  introduction. The selected record supplies its own image, title, description,
+  and destination; editing that record updates the promotion too. Poems use their
+  media and original verse, plus an explicit translation when one exists. Blog
+  posts can be added when the blog collection and public routes exist.
+- **Mission:** the project introduction. Edit its heading, text, image, link,
+  and position. It can be removed or repeated like the other sections.
+- **Events:** events and workshops share one picker. Automatic shows up to
+  four nearest upcoming published records. Manual shows only the selected records,
+  in the chosen order, up to four. Past events, drafts, duplicates, and records
+  without a title in the current language are omitted. Events underway remain
+  listed until their end time. Dates use Europe/Berlin time.
+- **Poems:** Automatic shows the four newest published poems by creation date.
+  Manual shows only the chosen poems, up to four and in selection order. Originals
+  remain visible; only available translations appear alongside them.
+- **Poets:** Automatic shows the four newest profiles with at least one published
+  poem. Manual shows only the chosen profiles, up to four and in selection order.
+  Names are shared; biographies and image descriptions are localised.
 - **Take part:** edit up to three destinations and their translated labels and
   descriptions. Root-relative links automatically use the visitor's locale.
 - **Newsletter:** edit its heading, text, and signup destination. Signup opens the
   configured newsletter service; this site does not pretend to collect emails.
 - **Search and social sharing:** edit the localised title, description, and image.
 
-Optional sections can be hidden, removed, or repeated. Order, relationships,
+Mission retains its existing `introduction` block identifier to preserve saved
+content. Existing selections and participation links remain available; no seed
+command overwrites an existing homepage.
+
+Sections can be removed or repeated; those with a visibility toggle can also be
+hidden. Order, relationships,
 dates, and visibility are shared between languages; editorial prose is localised.
 Payload language fallback is disabled. Missing prose uses the translated base UI
 copy, never another language's editorial text. Images without an accessible
@@ -40,6 +63,11 @@ Configure the same `PREVIEW_SECRET` in the CMS and Astro runtime, and correct
 `PUBLIC_SITE_URL` / `PUBLIC_CMS_URL` origins. Open Live Preview and select a mobile,
 tablet, desktop, or responsive width. The preview refreshes after autosave, draft
 save, and publish. It verifies the CMS message origin and preserves scroll position.
+The draft-preview banner must follow the editor's Payload interface language,
+independently of the content language being previewed. Direct preview links without
+an editor language use English for the banner. Preview URLs already pass an editor
+language, but the signed-in account flow still needs verification; the translation
+guide records the remaining work.
 
 For local preview, use the same hostname for both applications (for example,
 `localhost:3001` and `localhost:4321`). Chromium's local-network protection can
