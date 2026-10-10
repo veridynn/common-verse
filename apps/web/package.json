@@ -18,6 +18,8 @@
     "@dicebear/styles": "10.6.0",
     "@inlang/paraglide-js": "2.25.4",
     "@payloadcms/live-preview": "3.90.2",
+    "@payloadcms/richtext-lexical": "3.90.2",
+    "@poetry/cms-ui": "workspace:*",
     "@poetry/i18n": "workspace:*",
     "@poetry/types": "workspace:*",
     "@tailwindcss/vite": "4.3.3",
@@ -28,8 +30,7 @@
     "svelte": "5.57.1",
     "tailwind-merge": "3.7.0",
     "tailwind-variants": "3.3.1",
-    "tailwindcss": "4.3.3",
-    "@poetry/cms-ui": "workspace:*"
+    "tailwindcss": "4.3.3"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.8",

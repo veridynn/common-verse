@@ -129,3 +129,12 @@ export interface PayloadListResponse<T> {
   prevPage: number | null;
   nextPage: number | null;
 }
+
+export interface FixedPage {
+  title?: string | null;
+  content?:
+    | import("@payloadcms/richtext-lexical/lexical").SerializedEditorState
+    | null;
+  description?: string | null;
+  _status?: "draft" | "published";
+}

@@ -12,5 +12,8 @@
   "devDependencies": {
     "@poetry/i18n": "workspace:*",
     "typescript": "5.9.3"
+  },
+  "dependencies": {
+    "@payloadcms/richtext-lexical": "3.90.2"
   }
 }

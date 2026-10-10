@@ -357,6 +357,24 @@ h6 {
   font-family: var(--font-serif);
   font-size: var(--font-size-md);
 }
+.rich-text {
+  white-space: normal;
+}
+.rich-text :is(p, h2, h3, ul, ol) {
+  margin-block: var(--space-md);
+}
+.rich-text :is(ul, ol) {
+  padding-inline-start: var(--space-lg);
+}
+.rich-text ul {
+  list-style: disc;
+}
+.rich-text ol {
+  list-style: decimal;
+}
+.rich-text a {
+  text-decoration: underline;
+}
 .translation {
   margin-block: var(--space-xl);
   padding-block-start: var(--space-lg);

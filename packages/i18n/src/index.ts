@@ -46,6 +46,9 @@ export const localeMetadata: Record<Locale, LocaleMetadata> = {
 
 export const defaultLocale: Locale = "de";
 
+export const fixedPageKeys = ["about", "contact", "privacy", "legal"] as const;
+export type FixedPageKey = (typeof fixedPageKeys)[number];
+
 export function isLocale(value: string | undefined): value is Locale {
   return locales.includes(value as Locale);
 }
@@ -59,6 +62,7 @@ export const routeSegments = {
   poems: { de: "gedichte", international: "poems" },
   poets: { de: "poeten", international: "poets" },
   workshops: { de: "workshops", international: "workshops" },
+  about: { de: "ueber-uns", international: "about" },
   contact: { de: "kontakt", international: "contact" },
   privacy: { de: "datenschutz", international: "privacy" },
   legal: { de: "impressum", international: "legal" },

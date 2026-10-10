@@ -123,5 +123,10 @@
   "last_administrator_required": "Der letzte Administrator kann nicht zum Editor geändert oder gelöscht werden. Weise zuerst einem anderen Benutzer die Rolle Administrator zu.",
   "authors_help": "Profile der Menschen, die unsere Texte schreiben.",
   "poem_author_help": "Person, die das Originalgedicht geschrieben hat. Übersetzer:innen werden bei den Übersetzungen genannt.",
-  "poems_by_author": "Gedichte dieser Person"
+  "poems_by_author": "Gedichte dieser Person",
+  "about": "Über uns",
+  "contact": "Kontakt",
+  "privacy": "Datenschutz",
+  "legal": "Impressum",
+  "meta_description_help": "Kurze Zusammenfassung für Suchergebnisse und Link-Vorschauen. Etwa 150–160 Zeichen; erscheint nicht im Seitentext."
 }

@@ -37,13 +37,13 @@ describe("editorial schemas", () => {
     expect(names).toEqual(
       expect.arrayContaining([
         "media",
-        "pages",
         "authors",
         "workshops",
         "poems",
       ]),
     );
     expect(names).not.toContain("users");
+    expect(names).not.toContain("pages");
     expect(names).not.toContain("delete");
   });
 

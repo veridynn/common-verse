@@ -10,7 +10,6 @@ export const bulkCounts = {
   authors: 60,
   poems: 300,
   workshops: 100,
-  pages: 18,
   media: 12,
 } as const;
 const prefix = "bulk-demo-v1";
@@ -62,7 +61,7 @@ export async function seedBulk(payload: Payload) {
     throw new Error("Bulk seeding requires PostgreSQL transactions.");
   const req = { transactionID };
   const common = { req, overrideAccess: true, depth: 0 } as const;
-  const created = { authors: 0, poems: 0, workshops: 0, pages: 0, media: 0 };
+  const created = { authors: 0, poems: 0, workshops: 0, media: 0 };
   try {
     const mediaIDs: number[] = [];
     for (let i = 0; i < bulkCounts.media; i++) {
@@ -245,54 +244,6 @@ export async function seedBulk(payload: Payload) {
           data: localized(locale),
         });
       created.workshops++;
-    }
-    for (let i = 0; i < bulkCounts.pages; i++) {
-      const slug = `${prefix}-page-${i + 1}`;
-      const existing = await payload.find({
-        ...common,
-        collection: "pages",
-        locale: "de",
-        draft: true,
-        where: { slug: { equals: slug } },
-        limit: 1,
-      });
-      if (existing.docs[0]) continue;
-      const localized = (locale: Locale) => ({
-        slug,
-        title: `${bulkFixtures[locale].pageTitle} · ${i + 1}`,
-        layout: [
-          {
-            blockType: "richText" as const,
-            text: bulkFixtures[locale].content,
-          },
-          {
-            blockType: "quote" as const,
-            quote: bulkFixtures[locale].lines[2],
-            attribution: "Prototype Collective",
-          },
-          { blockType: "image" as const, image: mediaIDs[i % mediaIDs.length] },
-        ],
-      });
-      const page = await payload.create({
-        ...common,
-        collection: "pages",
-        locale: "de",
-        data: {
-          ...localized("de"),
-          _status: i % 5 === 0 ? "draft" : "published",
-        },
-      });
-      for (const locale of editorialLocales(i).filter(
-        (locale) => locale !== "de",
-      ))
-        await payload.update({
-          ...common,
-          collection: "pages",
-          id: page.id,
-          locale,
-          data: localized(locale),
-        });
-      created.pages++;
     }
     await payload.db.commitTransaction(transactionID);
     payload.logger.info(

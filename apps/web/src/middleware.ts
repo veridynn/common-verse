@@ -1,6 +1,7 @@
 import { defineMiddleware } from "astro:middleware";
 import {
   defaultLocale,
+  fixedPageKeys,
   isLocale,
   localizedPath,
   unlocalizedPath,
@@ -23,6 +24,7 @@ export const onRequest = defineMiddleware((context, next) => {
   if (
     locale === defaultLocale &&
     (identity === "/" ||
+      fixedPageKeys.some((page) => identity === `/${page}`) ||
       /^\/(workshops|poems|poets)(\/[^/]+)?\/?$/.test(identity))
   ) {
     return next(

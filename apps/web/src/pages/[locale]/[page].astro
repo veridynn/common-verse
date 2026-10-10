@@ -1,0 +1,35 @@
+---
+import { getSecret } from 'astro:env/server'
+import { convertLexicalToHTML } from '@payloadcms/richtext-lexical/html'
+import { convertLexicalToPlaintext } from '@payloadcms/richtext-lexical/plaintext'
+import { fixedPageKeys, getLocaleMetadata, isLocale, locales } from '@poetry/i18n'
+import { getFixedPage } from '../../lib/cms'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import * as m from '../../paraglide/messages.js'
+
+const { locale: rawLocale, page: rawPage } = Astro.params
+const page = fixedPageKeys.find((key) => key === rawPage)
+if (!isLocale(rawLocale) || !page) return new Response('Not found', { status: 404 })
+const locale = rawLocale
+const suppliedSecret = Astro.url.searchParams.get('previewSecret') ?? undefined
+const previewSecret = getSecret('PREVIEW_SECRET')
+const preview = Boolean(suppliedSecret && previewSecret && suppliedSecret === previewSecret)
+if (suppliedSecret && !preview) return new Response('Invalid preview link', { status: 401 })
+const document = await getFixedPage(page, locale, preview ? suppliedSecret : undefined)
+if (!document) return new Response('Not found', { status: 404 })
+const title = document.title
+const translations = preview ? [] : await Promise.all(locales.map(async (language) => {
+  if (language === locale) return { language, document }
+  return { language, document: await getFixedPage(page, language) }
+}))
+const alternateLocales = translations.filter(({ document }) => document !== null).map(({ language }) => language)
+const description = document.description || (document.content ? convertLexicalToPlaintext({ data: document.content }).slice(0, 160) : undefined)
+const html = document.content ? convertLexicalToHTML({ data: document.content, disableContainer: true }) : ''
+---
+
+<BaseLayout {locale} title={`${title} · ${m.site_title({}, { locale })}`} {description} canonicalPath={page} {preview} {alternateLocales}>
+  <article lang={document.contentLocale} dir={getLocaleMetadata(document.contentLocale).direction}>
+    <h1>{title}</h1>
+    <div class="prose rich-text" set:html={html} />
+  </article>
+</BaseLayout>

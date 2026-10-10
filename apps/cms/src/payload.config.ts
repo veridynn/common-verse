@@ -21,6 +21,7 @@ import { Poems } from "./collections/Poems";
 import { Users } from "./collections/Users";
 import { Workshops } from "./collections/Workshops";
 import { contentFields } from "./components/contentFields";
+import { FixedPages } from "./globals/FixedPages";
 import { Homepage } from "./globals/Homepage";
 
 const filename = fileURLToPath(import.meta.url);
@@ -50,22 +51,20 @@ export default buildConfig({
       },
     }),
   ),
-  globals: [
-    {
-      ...Homepage,
-      fields: contentFields(Homepage.fields),
-      admin: {
-        ...Homepage.admin,
-        components: {
-          elements: {
-            beforeDocumentControls: [
-              "./components/CollectionLabels#CollectionLabels",
-            ],
-          },
+  globals: [Homepage, ...FixedPages].map((global) => ({
+    ...global,
+    fields: contentFields(global.fields),
+    admin: {
+      ...global.admin,
+      components: {
+        elements: {
+          beforeDocumentControls: [
+            "./components/CollectionLabels#CollectionLabels",
+          ],
         },
       },
     },
-  ],
+  })),
   plugins: [
     mcpPlugin({
       overrideApiKeyCollection: (collection) => ({
@@ -87,10 +86,6 @@ export default buildConfig({
         media: {
           description:
             "Images and their localized accessible alternative text.",
-          enabled: { find: true, create: true, update: true, delete: false },
-        },
-        pages: {
-          description: "Localized structured pages for the public website.",
           enabled: { find: true, create: true, update: true, delete: false },
         },
         authors: {

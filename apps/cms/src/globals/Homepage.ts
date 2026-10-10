@@ -292,7 +292,7 @@ export const Homepage: GlobalConfig = {
   slug: "homepage",
   label: label("homepage"),
   admin: {
-    group: label("website"),
+    group: label("pages"),
     description: label(
       "choose_the_hero_arrange_the_sections_and_preview_each_language_before_publishing",
     ),
@@ -445,7 +445,13 @@ export const Homepage: GlobalConfig = {
       label: label("search_and_social_sharing"),
       fields: [
         text("title", label("page_title")),
-        text("description", label("meta_description"), "textarea"),
+        {
+          name: "description",
+          label: label("meta_description"),
+          type: "textarea",
+          localized: true,
+          admin: { description: label("meta_description_help") },
+        },
         {
           name: "image",
           type: "upload",

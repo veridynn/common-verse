@@ -61,7 +61,7 @@ const theme = themePreference(Astro.cookies.get('poetry-theme')?.value)
     {alternateLocales.map((alternative) => (
       <link rel="alternate" hreflang={alternative} href={new URL(localizedPath(alternative, canonicalPath), siteUrl)} />
     ))}
-    <link rel="alternate" hreflang="x-default" href={new URL(localizedPath(xDefaultLocale, canonicalPath), siteUrl)} />
+    {alternateLocales.length > 0 && <link rel="alternate" hreflang="x-default" href={new URL(localizedPath(xDefaultLocale, canonicalPath), siteUrl)} />}
     <meta property="og:type" content={contentType} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -83,9 +83,10 @@ const theme = themePreference(Astro.cookies.get('poetry-theme')?.value)
     <main id="main" tabindex="-1" class={mainClass}><slot /></main>
     <footer class="site-footer"><a class="brand" href={localizedPath(locale)}><BrandLogo /><span class="sr-only">The Poetry Project{m.site_title({}, { locale }) !== 'The Poetry Project' ? ` — ${m.site_title({}, { locale })}` : ''}</span></a>
       <nav aria-label={m.home_footer({}, { locale })}>
-        <a href="https://thepoetryproject.de/kontakt">{m.home_contact({}, { locale })}</a>
-        <a href="https://thepoetryproject.de/datenschutz">{m.home_privacy({}, { locale })}</a>
-        <a href="https://thepoetryproject.de/impressum">{m.home_legal({}, { locale })}</a>
+        <a href={localizedPath(locale, "about")}>{m.home_about({}, { locale })}</a>
+        <a href={localizedPath(locale, "contact")}>{m.home_contact({}, { locale })}</a>
+        <a href={localizedPath(locale, "privacy")}>{m.home_privacy({}, { locale })}</a>
+        <a href={localizedPath(locale, "legal")}>{m.home_legal({}, { locale })}</a>
       </nav>
       <p>© {new Date().getFullYear()} The Poetry Project e.V.</p>
     </footer>

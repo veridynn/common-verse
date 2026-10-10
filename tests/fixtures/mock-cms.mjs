@@ -1,3 +1,4 @@
+import { plainTextToRichText } from "../../apps/cms/src/utilities/plainTextToRichText.ts";
 import http from "node:http";
 import { homepageContent } from "../../apps/cms/scripts/seed/homepage-content.ts";
 
@@ -212,6 +213,31 @@ const server = http.createServer((request, response) => {
   }
 
   const locale = url.searchParams.get("locale") ?? "de";
+  const fixedPage = url.pathname.match(
+    /^\/api\/globals\/(about|contact|privacy|legal)\/(public|preview)$/,
+  )?.[1];
+  if (fixedPage) {
+    if (fixedPage === "privacy" && locale === "fa" && !isPreview)
+      return response.end("null");
+    const content = plainTextToRichText(
+      `Fixture content for ${fixedPage} in ${locale}.\n\nSecond paragraph.`,
+    );
+    content.root.children[0].children[0].format = 1;
+    content.root.children.push({
+      ...plainTextToRichText("More information").root.children[0],
+      type: "heading",
+      tag: "h2",
+    });
+    return response.end(
+      JSON.stringify({
+        title: `${fixedPage} ${locale}${isPreview ? " — draft" : ""}`,
+        content,
+        description: `Fixture description for ${fixedPage} in ${locale}.`,
+        _status: isPreview ? "draft" : "published",
+      }),
+    );
+  }
+
   if (url.pathname.startsWith("/api/globals/homepage/")) {
     const document = homepage(locale, isPreview);
     if (isPreview && reversedHomepageLocales.has(locale))

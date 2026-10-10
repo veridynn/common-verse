@@ -7,7 +7,8 @@ export const Pages: CollectionConfig = {
   slug: "pages",
   labels: { singular: label("page"), plural: label("pages") },
 
-  admin: { useAsTitle: "title", group: label("content") },
+  // Preserve legacy records; fixed pages now have their own global editors.
+  admin: { useAsTitle: "title", hidden: true },
   access: {
     read: publishedOrAuthenticated,
     create: authenticated,

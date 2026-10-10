@@ -1,6 +1,8 @@
-import { locales, type Locale } from "@poetry/i18n";
+import { locales, type Locale, type FixedPageKey } from "@poetry/i18n";
+import { convertLexicalToPlaintext } from "@payloadcms/richtext-lexical/plaintext";
 import type {
   Author,
+  FixedPage,
   Homepage,
   PayloadListResponse,
   Poem,
@@ -226,4 +228,31 @@ export async function getActivePoets(
     page += 1;
   } while (hasNextPage && authors.length < 4);
   return { authors, poems };
+}
+
+export async function getFixedPage(
+  page: FixedPageKey,
+  locale: Locale,
+  previewSecret?: string,
+): Promise<(FixedPage & { contentLocale: Locale }) | null> {
+  const url = new URL(
+    `/api/globals/${page}/${previewSecret ? "preview" : "public"}`,
+    cmsUrl,
+  );
+  url.searchParams.set("locale", locale);
+  const response = await fetch(url, {
+    headers: previewSecret ? { "x-preview-secret": previewSecret } : {},
+    cache: "no-store",
+  });
+  if (!response.ok && response.status !== 404)
+    throw new Error(`Page request failed with ${response.status}`);
+  const document: FixedPage | null =
+    response.status === 404 ? null : await response.json();
+  if (
+    document?.title?.trim() &&
+    document.content &&
+    convertLexicalToPlaintext({ data: document.content }).trim()
+  )
+    return { ...document, contentLocale: locale };
+  return locale === "en" ? null : getFixedPage(page, "en", previewSecret);
 }
