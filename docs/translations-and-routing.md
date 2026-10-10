@@ -1,8 +1,7 @@
 # Translations and language routing
 
-This document records the agreed translation rules and the remaining implementation
-work. These rules are project requirements; the implementation status below does
-not imply that every rule is already implemented.
+This document records the agreed translation rules and their implementation.
+These rules are project requirements.
 
 ## Three translation buckets
 
@@ -103,7 +102,9 @@ translated navigation labels and internal field names.
 - German routes have no locale prefix: `/` and, when implemented, `/kontakt`.
 - Other languages have a locale prefix and English page path names: `/en/contact`,
   `/ar/contact`, `/fa/contact`, `/uk/contact`, and `/ku/contact`.
-- Public path segments use Latin ASCII characters. Arabic and Cyrillic characters
+- New or changed editorial slugs use Latin ASCII letters, digits, hyphens, and
+  underscores. Existing saved slugs remain valid when unchanged. Public path
+  segments use Latin ASCII characters. Arabic and Cyrillic characters
   are technically supported through URL encoding, but Latin paths are the agreed
   project convention. Editorial titles keep their original script.
 - Identify the same page internally with one stable route key, such as `contact`.
@@ -119,10 +120,11 @@ translated navigation labels and internal field names.
   stable; changes to a record's public URL require explicit handling and redirects.
 
 The contact paths above describe the approved convention, not an existing contact
-page. The current footer links to the old website's contact page. The current
-`localizedPath` helper adds locale prefixes but does not translate page segments;
-it needs route-mapping support before `/kontakt` and `/ar/contact` can represent
-the same local page.
+page. The current footer links to the old website's contact page. The central route map already resolves `contact` to these paths; adding the
+actual local contact page remains separate work. Implemented poem and poet routes
+use `/gedichte` and `/poeten` in German, and `/ar/poems` and `/ar/poets`, for
+example, in Arabic. Old `/poems`, `/poets`, and corresponding `/de` URLs redirect
+permanently to their German canonical paths. Workshops keep `/workshops`.
 
 ## Direction and translation quality
 
@@ -133,45 +135,76 @@ language, including when it differs from the interface.
 
 Declare the correct `lang` and `dir` for mixed-language content and the preview
 banner. Verify keyboard behavior, narrow layouts, long translations, mixed writing
-directions, and English fallback. Have native speakers review translations before
-treating them as finished.
+directions, and English fallback. Translated wording is provisional for the
+MVP/POC. Native-speaker wording review is a separate task before public launch;
+it does not block the MVP implementation.
 
-## Implementation status and plan
+## Implementation
 
-At the time of this agreement:
+- **Payload UI:** `packages/cms-ui/messages/{locale}.json`, with a separate Inlang
+  project in `packages/cms-ui/project.inlang`. It compiles English, German, Arabic,
+  Persian, and Ukrainian. `label()` supplies Payload's localized label objects;
+  `message()` resolves custom messages with an explicit interface language.
+  Neither changes global request locale state. Payload's own packs handle its
+  standard controls, with English fallback.
+- **Website UI:** `apps/web/messages/{locale}.json`, with its own Inlang project.
+  English is the base/fallback. Shared compiler options in
+  `apps/web/paraglide.config.mjs` explicitly recognize unprefixed German URLs,
+  independently of the English UI fallback.
+- **Content:** Payload's six content locales keep `fallback: false`. Preview
+  queries explicitly disable content fallback as well. No field names, collection
+  slugs, block identifiers, selection values, or existing records were renamed.
+- **Preview:** the authorized preview URL carries the editor's interface language.
+  The draft banner reads the CMS catalog and declares that language and direction.
+  The website UI follows the preview's content route. Unsupported editor languages,
+  including Kurmanji, resolve to English.
+- **Inputs:** native Payload text and textarea controls retain their validation
+  and behavior. Localized editorial inputs declare the selected content language
+  and direction. Original poems and explicit translations use their own language
+  fields, so Arabic originals and English translations can share one form.
+  Interface labels continue to follow the editor preference.
+- **Routes:** `packages/i18n/src/index.ts` owns stable route keys and public path
+  mappings. Links, previews, metadata, and language switching use `localizedPath`;
+  Astro middleware resolves German paths and redirects legacy paths. Query strings,
+  anchors, and content-record slugs survive language switching. Contact, privacy,
+  and legal mappings establish the convention without adding local pages.
 
-- Website UI already uses Paraglide/inlang, but its configured base locale is
-  German. English UI fallback still needs implementation and verification.
-- Payload's built-in interface languages are German, English, Arabic, Persian,
-  and Ukrainian. Many project-defined labels and descriptions are still English
-  literals, or are inferred from untranslated field names.
-- Editorial localization supports all six languages and disables fallback.
-- Preview URLs pass an `editorLanguage` parameter, and the banner can use it.
-  The banner message currently belongs to the website catalog. A supplied
-  screenshot still showed English with Arabic editor controls; the real account
-  preference and preview flow need verification before calling that integration
-  complete.
-- German routes are unprefixed, and other routes have locale prefixes. German
-  page-name mappings are not yet implemented.
+Run these commands from the repository root:
 
-Implement the agreed rules in this order:
+```sh
+pnpm --filter @poetry/cms-ui compile
+pnpm --filter @poetry/web compile:ui
+pnpm check
+pnpm test
+pnpm lint
+```
 
-1. Create a dedicated CMS Paraglide/inlang project, separate from the website
-   catalog. Compile it for the CMS and expose only the editor messages needed by
-   previews. Reuse the existing locale metadata and translation toolchain.
-2. Inventory and translate all project-defined CMS labels, groups, descriptions,
-   placeholders, options, custom components, and user-facing validation messages.
-   Give inferred labels explicit translations. Preserve stored identifiers.
-3. Resolve custom UI text from Payload's interface preference on both server and
-   client. Use English default/fallback and keep the content selector independent.
-   Move the draft banner to the CMS catalog and verify the signed-in preview flow.
-4. Set English UI fallback for the website without changing German default routes
-   or enabling editorial fallback. Keep Kurmanji editor UI on English fallback.
-5. Add explicit public route mappings and update links, language switching,
-   previews, metadata, and redirects together as mapped pages are implemented.
-6. Test UI fallback, language independence, stable saved values, and mapped URLs.
-   Verify LTR/RTL and the real editor workflow as well as mock browser tests. Record
-   native-speaker review separately from technical test results.
+Compilation, development setup, and the owning app commands check the catalogs.
+Every message requires an English source. Missing locale messages produce a visible
+English-fallback warning. Generated Paraglide files are ignored and recreated by
+setup, app builds, and tests; edit the JSON catalogs instead.
+
+## Verification and remaining review
+
+Automated checks cover English fallback in both compiler configurations, stable
+saved values, disabled editorial fallback, independent editor language, ASCII slug
+validation, route mappings, query/anchor preservation, and legacy redirects.
+Browser tests cover all six website locales, preview authorization, language
+switching, keyboard interaction, and RTL rendering.
+
+Real signed-in Payload checks confirmed German, English, Ukrainian, Arabic, and
+Persian interface preferences independently of English content. Ukrainian controls
+also previewed Arabic content while retaining a Ukrainian draft banner. Arabic
+editor controls were checked at a narrow viewport. Arabic poem original inputs
+retained RTL while their English translation inputs retained LTR. Temporary test
+accounts and draft records were removed afterward.
+
+Native-speaker review is still pending and is required before treating the wording
+as final for public launch. Payload-owned translation gaps (for example its
+hardcoded “Responsive” preview control) remain framework-owned; this work does
+not replace Payload's translation packs. A small client-side label adapter handles
+Payload 3.90's relationship drawer accessibility label, which otherwise displays a
+localized label object as `[object Object]`.
 
 ## Framework references
 

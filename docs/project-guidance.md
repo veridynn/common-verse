@@ -63,9 +63,9 @@ German is the default content locale and website language at `/`, with unprefixe
 German page names. Other languages use locale prefixes and English page names:
 the agreed contact example is `/kontakt`, `/ar/contact`, and `/uk/contact`.
 Public paths use Latin ASCII characters. Use explicit route mappings rather than
-translated UI labels. Current `localizedPath` only adds prefixes; extend route
-resolution when implementing mapped pages. Links, canonicals, language alternates,
-and previews must agree. The language picker resolves the same page and preserves
+translated UI labels. Central route mappings and `localizedPath` resolve the
+same page across languages. Links, canonicals, language alternates, and previews
+must agree. The language picker resolves the same page and preserves
 query and anchor. Redirect changed published paths and legacy `/de` paths
 permanently to their canonical equivalent.
 
@@ -74,7 +74,8 @@ must be visible as missing or handled by an explicitly designed fallback. Adding
 a locale requires central metadata, Paraglide, Payload, tests, SEO alternates, and
 editor documentation to be updated together. Documents declare the routed locale
 in `lang` and `dir`; embedded originals and translations declare their own
-language and direction.
+language and direction. UI wording is provisional for the MVP/POC; native-speaker
+review remains a separate task before public launch.
 
 ## UI and accessibility
 
