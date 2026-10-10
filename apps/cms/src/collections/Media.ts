@@ -4,8 +4,8 @@ import { authenticated } from "./access";
 
 export const Media: CollectionConfig = {
   slug: "media",
-  labels: { singular: label("media"), plural: label("media") },
-  admin: { useAsTitle: "alt", group: label("content") },
+  labels: { singular: label("image"), plural: label("images_and_files") },
+  admin: { useAsTitle: "alt", group: label("media") },
   access: {
     read: () => true,
     create: authenticated,

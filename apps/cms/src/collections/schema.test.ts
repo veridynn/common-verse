@@ -130,8 +130,8 @@ describe("editorial schemas", () => {
     expect(Authors.labels?.plural).toMatchObject({ en: "Authors" });
     expect(Events.labels?.plural).toMatchObject({ en: "Events" });
     expect(Events.admin?.group).toMatchObject({ en: "Content" });
-    expect(Media.labels?.plural).toMatchObject({ en: "Media" });
-    expect(Media.admin?.group).toMatchObject({ en: "Content" });
+    expect(Media.labels?.plural).toMatchObject({ en: "Images & Files" });
+    expect(Media.admin?.group).toMatchObject({ en: "Media" });
   });
 });
 

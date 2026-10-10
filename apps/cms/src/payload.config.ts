@@ -31,10 +31,11 @@ const dirname = path.dirname(filename);
 export default buildConfig({
   admin: {
     user: Users.slug,
+    components: { Nav: "./components/Nav#Nav" },
     importMap: { baseDir: path.resolve(dirname) },
     meta: { titleSuffix: " · The Poetry Project" },
   },
-  collections: [Articles, Users, Media, Pages, Authors, Events, Poems].map(
+  collections: [Articles, Events, Poems, Authors, Media, Users, Pages].map(
     (collection) => ({
       ...collection,
       fields: contentFields(collection.fields),

@@ -14,6 +14,7 @@ import { HeadingFeatureClient as HeadingFeatureClient_e70f5e05f09f93e00b997edb1e
 import { ParagraphFeatureClient as ParagraphFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { CollectionLabels as CollectionLabels_c893afbc86a6beaa837b662ee93bcb60 } from '../../../components/CollectionLabels'
 import { RoleField as RoleField_f96784b8b8f3c6be62056c5b6c5bfa8d } from '../../../components/RoleField'
+import { Nav as Nav_0def0093354eba26caa57440017abaea } from '../../../components/Nav'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -34,5 +35,6 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#ParagraphFeatureClient": ParagraphFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "./components/CollectionLabels#CollectionLabels": CollectionLabels_c893afbc86a6beaa837b662ee93bcb60,
   "./components/RoleField#RoleField": RoleField_f96784b8b8f3c6be62056c5b6c5bfa8d,
+  "./components/Nav#Nav": Nav_0def0093354eba26caa57440017abaea,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }
