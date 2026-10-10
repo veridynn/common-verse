@@ -119,5 +119,6 @@
   "use_https_mailto_or_a_path_beginning_with_one_slash": "Verwende https://, mailto: oder einen Pfad mit einem einzelnen Schrägstrich am Anfang.",
   "draft_preview": "Entwurfsvorschau",
   "section": "Abschnitt",
-  "slug_format": "Verwende lateinische Buchstaben, Ziffern, Bindestriche oder Unterstriche für die URL."
+  "slug_format": "Verwende lateinische Buchstaben, Ziffern, Bindestriche oder Unterstriche für die URL.",
+  "last_administrator_required": "Der letzte Administrator kann nicht zum Editor geändert oder gelöscht werden. Weise zuerst einem anderen Benutzer die Rolle Administrator zu."
 }

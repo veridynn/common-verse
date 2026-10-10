@@ -119,5 +119,6 @@
   "use_https_mailto_or_a_path_beginning_with_one_slash": "Use https://, mailto:, or a path beginning with one slash.",
   "draft_preview": "Draft preview",
   "section": "Section",
-  "slug_format": "Use Latin letters, numbers, hyphens, or underscores for the URL."
+  "slug_format": "Use Latin letters, numbers, hyphens, or underscores for the URL.",
+  "last_administrator_required": "The last administrator cannot be changed to Editor or deleted. Make another user an Administrator first."
 }

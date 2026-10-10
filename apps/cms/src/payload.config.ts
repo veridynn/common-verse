@@ -12,6 +12,8 @@ import { uk } from "@payloadcms/translations/languages/uk";
 import { buildConfig } from "payload";
 import sharp from "sharp";
 
+import { administrator } from "./collections/access";
+import { label } from "@poetry/cms-ui";
 import { Authors } from "./collections/Authors";
 import { Media } from "./collections/Media";
 import { Pages } from "./collections/Pages";
@@ -66,6 +68,21 @@ export default buildConfig({
   ],
   plugins: [
     mcpPlugin({
+      overrideApiKeyCollection: (collection) => ({
+        ...collection,
+        admin: {
+          ...collection.admin,
+          group: label("administration"),
+          hidden: ({ user }) => user?.role !== "admin",
+        },
+        access: {
+          ...collection.access,
+          create: administrator,
+          read: administrator,
+          update: administrator,
+          delete: administrator,
+        },
+      }),
       collections: {
         media: {
           description:

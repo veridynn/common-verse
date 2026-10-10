@@ -58,7 +58,7 @@ describe("editorial schemas", () => {
       expect(collection.access?.readVersions).toBe(authenticated);
     }
     expect(await authenticated({ req: { user: null } } as never)).toBe(false);
-    expect(await authenticated({ req: { user: { id: 1 } } } as never)).toBe(
+    expect(await authenticated({ req: { user: { id: 1, collection: "users", role: "editor" } } } as never)).toBe(
       true,
     );
   });
