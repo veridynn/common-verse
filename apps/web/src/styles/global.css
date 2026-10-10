@@ -555,6 +555,7 @@ footer {
   padding-block: var(--space-xs);
   flex-shrink: 0;
 }
+.poem-grid,
 .poet-grid,
 .participation-grid,
 .event-list {
@@ -811,5 +812,27 @@ footer {
   to {
     opacity: 0;
     transform: scale(0.98);
+  }
+}
+
+.poem-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+  gap: var(--space-lg-xl);
+}
+.poem-grid > li {
+  min-inline-size: 0;
+}
+.featured-layout {
+  display: grid;
+  align-items: start;
+  gap: var(--space-md-lg);
+}
+.featured-poet > [data-slot="avatar"] {
+  max-inline-size: 20rem;
+}
+@media (min-width: 48rem) {
+  .featured-layout:has(> figure),
+  .featured-layout:has(> [data-slot="avatar"]) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 }

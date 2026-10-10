@@ -1,0 +1,29 @@
+---
+import { localizedPath, type Locale } from '@poetry/i18n'
+import type { HomepageSection } from '@poetry/types'
+import { Heading } from '$lib/components/ui/heading'
+import { Link } from '$lib/components/ui/link'
+import { PoemCard } from '$lib/components/sections'
+import PersonPortrait from './PersonPortrait.svelte'
+import EditorialImage from './EditorialImage.astro'
+import { authorDisplayName } from '../lib/editorial'
+import { featuredItem, mediaObject } from '../lib/homepage'
+interface Props { section: HomepageSection; locale: Locale; preview?: boolean }
+const { section, locale, preview = false } = Astro.props
+const item = featuredItem(section, preview)
+---
+{item?.kind === 'poem' && <div class="featured-layout">
+  <EditorialImage image={item.value.media?.find((image) => mediaObject(image))} {locale} />
+  <PoemCard poem={item.value} {locale} />
+</div>}
+{item?.kind === 'poet' && <article class="featured-layout featured-poet">
+  <PersonPortrait userId={item.value.id} image={item.value.portrait} />
+  <div><Heading level={3}><Link variant="heading" href={localizedPath(locale, `poets/${item.value.id}`)}>{authorDisplayName(item.value.name)}</Link></Heading>
+  {item.value.biography && <p class="section-prose">{item.value.biography}</p>}</div>
+</article>}
+{item?.kind === 'event' && <article class="featured-layout">
+  <EditorialImage image={item.value.image} {locale} />
+  <div><Heading level={3}><Link variant="heading" href={localizedPath(locale, `workshops/${item.value.slug}`)}>{item.value.title}</Link></Heading>
+  <p><time datetime={item.value.startDate}>{new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeStyle: 'short', timeZone: 'Europe/Berlin' }).format(new Date(item.value.startDate))}</time></p>
+  {item.value.description && <p class="section-prose">{item.value.description}</p>}</div>
+</article>}
