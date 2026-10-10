@@ -1,3 +1,4 @@
+import { validPublicSlug } from "./slug";
 import { label } from "@poetry/cms-ui";
 import type { CollectionConfig } from "payload";
 import { authenticated, publishedOrAuthenticated } from "./access";
@@ -54,6 +55,7 @@ export const Workshops: CollectionConfig = {
     },
     {
       name: "slug",
+      validate: validPublicSlug,
       label: label("slug"),
       type: "text",
       required: true,
