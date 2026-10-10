@@ -19,11 +19,16 @@ export const Poems: CollectionConfig = {
     group: "Poetry",
     description:
       "Keep the original poem intact and add only the translations that actually exist.",
-    preview: (doc, { locale }) =>
-      collectionPreviewUrl("poems", doc.slug, locale),
+    preview: (doc, { locale, req }) =>
+      collectionPreviewUrl("poems", doc.slug, locale, req.i18n.language),
     livePreview: {
-      url: ({ data, locale }) =>
-        collectionPreviewUrl("poems", data.slug, locale?.code),
+      url: ({ data, locale, req }) =>
+        collectionPreviewUrl(
+          "poems",
+          data.slug,
+          locale?.code,
+          req.i18n.language,
+        ),
     },
   },
   access: {

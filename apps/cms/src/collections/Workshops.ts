@@ -11,11 +11,16 @@ export const Workshops: CollectionConfig = {
     defaultColumns: ["title", "startDate", "_status", "updatedAt"],
     description:
       "Create translated workshop pages and preview them before publishing.",
-    preview: (doc, { locale }) =>
-      collectionPreviewUrl("workshops", doc.slug, locale),
+    preview: (doc, { locale, req }) =>
+      collectionPreviewUrl("workshops", doc.slug, locale, req.i18n.language),
     livePreview: {
-      url: ({ data, locale }) =>
-        collectionPreviewUrl("workshops", data.slug, locale?.code),
+      url: ({ data, locale, req }) =>
+        collectionPreviewUrl(
+          "workshops",
+          data.slug,
+          locale?.code,
+          req.i18n.language,
+        ),
     },
   },
   access: {

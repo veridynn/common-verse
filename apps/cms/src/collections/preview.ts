@@ -7,6 +7,7 @@ export function collectionPreviewUrl(
   collection: PreviewCollection,
   slug: unknown,
   locale = "de",
+  editorLanguage = "en",
 ) {
   const secret = process.env.PREVIEW_SECRET;
   if (!secret || !isLocale(locale) || typeof slug !== "string" || !slug)
@@ -16,6 +17,7 @@ export function collectionPreviewUrl(
     process.env.PUBLIC_SITE_URL ?? "http://localhost:4321",
   );
   url.searchParams.set("previewSecret", secret);
+  url.searchParams.set("editorLanguage", editorLanguage);
   return url.href;
 }
 

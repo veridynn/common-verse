@@ -235,7 +235,10 @@ const blocks: Block[] = [
   },
 ];
 
-export function homepagePreviewUrl(locale: string = "de") {
+export function homepagePreviewUrl(
+  locale: string = "de",
+  editorLanguage = "en",
+) {
   const secret = process.env.PREVIEW_SECRET;
   if (!secret || !isLocale(locale)) return null;
   const url = new URL(
@@ -243,6 +246,7 @@ export function homepagePreviewUrl(locale: string = "de") {
     process.env.PUBLIC_SITE_URL ?? "http://localhost:4321",
   );
   url.searchParams.set("previewSecret", secret);
+  url.searchParams.set("editorLanguage", editorLanguage);
   return url.href;
 }
 
@@ -253,9 +257,11 @@ export const Homepage: GlobalConfig = {
     group: "Website",
     description:
       "Choose the hero, arrange the sections, and preview each language before publishing.",
-    preview: (_, { locale }) => homepagePreviewUrl(locale),
+    preview: (_, { locale, req }) =>
+      homepagePreviewUrl(locale, req.i18n.language),
     livePreview: {
-      url: ({ locale }) => homepagePreviewUrl(locale?.code),
+      url: ({ locale, req }) =>
+        homepagePreviewUrl(locale?.code, req.i18n.language),
       breakpoints: [
         { name: "mobile", label: "Mobile", width: 390, height: 844 },
         { name: "tablet", label: "Tablet", width: 768, height: 1024 },
