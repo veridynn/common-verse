@@ -49,18 +49,21 @@ export function upcomingEvents(
   pinned: HomepageSection["pinnedEvents"],
   limit: number,
   now = new Date(),
+  selectionMode?: HomepageSection["selectionMode"],
+  preview = false,
 ): Workshop[] {
   const upcoming = (event: Workshop) =>
     Boolean(event.title) &&
-    event._status !== "draft" &&
+    (preview || event._status !== "draft") &&
     Number.isFinite(Date.parse(event.startDate)) &&
     Date.parse(event.endDate ?? event.startDate) >= now.getTime();
   const selected = (pinned ?? []).filter(
-    (event): event is Workshop => typeof event === "object" && upcoming(event),
+    (event): event is Workshop =>
+      Boolean(event) && typeof event === "object" && upcoming(event),
   );
   const ordered = [
-    ...selected,
-    ...events
+    ...(selectionMode === "auto" ? [] : selected),
+    ...(selectionMode === "manual" ? [] : events)
       .filter(upcoming)
       .sort((a, b) => Date.parse(a.startDate) - Date.parse(b.startDate)),
   ];
@@ -72,7 +75,7 @@ export function upcomingEvents(
       seen.add(id);
       return true;
     })
-    .slice(0, Math.max(1, Math.min(6, limit)));
+    .slice(0, Math.max(1, Math.min(4, limit)));
 }
 
 export function poemExcerpt(poem: Poem, locale: Locale) {
@@ -83,4 +86,53 @@ export function poemExcerpt(poem: Poem, locale: Locale) {
     original: poem.originalText.split("\n").slice(0, 5).join("\n"),
     translation,
   };
+}
+
+/** Explicit manual selections never silently fill empty slots with automatic content. */
+export function sectionItems<
+  T extends { id: number | string; _status?: string },
+>(
+  automatic: T[],
+  selected: (T | number | string)[] | null | undefined,
+  mode: HomepageSection["selectionMode"],
+  preview = false,
+): T[] {
+  const source =
+    mode === "manual" || (!mode && selected?.length)
+      ? (selected ?? [])
+      : automatic;
+  const seen = new Set<string>();
+  return source
+    .filter((item): item is T => {
+      if (
+        !item ||
+        typeof item !== "object" ||
+        (!preview && item._status === "draft")
+      )
+        return false;
+      const id = String(item.id);
+      if (seen.has(id)) return false;
+      seen.add(id);
+      return true;
+    })
+    .slice(0, 4);
+}
+
+export function featuredItem(section: HomepageSection, preview = false) {
+  const item = section.item;
+  if (!item?.value || typeof item.value !== "object") return null;
+  if (
+    item.relationTo === "poems" &&
+    (preview || item.value._status !== "draft")
+  )
+    return { kind: "poem" as const, value: item.value };
+  if (item.relationTo === "authors" && item.value.name)
+    return { kind: "poet" as const, value: item.value };
+  if (
+    item.relationTo === "workshops" &&
+    item.value.title &&
+    (preview || item.value._status !== "draft")
+  )
+    return { kind: "event" as const, value: item.value };
+  return null;
 }

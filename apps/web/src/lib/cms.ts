@@ -94,6 +94,7 @@ export async function getAuthorPoems(
     url.searchParams.set("fallback-locale", "none");
     url.searchParams.set("depth", "2");
     url.searchParams.set("where[author][equals]", id);
+    url.searchParams.set("where[_status][equals]", "published");
     url.searchParams.set("sort", "title");
     url.searchParams.set("limit", String(limit ?? 100));
     url.searchParams.set("page", String(page));
@@ -116,7 +117,9 @@ export async function getUpcomingWorkshops(
   url.searchParams.set("fallback-locale", "none");
   url.searchParams.set("depth", "2");
   url.searchParams.set("sort", "startDate");
-  url.searchParams.set("limit", "6");
+  url.searchParams.set("limit", "4");
+  url.searchParams.set("where[title][exists]", "true");
+  url.searchParams.set("where[title][not_equals]", "");
   const now = new Date().toISOString();
   url.searchParams.set("where[or][0][startDate][greater_than_equal]", now);
   url.searchParams.set("where[or][1][endDate][greater_than_equal]", now);
@@ -173,4 +176,54 @@ export async function getWorkshopLocales(
   return localized
     .filter(({ workshop }) => Boolean(workshop?.title))
     .map(({ locale }) => locale);
+}
+
+export async function getRecentPoems(locale: Locale): Promise<Poem[]> {
+  const url = new URL("/api/poems", cmsUrl);
+  url.searchParams.set("locale", locale);
+  url.searchParams.set("fallback-locale", "none");
+  url.searchParams.set("depth", "2");
+  url.searchParams.set("where[_status][equals]", "published");
+  url.searchParams.set("sort", "-createdAt");
+  url.searchParams.set("limit", "4");
+  const response = await fetch(url);
+  if (!response.ok)
+    throw new Error(`Recent poems request failed with ${response.status}`);
+  const data = (await response.json()) as PayloadListResponse<Poem>;
+  return data.docs;
+}
+
+/** Walk newest profiles until four have published work, including beyond the first page. */
+export async function getActivePoets(
+  locale: Locale,
+): Promise<{ authors: Author[]; poems: Poem[] }> {
+  const authors: Author[] = [];
+  const poems: Poem[] = [];
+  let page = 1;
+  let hasNextPage: boolean;
+  do {
+    const url = new URL("/api/authors", cmsUrl);
+    url.searchParams.set("locale", locale);
+    url.searchParams.set("fallback-locale", "none");
+    url.searchParams.set("depth", "1");
+    url.searchParams.set("sort", "-createdAt");
+    url.searchParams.set("limit", "4");
+    url.searchParams.set("page", String(page));
+    const response = await fetch(url);
+    if (!response.ok)
+      throw new Error(`Active poets request failed with ${response.status}`);
+    const data = (await response.json()) as PayloadListResponse<Author>;
+    const samples = await Promise.all(
+      data.docs.map((author) => getAuthorPoems(String(author.id), locale, 1)),
+    );
+    data.docs.forEach((author, index) => {
+      if (samples[index]?.length && authors.length < 4) {
+        authors.push(author);
+        poems.push(...samples[index]);
+      }
+    });
+    hasNextPage = data.hasNextPage;
+    page += 1;
+  } while (hasNextPage && authors.length < 4);
+  return { authors, poems };
 }

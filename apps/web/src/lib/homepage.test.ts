@@ -5,6 +5,8 @@ import {
   poemExcerpt,
   safeHref,
   upcomingEvents,
+  sectionItems,
+  featuredItem,
 } from "./homepage";
 
 const event = (
@@ -75,5 +77,72 @@ describe("homepage editorial behaviour", () => {
     expect(safeHref("mailto:hello@example.org", "en")).toBe(
       "mailto:hello@example.org",
     );
+  });
+});
+
+describe("composed homepage content", () => {
+  it("keeps manual order, removes drafts/unresolved/duplicates, caps at four, and never fills empty manual choices", () => {
+    const automatic = Array.from({ length: 6 }, (_, id) => ({
+      id,
+      _status: "published",
+    }));
+    expect(sectionItems(automatic, [], "auto").map((item) => item.id)).toEqual([
+      0, 1, 2, 3,
+    ]);
+    expect(sectionItems(automatic, [], "manual")).toEqual([]);
+    const selected = [
+      automatic[4],
+      2,
+      automatic[1],
+      automatic[4],
+      { id: 9, _status: "draft" },
+    ];
+    expect(
+      sectionItems(automatic, selected, "manual").map((item) => item.id),
+    ).toEqual([4, 1]);
+    expect(
+      sectionItems(automatic, selected, undefined).map((item) => item.id),
+    ).toEqual([4, 1]);
+    expect(
+      sectionItems(automatic, selected, "manual", true).map((item) => item.id),
+    ).toEqual([4, 1, 9]);
+  });
+  it("shows only chosen programme items manually and the closest dates automatically", () => {
+    const now = new Date("2026-10-08T12:00:00Z");
+    const events = [event(1, "2026-10-09"), event(2, "2026-10-11")];
+    expect(
+      upcomingEvents(events, [events[1]], 4, now, "manual").map(
+        (item) => item.id,
+      ),
+    ).toEqual([2]);
+    expect(upcomingEvents(events, [], 4, now, "manual")).toEqual([]);
+    expect(
+      upcomingEvents(events, [events[1]], 4, now, "auto").map(
+        (item) => item.id,
+      ),
+    ).toEqual([1, 2]);
+  });
+  it("features populated records only and protects drafts while allowing authorized preview", () => {
+    const section = {
+      blockType: "featured" as const,
+      item: {
+        relationTo: "workshops" as const,
+        value: event(1, "2026-11-01", { _status: "draft" }),
+      },
+    };
+    expect(featuredItem(section)).toBeNull();
+    expect(featuredItem(section, true)?.kind).toBe("event");
+    expect(
+      featuredItem({
+        blockType: "featured",
+        item: { relationTo: "authors", value: { id: 3, name: "Poet" } },
+      })?.kind,
+    ).toBe("poet");
+    expect(
+      featuredItem({
+        blockType: "featured",
+        item: { relationTo: "poems", value: 2 },
+      }),
+    ).toBeNull();
   });
 });
