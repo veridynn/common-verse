@@ -59,6 +59,7 @@ export function getLocaleMetadata(locale: Locale): LocaleMetadata {
 
 /** Stable page identities; editorial record slugs are left untouched. */
 export const routeSegments = {
+  articles: { de: "artikel", international: "articles" },
   poems: { de: "gedichte", international: "poems" },
   poets: { de: "poeten", international: "poets" },
   workshops: { de: "workshops", international: "workshops" },

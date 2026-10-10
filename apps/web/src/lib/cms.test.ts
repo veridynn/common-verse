@@ -1,6 +1,6 @@
 import { plainTextToRichText } from "../../../../apps/cms/src/utilities/plainTextToRichText";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { getFixedPage, getActivePoets, getRecentPoems, getUpcomingWorkshops } from "./cms";
+import { getArticles, getArticle, getFixedPage, getActivePoets, getRecentPoems, getUpcomingWorkshops } from "./cms";
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -105,5 +105,43 @@ describe("automatic homepage queries", () => {
     );
     await expect(getRecentPoems("en")).rejects.toThrow("503");
     await expect(getActivePoets("en")).rejects.toThrow("503");
+  });
+});
+
+it("requests published article content without language fallback and omits incomplete translations", async () => {
+  const complete = {
+    id: 1,
+    slug: "news",
+    title: "News",
+    content: plainTextToRichText("Article text"),
+  };
+  const fetch = vi
+    .fn()
+    .mockResolvedValueOnce(
+      Response.json({
+        docs: [
+          complete,
+          { ...complete, title: null },
+          { ...complete, content: null },
+        ],
+      }),
+    )
+    .mockResolvedValueOnce(
+      Response.json({ docs: [{ ...complete, content: null }] }),
+    )
+    .mockResolvedValueOnce(Response.json({ docs: [complete] }));
+  vi.stubGlobal("fetch", fetch);
+  expect(await getArticles("ar")).toEqual([complete]);
+  const archiveURL = new URL(fetch.mock.calls[0][0]);
+  expect(archiveURL.pathname).toBe("/api/articles");
+  expect(archiveURL.searchParams.get("fallback-locale")).toBe("none");
+  expect(archiveURL.searchParams.get("sort")).toBe("-publishedAt,-createdAt");
+  expect(await getArticle("news", "ar")).toBeNull();
+  expect(await getArticle("news", "en", "secret")).toEqual(complete);
+  expect(new URL(fetch.mock.calls[2][0]).pathname).toBe(
+    "/api/articles/preview",
+  );
+  expect(fetch.mock.calls[2][1]).toEqual({
+    headers: { "x-preview-secret": "secret" },
   });
 });

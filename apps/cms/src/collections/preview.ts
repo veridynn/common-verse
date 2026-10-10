@@ -1,7 +1,7 @@
 import type { Endpoint } from "payload";
 import { isLocale, localizedPath } from "@poetry/i18n";
 
-type PreviewCollection = "workshops" | "poems";
+type PreviewCollection = "workshops" | "poems" | "articles";
 
 export function collectionPreviewUrl(
   collection: PreviewCollection,

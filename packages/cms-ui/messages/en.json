@@ -128,5 +128,8 @@
   "contact": "Contact",
   "privacy": "Privacy",
   "legal": "Legal notice",
-  "meta_description_help": "A short summary that may appear in search results and link previews. Aim for about 150–160 characters. It is not shown in the page body."
+  "meta_description_help": "A short summary that may appear in search results and link previews. Aim for about 150–160 characters. It is not shown in the page body.",
+  "article": "Article",
+  "articles": "Articles",
+  "publication_date": "Publication date"
 }

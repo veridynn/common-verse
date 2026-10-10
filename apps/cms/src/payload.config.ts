@@ -14,6 +14,7 @@ import sharp from "sharp";
 
 import { administrator } from "./collections/access";
 import { label } from "@poetry/cms-ui";
+import { Articles } from "./collections/Articles";
 import { Authors } from "./collections/Authors";
 import { Media } from "./collections/Media";
 import { Pages } from "./collections/Pages";
@@ -33,7 +34,7 @@ export default buildConfig({
     importMap: { baseDir: path.resolve(dirname) },
     meta: { titleSuffix: " · The Poetry Project" },
   },
-  collections: [Users, Media, Pages, Authors, Workshops, Poems].map(
+  collections: [Articles, Users, Media, Pages, Authors, Workshops, Poems].map(
     (collection) => ({
       ...collection,
       fields: contentFields(collection.fields),

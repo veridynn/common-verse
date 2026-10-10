@@ -128,5 +128,8 @@
   "contact": "Kontakt",
   "privacy": "Datenschutz",
   "legal": "Impressum",
-  "meta_description_help": "Kurze Zusammenfassung für Suchergebnisse und Link-Vorschauen. Etwa 150–160 Zeichen; erscheint nicht im Seitentext."
+  "meta_description_help": "Kurze Zusammenfassung für Suchergebnisse und Link-Vorschauen. Etwa 150–160 Zeichen; erscheint nicht im Seitentext.",
+  "article": "Artikel",
+  "articles": "Artikel",
+  "publication_date": "Veröffentlichungsdatum"
 }

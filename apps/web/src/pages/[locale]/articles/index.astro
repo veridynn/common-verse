@@ -1,0 +1,29 @@
+---
+import { Heading } from '$lib/components/ui/heading'
+import { Link } from '$lib/components/ui/link'
+import { isLocale, localizedPath } from '@poetry/i18n'
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+import { getArticles } from '../../../lib/cms'
+import * as m from '../../../paraglide/messages.js'
+
+const { locale: rawLocale } = Astro.params
+if (!isLocale(rawLocale)) return new Response('Not found', { status: 404 })
+const locale = rawLocale
+const articles = await getArticles(locale)
+const title = m.nav_articles({}, { locale })
+---
+
+<BaseLayout {locale} {title} canonicalPath="articles">
+  <section>
+    <Heading level={1}>{title}</Heading>
+    <ul class="content-list">
+      {articles.map((article) => (
+        <li><article>
+          <Heading level={2}><Link variant="heading" href={localizedPath(locale, `articles/${article.slug}`)}>{article.title}</Link></Heading>
+          {article.description && <p>{article.description}</p>}
+          {article.publishedAt && <time datetime={article.publishedAt}>{new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(new Date(article.publishedAt))}</time>}
+        </article></li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>

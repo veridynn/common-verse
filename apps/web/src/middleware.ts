@@ -16,7 +16,7 @@ export const onRequest = defineMiddleware((context, next) => {
   const canonical = localizedPath(locale, identity);
   if (
     (prefix === "de" ||
-      /^\/(workshops|poems|poets)(\/[^/]+)?\/?$/.test(identity)) &&
+      /^\/(workshops|poems|poets|articles)(\/[^/]+)?\/?$/.test(identity)) &&
     pathname !== canonical
   ) {
     return context.redirect(`${canonical}${search}`, 308);
@@ -25,7 +25,7 @@ export const onRequest = defineMiddleware((context, next) => {
     locale === defaultLocale &&
     (identity === "/" ||
       fixedPageKeys.some((page) => identity === `/${page}`) ||
-      /^\/(workshops|poems|poets)(\/[^/]+)?\/?$/.test(identity))
+      /^\/(workshops|poems|poets|articles)(\/[^/]+)?\/?$/.test(identity))
   ) {
     return next(
       new URL(`/de${identity === "/" ? "" : identity}${search}`, context.url),

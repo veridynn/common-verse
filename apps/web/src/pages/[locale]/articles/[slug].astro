@@ -1,0 +1,37 @@
+---
+import { Heading } from '$lib/components/ui/heading'
+import { getSecret } from 'astro:env/server'
+import { convertLexicalToHTML } from '@payloadcms/richtext-lexical/html'
+import { convertLexicalToPlaintext } from '@payloadcms/richtext-lexical/plaintext'
+import { isLocale, locales } from '@poetry/i18n'
+import { getArticle } from '../../../lib/cms'
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+import * as m from '../../../paraglide/messages.js'
+
+const { locale: rawLocale, slug } = Astro.params
+if (!isLocale(rawLocale) || !slug) return new Response('Not found', { status: 404 })
+const locale = rawLocale
+const suppliedSecret = Astro.url.searchParams.get('previewSecret') ?? undefined
+const previewSecret = getSecret('PREVIEW_SECRET')
+const preview = Boolean(suppliedSecret && previewSecret && suppliedSecret === previewSecret)
+if (suppliedSecret && !preview) return new Response('Invalid preview link', { status: 401 })
+const article = await getArticle(slug, locale, preview ? suppliedSecret : undefined)
+if (!article) return new Response('Not found', { status: 404 })
+const translated = preview ? [] : await Promise.all(locales.map(async (language) => ({ language, article: language === locale ? article : await getArticle(slug, language) })))
+const alternateLocales = translated.filter(({ article }) => article !== null).map(({ language }) => language)
+const title = article.seo?.title || `${article.title} · ${m.site_title({}, { locale })}`
+const description = article.seo?.description || article.description || convertLexicalToPlaintext({ data: article.content! }).slice(0, 160)
+const media = article.image && typeof article.image === 'object' ? article.image : null
+const image = media?.url ? new URL(media.url, import.meta.env.PUBLIC_CMS_URL ?? 'http://localhost:3001').href : null
+const html = convertLexicalToHTML({ data: article.content!, disableContainer: true })
+---
+
+<BaseLayout {locale} {title} {description} {image} {alternateLocales} canonicalPath={`articles/${slug}`} {preview} noIndex={article.seo?.noIndex ?? false} contentType="article">
+  <article>
+    <Heading level={1}>{article.title}</Heading>
+    {article.publishedAt && <p><time datetime={article.publishedAt}>{new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(new Date(article.publishedAt))}</time></p>}
+    {image && media?.alt && <figure class="hero-figure"><img class="hero-image" src={image} alt={media.alt} width={media.width ?? 1200} height={media.height ?? 800} /></figure>}
+    {article.description && <p class="lede">{article.description}</p>}
+    <div class="prose rich-text" set:html={html} />
+  </article>
+</BaseLayout>

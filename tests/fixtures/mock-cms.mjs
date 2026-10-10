@@ -257,6 +257,29 @@ const server = http.createServer((request, response) => {
     response.statusCode = 404;
     return response.end(JSON.stringify({ error: "Not found" }));
   }
+  if (url.pathname.startsWith("/api/articles")) {
+    const slug = isPreview
+      ? url.searchParams.get("slug")
+      : url.searchParams.get("where[slug][equals]");
+    if (slug === "missing" || locale === "fa")
+      return response.end(JSON.stringify({ docs: [], totalDocs: 0 }));
+    return response.end(
+      JSON.stringify({
+        docs: [
+          {
+            id: 1,
+            slug: "project-news",
+            title: `Article ${locale}${isPreview ? " — draft" : ""}`,
+            description: `Article summary ${locale}`,
+            content: plainTextToRichText(`Article content ${locale}`),
+            publishedAt: "2026-10-10T12:00:00Z",
+            _status: isPreview ? "draft" : "published",
+          },
+        ],
+        totalDocs: 1,
+      }),
+    );
+  }
   if (url.pathname.startsWith("/api/workshops")) {
     const requestedSlug = isPreview
       ? url.searchParams.get("slug")

@@ -138,3 +138,19 @@ export interface FixedPage {
   description?: string | null;
   _status?: "draft" | "published";
 }
+
+export interface Article {
+  id: number | string;
+  title: string;
+  slug: string;
+  description?: string | null;
+  content?: FixedPage["content"];
+  image?: MediaReference | number | string | null;
+  publishedAt?: string | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    noIndex?: boolean | null;
+  } | null;
+  _status?: "draft" | "published";
+}

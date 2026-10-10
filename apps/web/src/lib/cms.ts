@@ -2,6 +2,7 @@ import { locales, type Locale, type FixedPageKey } from "@poetry/i18n";
 import { convertLexicalToPlaintext } from "@payloadcms/richtext-lexical/plaintext";
 import type {
   Author,
+  Article,
   FixedPage,
   Homepage,
   PayloadListResponse,
@@ -11,7 +12,7 @@ import type {
 
 const cmsUrl = import.meta.env.PUBLIC_CMS_URL ?? "http://localhost:3001";
 
-type Collection = "workshops" | "poems" | "authors";
+type Collection = "workshops" | "poems" | "authors" | "articles";
 
 async function fetchCollection<T>(
   collection: Collection,
@@ -24,7 +25,9 @@ async function fetchCollection<T>(
   url.searchParams.set("limit", "100");
   url.searchParams.set(
     "sort",
-    collection === "workshops"
+    collection === "articles"
+      ? "-publishedAt,-createdAt"
+      : collection === "workshops"
       ? "startDate"
       : collection === "authors"
         ? "-createdAt"
@@ -256,3 +259,27 @@ export async function getFixedPage(
     return { ...document, contentLocale: locale };
   return locale === "en" ? null : getFixedPage(page, "en", previewSecret);
 }
+
+function completeArticle(article: Article | null): article is Article {
+  return Boolean(
+    article?.title?.trim() &&
+      article.content &&
+      convertLexicalToPlaintext({ data: article.content }).trim(),
+  );
+}
+
+export const getArticles = async (locale: Locale) =>
+  (await fetchCollection<Article>("articles", locale)).filter(completeArticle);
+export const getArticle = async (
+  slug: string,
+  locale: Locale,
+  previewSecret?: string,
+) => {
+  const article = await fetchDocument<Article>(
+    "articles",
+    slug,
+    locale,
+    previewSecret,
+  );
+  return completeArticle(article) ? article : null;
+};
