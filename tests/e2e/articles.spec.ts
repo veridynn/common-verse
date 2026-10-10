@@ -68,7 +68,6 @@ test("old collection URLs return 404 without redirects", async ({
     "/workshops",
     "/poets",
     "/poeten",
-    "/de",
     "/de/articles/project-news",
     "/en/blog",
     "/en/posts",
@@ -79,4 +78,42 @@ test("old collection URLs return 404 without redirects", async ({
     expect(response.status(), path).toBe(404);
     expect(response.headers().location, path).toBeUndefined();
   }
+});
+
+test("main-page aliases redirect once to canonical locale URLs", async ({
+  request,
+  page,
+}) => {
+  for (const [source, target] of [
+    ["/de", "/"],
+    ["/de/about", "/ueber-uns"],
+    ["/de/contact?from=language", "/kontakt?from=language"],
+    ["/de/privacy", "/datenschutz"],
+    ["/de/legal", "/impressum"],
+    ["/de/articles", "/artikel"],
+    ["/de/events", "/veranstaltungen"],
+    ["/de/authors", "/autoren"],
+    ["/de/poems", "/gedichte"],
+    ["/ar/kontakt", "/ar/contact"],
+  ]) {
+    const response = await request.get(source, { maxRedirects: 0 });
+    expect(response.status(), source).toBe(301);
+    expect(response.headers().location, source).toBe(target);
+    expect(
+      (await request.get(target, { maxRedirects: 0 })).status(),
+      target,
+    ).toBe(200);
+  }
+  await page.goto("/de/contact?from=language#content");
+  await expect(page).toHaveURL(/\/kontakt\?from=language#content$/);
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    "href",
+    /\/kontakt$/,
+  );
+  await page.goto("/ar/kontakt");
+  await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    "href",
+    /\/ar\/contact$/,
+  );
 });

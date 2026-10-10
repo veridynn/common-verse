@@ -7,7 +7,7 @@ import {
   unlocalizedPath,
 } from "@poetry/i18n";
 
-/** German URLs render through the same locale templates without redirects. */
+/** Render canonical German URLs internally; normalize main-page aliases. */
 export const onRequest = defineMiddleware((context, next) => {
   const { pathname, search } = context.url;
   const prefix = pathname.split("/")[1];
@@ -21,6 +21,7 @@ export const onRequest = defineMiddleware((context, next) => {
     mainPage || /^\/(events|poems|authors|articles)\/[^/]+\/?$/.test(identity);
   const canonicalPath = localizedPath(locale, identity);
   if (knownPage && pathname !== canonicalPath) {
+    if (mainPage) return context.redirect(`${canonicalPath}${search}`, 301);
     return new Response("Not found", { status: 404 });
   }
   if (locale === defaultLocale && knownPage) {
