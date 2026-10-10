@@ -428,7 +428,7 @@ export const Homepage: GlobalConfig = {
       maxRows: 10,
       admin: {
         initCollapsed: true,
-        description: label("add_reorder_remove_or_repeat_sections"),
+        description: label("sections_appear_on_the_page_in_this_order"),
       },
       defaultValue: [
         { blockType: "introduction" },
