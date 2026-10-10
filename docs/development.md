@@ -31,7 +31,10 @@ Site: `http://localhost:4321`. Admin: `http://localhost:3001/admin`.
 `pnpm dev:force` stops this checkout's servers on ports 4321 and 3001 before
 starting again (macOS/Linux, requires `lsof`). Services from other projects are
 left running and produce an error. It is also available in Zed's task picker.
-Create the first account in the admin UI; the seed never creates credentials.
+Create the first account in the admin UI; it becomes the Administrator. The
+administrator creates Editor accounts for content managers. The seed never creates
+credentials. See [accounts and permissions](accounts-and-permissions.md) for the
+MVP role rules and the v2.0 contributor plan.
 Ctrl+C stops the apps. `docker compose stop postgres` stops the database while
 retaining data. Ports 4321 and 3001 must be free; Compose needs local port 5432.
 
@@ -92,7 +95,7 @@ them. Back up PostgreSQL and `apps/cms/media/` together when transferring conten
 ### Optional bulk demo data
 
 Run `pnpm --filter @poetry/cms seed:bulk` from the repository root to add 60
-fictional authors, 300 poems, 100 workshops, 18 structured pages, and 12 local SVG
+fictional authors, 300 poems, 100 workshops, and 12 local SVG
 artwork assets. Start PostgreSQL first with `docker compose up -d postgres`.
 This separate command does not change the small automatic startup seed.
 

@@ -25,8 +25,7 @@ translation work described in
   poet, or event/workshop, then give the section a translated title and short
   introduction. The selected record supplies its own image, title, description,
   and destination; editing that record updates the promotion too. Poems use their
-  media and original verse, plus an explicit translation when one exists. Blog
-  posts can be added when the blog collection and public routes exist.
+  media and original verse, plus an explicit translation when one exists. Articles are available in their own collection and public archive.
 - **Mission:** the project introduction. Edit its heading, text, image, link,
   and position. It can be removed or repeated like the other sections.
 - **Events:** events and workshops share one picker. Automatic shows up to
@@ -87,11 +86,38 @@ homepage only if no saved homepage exists, using existing published records and
 the six translated starting texts. It never replaces an existing homepage.
 Review the initial content before using it outside the local prototype.
 
-Invitation, support, newsletter, and footer legal/contact links initially point
-to the existing Poetry Project website. Editors can replace the homepage section
-destinations as the remaining pages are migrated. The footer destinations stay in
-the public layout until those routes are implemented.
+Invitation, support, and newsletter links initially point to the existing Poetry
+Project website. Editors can replace these homepage section destinations. The footer
+links to the local About, Contact, Privacy, and Legal Notice routes. Each has its own
+fixed Payload editor under Pages. Supply and publish the title and rich text content (paragraphs, headings, bold/italic, lists and links)
+for each language. Missing or incomplete translations use English on these four
+fixed pages; other editorial content retains its existing translation behavior. The legacy
+generic page collection is hidden and its records are preserved.
 
 The local development database uses Payload's schema push. As with the existing
 collections, production rollout requires a reviewed Payload migration; running
 the local seed is not a deployment command.
+
+## Fixed informational page starting content
+
+Run `pnpm seed:pages` in `apps/cms` to import the German and English
+About, Contact, Privacy, and Legal Notice content. This replaces those two locales
+for the four globals in one transaction and preserves other translations. Existing
+versions retain the previous content. The command refuses production.
+
+The adaptations were prepared from [About](https://thepoetryproject.de/ueber-uns),
+[Association](https://thepoetryproject.de/ueber-uns/der-verein),
+[Contact](https://thepoetryproject.de/kontakt),
+[Privacy](https://thepoetryproject.de/datenschutz), and
+[Legal Notice](https://thepoetryproject.de/impressum), retrieved on 10 October 2026.
+Names, organization identifiers, addresses and contact details use placeholders.
+Privacy describes the starting content and needs to match the services used by the
+website. Replace placeholders and review
+privacy/legal content before public launch. No old photographs are imported.
+
+The meta-description helper explains its use in search results and link previews;
+it is not part of the visible page text. Existing fixed-page text and saved versions
+are converted by `20261010_fixed_page_rich_text`. Run `pnpm payload migrate`
+with schema push disabled (`PAYLOAD_MIGRATING=true`) before starting an older
+development database with this schema. Rolling this migration back preserves text
+but removes rich-text formatting.

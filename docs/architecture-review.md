@@ -23,12 +23,12 @@ The public site does not use React or Next.js. Next.js exists only inside the Pa
 - Locale metadata is centralized in `packages/i18n` for German, English, Arabic, Persian, Ukrainian, and Kurmanji.
 - Arabic and Persian are RTL; the other four locales are LTR. The document `lang` and `dir` attributes come from that shared metadata.
 - Interface copy is compiled from repository-owned Paraglide messages.
-- Workshop editorial fields use Payload localization with fallback disabled, so a missing translation is not silently presented as if translated.
+- Event editorial fields use Payload localization with fallback disabled, so a missing translation is not silently presented as if translated.
 - Poem originals are nonlocalized records with an explicit original language. Optional translation records carry their own language, title, text, and translator attribution.
 
 ## Editorial workflow
 
-Workshops and poems use Payload versions and drafts. Preview links are locale-aware and carry a dedicated preview secret to Astro. Astro verifies the secret, calls a protected Payload collection endpoint, renders the draft, and emits `noindex,nofollow`. Anonymous normal API reads are limited to published content.
+Events and poems use Payload versions and drafts. Preview links are locale-aware and carry a dedicated preview secret to Astro. Astro verifies the secret, calls a protected Payload collection endpoint, renders the draft, and emits `noindex,nofollow`. Anonymous normal API reads are limited to published content.
 
 The seed creates a six-locale workshop, localized media alternative text, and a Persian poem with German and English translations. It can safely fill either missing prototype record without duplicating the other.
 
@@ -42,7 +42,7 @@ The baseline includes semantic landmarks, a skip link, visible focus, labelled c
 - `pnpm lint`: passes the repository formatting gate.
 - `pnpm test`: 10 Vitest tests pass, covering locale invariants, Payload schema boundaries, authenticated editorial mutations, scoped MCP capabilities, and preview authorization.
 - `pnpm build`: Astro and Payload production builds pass.
-- `pnpm test:e2e`: 20 Chromium tests pass across all six locales, both RTL locales, localized workshops, translation-aware `hreflang`, collection navigation, language switching, keyboard access, preview security, SEO, media, structured data, poem translations, and browser errors.
+- `pnpm test:e2e`: 20 Chromium tests pass across all six locales, both RTL locales, localized events, translation-aware `hreflang`, collection navigation, language switching, keyboard access, preview security, SEO, media, structured data, poem translations, and browser errors.
 - At the milestone review, all nine original project-local skills passed the Codex skill validator. Their project-specific guidance has since moved into `AGENTS.md` and `docs/project-guidance.md`; upstream skills are maintained through `skills-lock.json`.
 - The project runs on Node.js 26, following the prototype-specific runtime decision that supersedes the original Node.js 22 baseline.
 

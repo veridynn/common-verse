@@ -60,7 +60,7 @@ URLs: routes still use `localizedPath`, and editorial URLs still use `safeHref`.
     <Card.Action><Badge variant="secondary">Workshop</Badge></Card.Action>
   </Card.Header>
   <Card.Content><Text>Workshop details go here.</Text></Card.Content>
-  <Card.Footer><Button href="/en/workshops">View workshops</Button></Card.Footer>
+  <Card.Footer><Button href="/en/events">View events</Button></Card.Footer>
 </Card.Root>
 ```
 

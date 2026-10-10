@@ -65,7 +65,11 @@ must not change the user's interface preference.
 - Kurmanji remains supported for website UI and editorial content.
 - German remains the default content locale and the website language at `/`.
   English UI fallback does not change that routing or content decision.
-- Editorial content fallback is disabled. Never silently substitute English,
+- About, Contact, Privacy, and Legal Notice fall back to the complete English
+  page when the requested translation is missing or incomplete. Their articles
+  declare the content language and direction; surrounding UI uses the route locale.
+  A missing English page remains a 404. No missing-translation notice is shown.
+- Other editorial content fallback is disabled. Never silently substitute English,
   German, or another language's editorial text for a missing translation. Omit
   unavailable content or show an appropriate translated UI message. A deliberately
   designed generic UI message may fill an empty area, but must not be presented as
@@ -114,17 +118,26 @@ translated navigation labels and internal field names.
   its query and anchor. Switching from `/kontakt` to Arabic should lead to
   `/ar/contact`; switching back should return to `/kontakt`.
 - Links, previews, canonical URLs, and language alternates must all use the same
-  route resolution. Existing published URLs that change need permanent redirects.
-  Continue redirecting legacy `/de` paths to their unprefixed German equivalent.
+  route resolution. Main-page aliases use permanent (301) redirects to the canonical
+  localized URL, preserving query parameters; browsers retain URL anchors. Examples:
+  `/de` → `/`, `/de/contact` → `/kontakt`, `/ar/kontakt` → `/ar/contact`.
 - Content-record slugs are separate from interface labels. Keep existing slugs
-  stable; changes to a record's public URL require explicit handling and redirects.
+  stable; changes to a record's public URL require an explicit naming decision.
 
-The contact paths above describe the approved convention, not an existing contact
-page. The current footer links to the old website's contact page. The central route map already resolves `contact` to these paths; adding the
-actual local contact page remains separate work. Implemented poem and poet routes
-use `/gedichte` and `/poeten` in German, and `/ar/poems` and `/ar/poets`, for
-example, in Arabic. Old `/poems`, `/poets`, and corresponding `/de` URLs redirect
-permanently to their German canonical paths. Workshops keep `/workshops`.
+Fixed local routes are backed by the About, Contact, Privacy, and Legal Notice
+Payload globals. German uses `/ueber-uns`, `/kontakt`, `/datenschutz`, and
+`/impressum`; other locales use `/about`, `/contact`, `/privacy`, and `/legal`
+with a locale prefix. The footer links to these local routes. Missing or incomplete
+translations use the English page. If English is also unavailable, the route returns
+a 404. Language alternates include routes served with English fallback. Editors can
+supply and publish translations separately for each language.
+
+Poems, Authors, Events and Articles use `/gedichte`, `/autoren`,
+`/veranstaltungen` and `/artikel` in German. Other locales use prefixed English
+segments: `/ar/poems`, `/ar/authors`, `/ar/events` and `/ar/articles`.
+Main-page redirects also cover collection indexes, such as `/de/articles` →
+`/artikel`. Detail-page aliases and old collection names (`blog`, `posts`,
+`workshops`, `poets`) still return 404 without redirects.
 
 ## Direction and translation quality
 
@@ -165,9 +178,9 @@ it does not block the MVP implementation.
   Interface labels continue to follow the editor preference.
 - **Routes:** `packages/i18n/src/index.ts` owns stable route keys and public path
   mappings. Links, previews, metadata, and language switching use `localizedPath`;
-  Astro middleware resolves German paths and redirects legacy paths. Query strings,
-  anchors, and content-record slugs survive language switching. Contact, privacy,
-  and legal mappings establish the convention without adding local pages.
+  Astro middleware resolves German paths and rejects noncanonical paths. Query strings,
+  anchors, and content-record slugs survive language switching. About, contact, privacy,
+  and legal routes resolve fixed Payload globals.
 
 Run these commands from the repository root:
 
@@ -188,7 +201,7 @@ setup, app builds, and tests; edit the JSON catalogs instead.
 
 Automated checks cover English fallback in both compiler configurations, stable
 saved values, disabled editorial fallback, independent editor language, ASCII slug
-validation, route mappings, query/anchor preservation, and legacy redirects.
+validation, route mappings, query/anchor preservation, main-page redirects, and old-path 404 responses.
 Browser tests cover all six website locales, preview authorization, language
 switching, keyboard interaction, and RTL rendering.
 

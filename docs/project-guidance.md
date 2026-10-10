@@ -38,6 +38,28 @@ unlocalized. Localize editorial prose and editor-authored link labels where
 independent translations make sense. Field labels and other editor controls are
 UI, not editorial content.
 
+Poems require an Author relationship when published; drafts may omit it. Authors
+are shared writer profiles, independent of CMS user accounts. Their related poems
+are shown through Payload’s native join field in the admin. Fixed shared pages do
+not need a byline; events describe activities rather than authored texts.
+
+Keep Payload’s native dashboard and cards. Organize the editorial sidebar as
+Content (Articles, Events), Media (Images & Files), Administration (Users),
+then Pages (Home, About, Contact, Privacy, Legal Notice). Collection IDs, route identities and labels use the same editorial names.
+
+Home, About, Contact, Privacy, and Legal Notice are fixed Payload globals. Event,
+poet, and poem detail pages come from their collections. Articles are an MVP collection with localized native rich text, drafts, preview
+and public article routes. Do not add arbitrary pages. The legacy `pages` collection remains
+hidden to preserve existing records and is not used by public routing or bulk seeding.
+
+Poems and Authors are hidden from admin navigation until v2.0; preserve their
+records and existing public routes. Only Administrator and Editor accounts may
+edit content. Editors can create and view Editor accounts, but update only their own account.
+Account deletion and Administrator role assignment are administrator-only.
+Contributor accounts and account-to-author connections are deferred to v2.0.
+See [accounts and permissions](accounts-and-permissions.md) for the MVP permission
+matrix and the v2.0 authorship, translation and review workflow.
+
 ## Locales and translation domains
 
 Supported locales are `de`, `en`, `ar`, `fa`, `uk`, and `ku` (Kurmanji). Locale
@@ -52,7 +74,7 @@ separate:
   controls retain its built-in translation packs.
 - Website UI: a separate Paraglide/inlang catalog in Git.
 - Website content: Payload localization and explicit optional poem translations,
-  with editorial fallback disabled.
+  with editorial fallback disabled, except for the four fixed informational pages.
 
 The Payload user's interface language is independent of the content language they
 edit. Use English as UI default/fallback, including for unsupported Kurmanji
@@ -66,8 +88,15 @@ Public paths use Latin ASCII characters. Use explicit route mappings rather than
 translated UI labels. Central route mappings and `localizedPath` resolve the
 same page across languages. Links, canonicals, language alternates, and previews
 must agree. The language picker resolves the same page and preserves
-query and anchor. Redirect changed published paths and legacy `/de` paths
-permanently to their canonical equivalent.
+query and anchor. Main-page aliases redirect permanently to their canonical localized URLs, for example
+`/de` to `/` and `/de/contact` to `/kontakt`. This covers home, fixed informational
+pages and collection indexes only. Detail-page aliases and old collection names
+return 404; do not add compatibility redirects for them.
+
+About, Contact, Privacy, and Legal Notice use a complete English page when the
+requested translation is missing or incomplete. Declare the actual content language
+and direction on their article; keep the surrounding UI in the routed locale.
+This exception does not apply to Homepage, events, poets, or poems.
 
 Never imply untranslated content is translated. Missing editorial translations
 must be visible as missing or handled by an explicitly designed fallback. Adding
@@ -113,7 +142,7 @@ workflow is proven.
 Use Vitest for deterministic logic and Playwright for observable browser behavior.
 Cover the smallest critical behavior for public UI changes rather than mirroring
 implementation details. Maintain smoke coverage for all six locale routes,
-Arabic/Persian RTL, Kurmanji LTR, localized workshops, draft preview authorization,
+Arabic/Persian RTL, Kurmanji LTR, localized events, draft preview authorization,
 language switching, keyboard navigation, and browser console errors.
 
 Run the relevant narrow test first, then `pnpm check`, `pnpm test`, and affected
@@ -126,3 +155,18 @@ consistency, links, and formatting rather than rerunning unrelated app tests.
 The current suite has Chromium smoke coverage. Broader keyboard tasks, automated
 axe checks, additional browser coverage, and CI are follow-up work; installing a
 skill does not implement those checks.
+
+## Naming contracts
+
+Use Articles (`Article`, `Articles`, `getArticle`, `getArticles`), Events
+(`Event`, `Events`, `getEvent`, `getEvents`), Authors, Poems, Media, Users and fixed
+Pages in application code and editor labels. Workshops are an event subtype;
+poets are authors with published poems, not a separate account or collection.
+
+Articles use the `articles` collection, `/artikel` in German and
+`/<locale>/articles` elsewhere. Events use `events`, `/veranstaltungen` and
+`/<locale>/events`. Authors use `authors`, `/autoren` and `/<locale>/authors`.
+Homepage author sections and relationship fields use `authors` too. Route
+segments stay in the central mapping in `@poetry/i18n`, separately from UI
+translations. There are no aliases or redirects for old names. Historical
+migrations retain the names of the schema they originally created.
