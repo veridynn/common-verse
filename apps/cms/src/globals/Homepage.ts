@@ -60,13 +60,61 @@ const optionalFields: Field[] = [
   text("description", "Introduction", "textarea"),
 ];
 
+const selectionMode: Field = {
+  name: "selectionMode",
+  type: "select",
+  label: "Choose content",
+  required: true,
+  hooks: {
+    afterRead: [
+      ({ value, siblingData }) =>
+        value ??
+        (siblingData.poets?.length ||
+        siblingData.pinnedEvents?.length ||
+        siblingData.poems?.length
+          ? "manual"
+          : "auto"),
+    ],
+    beforeValidate: [
+      ({ value, siblingData }) =>
+        value ??
+        (siblingData.poets?.length ||
+        siblingData.pinnedEvents?.length ||
+        siblingData.poems?.length
+          ? "manual"
+          : "auto"),
+    ],
+  },
+  options: [
+    { label: "Automatic", value: "auto" },
+    { label: "Select manually", value: "manual" },
+  ],
+};
+
 const blocks: Block[] = [
   {
+    slug: "featured",
+    labels: { singular: "Featured", plural: "Featured sections" },
+    admin: { disableBlockName: true },
+    fields: [
+      ...optionalFields,
+      {
+        name: "item",
+        type: "relationship",
+        label: "Item to feature",
+        relationTo: ["poems", "authors", "workshops"],
+        required: true,
+        admin: {
+          description:
+            "Choose a poem, poet, or event/workshop. Its image, title, description, and link come from the original record.",
+        },
+      },
+    ],
+  },
+  {
     slug: "introduction",
-    labels: {
-      singular: "Project introduction",
-      plural: "Project introductions",
-    },
+    labels: { singular: "Mission", plural: "Mission" },
+    admin: { disableBlockName: true },
     fields: [
       text("heading", "Heading"),
       text("description", "Project introduction", "textarea"),
@@ -75,10 +123,80 @@ const blocks: Block[] = [
     ],
   },
   {
-    slug: "poets",
-    labels: { singular: "Featured poets", plural: "Featured poets" },
+    slug: "events",
+    labels: { singular: "Events", plural: "Events sections" },
+    admin: { disableBlockName: true },
     fields: [
       ...optionalFields,
+      {
+        ...selectionMode,
+        admin: {
+          description:
+            "Automatic shows the four nearest upcoming events and workshops. Manual shows only your selection, in order.",
+        },
+      },
+      {
+        name: "pinnedEvents",
+        label: "Events and workshops",
+        type: "relationship",
+        relationTo: "workshops",
+        hasMany: true,
+        maxRows: 4,
+        admin: {
+          condition: (_, data) => data.selectionMode === "manual",
+          description:
+            "Choose up to four. Past, draft, and untranslated events are omitted on the public site.",
+        },
+      },
+      // Existing homepages retain their stored limit until editors choose a mode.
+      {
+        name: "limit",
+        type: "number",
+        min: 1,
+        max: 6,
+        admin: { hidden: true },
+      },
+    ],
+  },
+  {
+    slug: "poems",
+    labels: { singular: "Poems", plural: "Poem sections" },
+    admin: { disableBlockName: true },
+    fields: [
+      ...optionalFields,
+      {
+        ...selectionMode,
+        admin: {
+          description:
+            "Automatic shows the four most recently created published poems.",
+        },
+      },
+      {
+        name: "poems",
+        type: "relationship",
+        relationTo: "poems",
+        hasMany: true,
+        maxRows: 4,
+        admin: {
+          condition: (_, data) => data.selectionMode === "manual",
+          description: "Choose up to four poems in display order.",
+        },
+      },
+    ],
+  },
+  {
+    slug: "poets",
+    labels: { singular: "Poets", plural: "Poet sections" },
+    admin: { disableBlockName: true },
+    fields: [
+      ...optionalFields,
+      {
+        ...selectionMode,
+        admin: {
+          description:
+            "Automatic shows the four newest profiles with published poetry.",
+        },
+      },
       {
         name: "poets",
         type: "relationship",
@@ -86,38 +204,9 @@ const blocks: Block[] = [
         hasMany: true,
         maxRows: 4,
         admin: {
-          description:
-            "Choose up to four poets in display order. Leave empty to show the latest profiles.",
+          condition: (_, data) => data.selectionMode === "manual",
+          description: "Choose up to four poets in display order.",
         },
-      },
-    ],
-  },
-  {
-    slug: "events",
-    labels: {
-      singular: "Upcoming events and workshops",
-      plural: "Event sections",
-    },
-    fields: [
-      ...optionalFields,
-      {
-        name: "pinnedEvents",
-        type: "relationship",
-        relationTo: "workshops",
-        hasMany: true,
-        maxRows: 3,
-        admin: {
-          description:
-            "Prioritise up to three upcoming events. Past events are excluded automatically.",
-        },
-      },
-      {
-        name: "limit",
-        type: "number",
-        min: 1,
-        max: 6,
-        defaultValue: 3,
-        label: "Number of events",
       },
     ],
   },
@@ -163,7 +252,7 @@ export const Homepage: GlobalConfig = {
   admin: {
     group: "Website",
     description:
-      "Choose the opening feature, arrange the sections, and preview each language before publishing.",
+      "Choose the hero, arrange the sections, and preview each language before publishing.",
     preview: (_, { locale }) => homepagePreviewUrl(locale),
     livePreview: {
       url: ({ locale }) => homepagePreviewUrl(locale?.code),
@@ -235,7 +324,7 @@ export const Homepage: GlobalConfig = {
     {
       name: "feature",
       type: "group",
-      label: "Opening feature",
+      label: "Hero",
       fields: [
         {
           name: "kind",
@@ -279,24 +368,16 @@ export const Homepage: GlobalConfig = {
       name: "sections",
       type: "blocks",
       blocks,
-      minRows: 1,
       maxRows: 10,
       admin: {
         initCollapsed: true,
-        description:
-          "The project introduction is required. Other sections can be hidden, removed, or repeated.",
-      },
-      validate: (value) => {
-        const rows = value as { blockType?: string }[] | null;
-        return (
-          rows?.filter((row) => row.blockType === "introduction").length ===
-            1 || "Include exactly one project introduction."
-        );
+        description: "Add, reorder, remove, or repeat sections.",
       },
       defaultValue: [
         { blockType: "introduction" },
-        { blockType: "poets", enabled: true },
-        { blockType: "events", enabled: true, limit: 3 },
+        { blockType: "poets", enabled: true, selectionMode: "auto" },
+        { blockType: "poems", enabled: true, selectionMode: "auto" },
+        { blockType: "events", enabled: true, selectionMode: "auto" },
         { blockType: "participation", enabled: true },
         { blockType: "newsletter", enabled: true },
       ],

@@ -93,3 +93,41 @@ describe("homepage publishing and preview", () => {
     expect(validLink("/workshops")).toBe(true);
   });
 });
+
+describe("homepage sections", () => {
+  it("offers all section variants with four-item limits and preserves legacy selections", () => {
+    const field = Homepage.fields.find(
+      (field) => "name" in field && field.name === "sections",
+    );
+    if (field?.type !== "blocks") throw new Error("Missing sections");
+    expect(field.blocks.map((block) => block.slug)).toEqual(
+      expect.arrayContaining([
+        "featured",
+        "introduction",
+        "events",
+        "poems",
+        "poets",
+        "newsletter",
+      ]),
+    );
+    for (const slug of ["events", "poems", "poets"]) {
+      const block = field.blocks.find((block) => block.slug === slug)!;
+      const relationship = block.fields.find(
+        (field) => field.type === "relationship",
+      );
+      expect(relationship).toMatchObject({ hasMany: true, maxRows: 4 });
+      const mode = block.fields.find(
+        (field) => "name" in field && field.name === "selectionMode",
+      )!;
+      if (mode.type !== "select") throw new Error("Missing mode");
+      const read = mode.hooks!.afterRead![0];
+      expect(
+        read({ value: undefined, siblingData: { poets: [3] } } as never),
+      ).toBe("manual");
+      expect(read({ value: undefined, siblingData: {} } as never)).toBe("auto");
+      expect(
+        read({ value: "auto", siblingData: { poets: [3] } } as never),
+      ).toBe("auto");
+    }
+  });
+});

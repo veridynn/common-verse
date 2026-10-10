@@ -46,6 +46,7 @@ export interface Poem {
   originalLanguageLabel?: string | null;
   originalText: string;
   author?: Author | number | string | null;
+  media?: (MediaReference | number | string)[] | null;
   translations?: PoemTranslation[] | null;
   _status?: "draft" | "published";
 }
@@ -66,6 +67,8 @@ export interface HomepageLink {
 export interface HomepageSection {
   id?: string;
   blockType:
+    | "featured"
+    | "poems"
     | "introduction"
     | "poets"
     | "events"
@@ -77,6 +80,13 @@ export interface HomepageSection {
   image?: MediaReference | number | string | null;
   linkLabel?: string | null;
   linkUrl?: string | null;
+  selectionMode?: "auto" | "manual" | null;
+  item?:
+    | { relationTo: "poems"; value: Poem | number | string | null }
+    | { relationTo: "authors"; value: Author | number | string | null }
+    | { relationTo: "workshops"; value: Workshop | number | string | null }
+    | null;
+  poems?: (Poem | number | string)[] | null;
   poets?: (Author | number | string)[] | null;
   pinnedEvents?: (Workshop | number | string)[] | null;
   limit?: number | null;
