@@ -1,24 +1,28 @@
+import { label } from "@poetry/cms-ui";
 import type { CollectionConfig } from "payload";
 import { authenticated, publishedOrAuthenticated } from "./access";
 import { collectionPreviewUrl, previewEndpoint } from "./preview";
 
 const languageOptions = [
-  { label: "German", value: "de" },
-  { label: "English", value: "en" },
-  { label: "Arabic", value: "ar" },
-  { label: "Persian", value: "fa" },
-  { label: "Ukrainian", value: "uk" },
-  { label: "Kurdish (Kurmanji)", value: "ku" },
-  { label: "Other language", value: "other" },
+  { label: label("german"), value: "de" },
+  { label: label("english"), value: "en" },
+  { label: label("arabic"), value: "ar" },
+  { label: label("persian"), value: "fa" },
+  { label: label("ukrainian"), value: "uk" },
+  { label: label("kurdish_kurmanji"), value: "ku" },
+  { label: label("other_language"), value: "other" },
 ];
 
 export const Poems: CollectionConfig = {
   slug: "poems",
+  labels: { singular: label("poem"), plural: label("poems") },
+
   admin: {
     useAsTitle: "title",
-    group: "Poetry",
-    description:
-      "Keep the original poem intact and add only the translations that actually exist.",
+    group: label("poetry"),
+    description: label(
+      "keep_the_original_poem_intact_and_add_only_the_translations_that_actually_exist",
+    ),
     preview: (doc, { locale, req }) =>
       collectionPreviewUrl("poems", doc.slug, locale, req.i18n.language),
     livePreview: {
@@ -41,45 +45,95 @@ export const Poems: CollectionConfig = {
   endpoints: [previewEndpoint("poems")],
   versions: { drafts: { autosave: { interval: 375 } } },
   fields: [
-    { name: "title", type: "text", required: true, label: "Original title" },
-    { name: "slug", type: "text", required: true, unique: true, index: true },
+    {
+      name: "title",
+      type: "text",
+      required: true,
+      label: label("original_title"),
+      custom: { languageField: "originalLanguage" },
+    },
+    {
+      name: "slug",
+      label: label("slug"),
+      type: "text",
+      required: true,
+      unique: true,
+      index: true,
+    },
     {
       name: "originalLanguage",
+      label: label("original_language"),
       type: "select",
       required: true,
       options: languageOptions,
     },
     {
       name: "originalLanguageLabel",
+      label: label("original_language_label"),
       type: "text",
       admin: {
         condition: (_, siblingData) => siblingData.originalLanguage === "other",
       },
     },
-    { name: "originalText", type: "textarea", required: true },
-    { name: "author", type: "relationship", relationTo: "authors" },
-    { name: "media", type: "upload", relationTo: "media", hasMany: true },
+    {
+      name: "originalText",
+      label: label("original_text"),
+      custom: { languageField: "originalLanguage" },
+      type: "textarea",
+      required: true,
+    },
+    {
+      name: "author",
+      label: label("author"),
+      type: "relationship",
+      relationTo: "authors",
+    },
+    {
+      name: "media",
+      label: label("media"),
+      type: "upload",
+      relationTo: "media",
+      hasMany: true,
+    },
     {
       name: "translations",
+      label: label("translations"),
       type: "array",
-      labels: { singular: "Translation", plural: "Available translations" },
+      labels: {
+        singular: label("translation"),
+        plural: label("available_translations"),
+      },
       fields: [
         {
           name: "language",
+          label: label("language"),
           type: "select",
           required: true,
           options: languageOptions,
         },
         {
           name: "languageLabel",
+          label: label("language_label"),
           type: "text",
           admin: {
             condition: (_, siblingData) => siblingData.language === "other",
           },
         },
-        { name: "title", type: "text", required: true },
-        { name: "text", type: "textarea", required: true },
-        { name: "translator", type: "text" },
+        {
+          name: "title",
+          custom: { languageField: "language" },
+          label: label("title"),
+          type: "text",
+          required: true,
+        },
+        {
+          name: "text",
+          custom: { languageField: "language" },
+          label: label("text"),
+          type: "textarea",
+          required: true,
+        },
+        { name: "translator", label: label("translator"), type: "text" },
       ],
     },
   ],

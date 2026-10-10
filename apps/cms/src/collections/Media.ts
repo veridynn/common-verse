@@ -1,9 +1,11 @@
+import { label } from "@poetry/cms-ui";
 import type { CollectionConfig } from "payload";
 import { authenticated } from "./access";
 
 export const Media: CollectionConfig = {
   slug: "media",
-  admin: { useAsTitle: "alt", group: "Content" },
+  labels: { singular: label("media"), plural: label("media") },
+  admin: { useAsTitle: "alt", group: label("content") },
   access: {
     read: () => true,
     create: authenticated,
@@ -24,11 +26,11 @@ export const Media: CollectionConfig = {
       type: "text",
       localized: true,
       required: true,
-      label: "Alternative text",
+      label: label("alternative_text"),
       admin: {
-        description: "Describe the image for visitors who cannot see it.",
+        description: label("describe_the_image_for_visitors_who_cannot_see_it"),
       },
     },
-    { name: "credit", type: "text", label: "Photo / artwork credit" },
+    { name: "credit", type: "text", label: label("photo_artwork_credit") },
   ],
 };

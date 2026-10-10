@@ -1,16 +1,18 @@
+import { label } from "@poetry/cms-ui";
 import type { CollectionConfig } from "payload";
 import { authenticated, publishedOrAuthenticated } from "./access";
 import { collectionPreviewUrl, previewEndpoint } from "./preview";
 
 export const Workshops: CollectionConfig = {
   slug: "workshops",
-  labels: { singular: "Workshop", plural: "Workshops" },
+  labels: { singular: label("workshop"), plural: label("workshops") },
   admin: {
     useAsTitle: "title",
-    group: "Programme",
+    group: label("programme"),
     defaultColumns: ["title", "startDate", "_status", "updatedAt"],
-    description:
-      "Create translated workshop pages and preview them before publishing.",
+    description: label(
+      "create_translated_workshop_pages_and_preview_them_before_publishing",
+    ),
     preview: (doc, { locale, req }) =>
       collectionPreviewUrl("workshops", doc.slug, locale, req.i18n.language),
     livePreview: {
@@ -35,64 +37,101 @@ export const Workshops: CollectionConfig = {
   fields: [
     {
       name: "kind",
+      label: label("kind"),
       type: "select",
       defaultValue: "workshop",
       options: [
-        { label: "Workshop", value: "workshop" },
-        { label: "Reading or event", value: "event" },
+        { label: label("workshop"), value: "workshop" },
+        { label: label("reading_or_event"), value: "event" },
       ],
     },
-    { name: "title", type: "text", localized: true, required: true },
+    {
+      name: "title",
+      label: label("title"),
+      type: "text",
+      localized: true,
+      required: true,
+    },
     {
       name: "slug",
+      label: label("slug"),
       type: "text",
       required: true,
       unique: true,
       index: true,
       admin: {
-        description: "Stable URL segment shared by every language version.",
+        description: label(
+          "stable_url_segment_shared_by_every_language_version",
+        ),
       },
     },
-    { name: "description", type: "textarea", localized: true },
-    { name: "content", type: "textarea", localized: true },
-    { name: "image", type: "upload", relationTo: "media" },
+    {
+      name: "description",
+      label: label("description"),
+      type: "textarea",
+      localized: true,
+    },
+    {
+      name: "content",
+      label: label("content"),
+      type: "textarea",
+      localized: true,
+    },
+    {
+      name: "image",
+      label: label("image"),
+      type: "upload",
+      relationTo: "media",
+    },
     {
       name: "startDate",
+      label: label("start_date"),
       type: "date",
       required: true,
       admin: { date: { pickerAppearance: "dayAndTime" } },
     },
     {
       name: "endDate",
+      label: label("end_date"),
       type: "date",
       admin: { date: { pickerAppearance: "dayAndTime" } },
     },
-    { name: "location", type: "text", localized: true },
-    { name: "registrationUrl", type: "text", label: "Registration URL" },
+    {
+      name: "location",
+      label: label("location"),
+      type: "text",
+      localized: true,
+    },
+    { name: "registrationUrl", type: "text", label: label("registration_url") },
     {
       name: "seo",
       type: "group",
-      label: "Search and social sharing",
+      label: label("search_and_social_sharing"),
       fields: [
-        { name: "title", type: "text", localized: true, label: "SEO title" },
+        {
+          name: "title",
+          type: "text",
+          localized: true,
+          label: label("seo_title"),
+        },
         {
           name: "description",
           type: "textarea",
           localized: true,
-          label: "Meta description",
+          label: label("meta_description"),
           maxLength: 170,
         },
         {
           name: "image",
           type: "upload",
           relationTo: "media",
-          label: "Social image",
+          label: label("social_image"),
         },
         {
           name: "noIndex",
           type: "checkbox",
           defaultValue: false,
-          label: "Hide from search engines",
+          label: label("hide_from_search_engines"),
         },
       ],
     },

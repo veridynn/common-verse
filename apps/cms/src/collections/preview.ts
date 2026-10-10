@@ -36,13 +36,16 @@ export function previewEndpoint(collection: PreviewCollection): Endpoint {
       const url = new URL(req.url ?? "", "http://localhost");
       const slug = url.searchParams.get("slug");
       const locale = url.searchParams.get("locale") ?? "de";
+      if (!isLocale(locale))
+        return Response.json({ error: "Invalid locale" }, { status: 400 });
       if (!slug)
         return Response.json({ error: "Missing slug" }, { status: 400 });
 
       const result = await req.payload.find({
         collection,
         where: { slug: { equals: slug } },
-        locale: locale as "de" | "en" | "ar" | "fa" | "uk" | "ku",
+        locale,
+        fallbackLocale: false,
         draft: true,
         overrideAccess: true,
         depth: 2,

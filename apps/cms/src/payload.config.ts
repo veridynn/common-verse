@@ -18,6 +18,7 @@ import { Pages } from "./collections/Pages";
 import { Poems } from "./collections/Poems";
 import { Users } from "./collections/Users";
 import { Workshops } from "./collections/Workshops";
+import { contentFields } from "./components/contentFields";
 import { Homepage } from "./globals/Homepage";
 
 const filename = fileURLToPath(import.meta.url);
@@ -29,8 +30,40 @@ export default buildConfig({
     importMap: { baseDir: path.resolve(dirname) },
     meta: { titleSuffix: " · The Poetry Project" },
   },
-  collections: [Users, Media, Pages, Authors, Workshops, Poems],
-  globals: [Homepage],
+  collections: [Users, Media, Pages, Authors, Workshops, Poems].map(
+    (collection) => ({
+      ...collection,
+      fields: contentFields(collection.fields),
+      admin: {
+        ...collection.admin,
+        components: {
+          ...collection.admin?.components,
+          edit: {
+            ...collection.admin?.components?.edit,
+            beforeDocumentControls: [
+              "./components/CollectionLabels#CollectionLabels",
+            ],
+          },
+        },
+      },
+    }),
+  ),
+  globals: [
+    {
+      ...Homepage,
+      fields: contentFields(Homepage.fields),
+      admin: {
+        ...Homepage.admin,
+        components: {
+          elements: {
+            beforeDocumentControls: [
+              "./components/CollectionLabels#CollectionLabels",
+            ],
+          },
+        },
+      },
+    },
+  ],
   plugins: [
     mcpPlugin({
       collections: {
@@ -76,7 +109,7 @@ export default buildConfig({
     defaultLocale: "de",
     fallback: false,
   },
-  i18n: { supportedLanguages: { de, en, ar, fa, uk } },
+  i18n: { fallbackLanguage: "en", supportedLanguages: { de, en, ar, fa, uk } },
   secret: process.env.PAYLOAD_SECRET ?? "",
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL ?? "http://localhost:3001",
   sharp,
