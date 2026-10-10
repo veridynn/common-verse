@@ -120,5 +120,8 @@
   "draft_preview": "Entwurfsvorschau",
   "section": "Abschnitt",
   "slug_format": "Verwende lateinische Buchstaben, Ziffern, Bindestriche oder Unterstriche für die URL.",
-  "last_administrator_required": "Der letzte Administrator kann nicht zum Editor geändert oder gelöscht werden. Weise zuerst einem anderen Benutzer die Rolle Administrator zu."
+  "last_administrator_required": "Der letzte Administrator kann nicht zum Editor geändert oder gelöscht werden. Weise zuerst einem anderen Benutzer die Rolle Administrator zu.",
+  "authors_help": "Profile der Menschen, die unsere Texte schreiben.",
+  "poem_author_help": "Person, die das Originalgedicht geschrieben hat. Übersetzer:innen werden bei den Übersetzungen genannt.",
+  "poems_by_author": "Gedichte dieser Person"
 }

@@ -78,6 +78,9 @@ describe("editorial schemas", () => {
   });
 
   it("models poem translations as optional explicit records", () => {
+    expect(field(Authors, "poems")).toMatchObject({
+      type: "join", collection: "poems", on: "author",
+    });
     expect(field(Poems, "originalLanguage")).toMatchObject({
       type: "select",
       required: true,

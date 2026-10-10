@@ -120,5 +120,8 @@
   "draft_preview": "Draft preview",
   "section": "Section",
   "slug_format": "Use Latin letters, numbers, hyphens, or underscores for the URL.",
-  "last_administrator_required": "The last administrator cannot be changed to Editor or deleted. Make another user an Administrator first."
+  "last_administrator_required": "The last administrator cannot be changed to Editor or deleted. Make another user an Administrator first.",
+  "authors_help": "Profiles of the people who write our texts.",
+  "poem_author_help": "The person who wrote the original poem. Credit translators in the translations below.",
+  "poems_by_author": "Poems by this author"
 }

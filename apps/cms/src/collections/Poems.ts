@@ -19,8 +19,9 @@ export const Poems: CollectionConfig = {
   labels: { singular: label("poem"), plural: label("poems") },
 
   admin: {
+    hidden: true,
     useAsTitle: "title",
-    group: label("poetry"),
+    group: label("content"),
     description: label(
       "keep_the_original_poem_intact_and_add_only_the_translations_that_actually_exist",
     ),
@@ -89,6 +90,8 @@ export const Poems: CollectionConfig = {
       label: label("author"),
       type: "relationship",
       relationTo: "authors",
+      required: true,
+      admin: { description: label("poem_author_help") },
     },
     {
       name: "media",
