@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "seed:pages": "pnpm --filter @poetry/cms-ui compile && node --import tsx scripts/seed/seed-fixed-pages-cli.ts",
     "seed:homepage": "pnpm --filter @poetry/cms-ui compile && tsx scripts/seed/seed-homepage.ts",
     "dev": "pnpm --filter @poetry/cms-ui compile && next dev --port 3001",
     "build": "pnpm --filter @poetry/cms-ui compile && next build --webpack",
