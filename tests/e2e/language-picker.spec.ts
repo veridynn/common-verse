@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
-test("German is served at root with canonical metadata and legacy redirects", async ({
+test("German is served at root with canonical metadata and no legacy redirects", async ({
   page,
   baseURL,
 }) => {
@@ -17,15 +17,11 @@ test("German is served at root with canonical metadata and legacy redirects", as
     "href",
     `${baseURL}/`,
   );
-  const legacy = await page.request.get("/de/workshops/test?ref=legacy", {
+  const legacy = await page.request.get("/de/events/test?ref=legacy", {
     maxRedirects: 0,
   });
-  expect(legacy.status()).toBe(308);
-  expect(new URL(legacy.headers().location, baseURL).pathname).toBe(
-    "/workshops/test",
-  );
-  expect(legacy.headers().location).toContain("?ref=legacy");
-  await page.goto("/workshops/test");
+  expect(legacy.status()).toBe(404);
+  await page.goto("/veranstaltungen/test");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
     "Poesie über Grenzen",
   );
@@ -70,10 +66,10 @@ for (const locale of ["de", "ar"] as const) {
 test("language links preserve the content path, query, and anchor when returning to German", async ({
   page,
 }) => {
-  await page.goto("/en/workshops/test?ref=invite#main");
+  await page.goto("/en/events/test?ref=invite#main");
   await page.getByRole("button", { name: "Language: English" }).click();
   await page.getByRole("link", { name: "Deutsch", exact: true }).click();
-  await expect(page).toHaveURL(/\/workshops\/test\?ref=invite#main$/);
+  await expect(page).toHaveURL(/\/veranstaltungen\/test\?ref=invite#main$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "de");
 });
 
@@ -98,8 +94,7 @@ test("German page names share route identity, alternates, and query/hash with ot
   const legacy = await page.request.get("/poems/test-poem?ref=legacy", {
     maxRedirects: 0,
   });
-  expect(legacy.status()).toBe(308);
-  expect(legacy.headers().location).toBe("/gedichte/test-poem?ref=legacy");
+  expect(legacy.status()).toBe(404);
   await page.goto("/gedichte/test-poem?ref=invite#main");
   await expect(page.locator("html")).toHaveAttribute("lang", "de");
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(

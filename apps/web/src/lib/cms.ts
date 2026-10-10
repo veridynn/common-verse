@@ -2,17 +2,17 @@ import { locales, type Locale, type FixedPageKey } from "@poetry/i18n";
 import { convertLexicalToPlaintext } from "@payloadcms/richtext-lexical/plaintext";
 import type {
   Author,
-  Article,
   FixedPage,
   Homepage,
   PayloadListResponse,
   Poem,
-  Workshop,
+  Article,
+  Event,
 } from "@poetry/types";
 
 const cmsUrl = import.meta.env.PUBLIC_CMS_URL ?? "http://localhost:3001";
 
-type Collection = "workshops" | "poems" | "authors" | "articles";
+type Collection = "events" | "poems" | "authors" | "articles";
 
 async function fetchCollection<T>(
   collection: Collection,
@@ -27,11 +27,11 @@ async function fetchCollection<T>(
     "sort",
     collection === "articles"
       ? "-publishedAt,-createdAt"
-      : collection === "workshops"
-      ? "startDate"
-      : collection === "authors"
-        ? "-createdAt"
-        : "title",
+      : collection === "events"
+        ? "startDate"
+        : collection === "authors"
+          ? "-createdAt"
+          : "title",
   );
   const response = await fetch(url);
   if (!response.ok)
@@ -66,17 +66,17 @@ async function fetchDocument<T>(
   return data.docs[0] ?? null;
 }
 
-export const getWorkshop = (
+export const getEvent = (
   slug: string,
   locale: Locale,
   previewSecret?: string,
-) => fetchDocument<Workshop>("workshops", slug, locale, previewSecret);
+) => fetchDocument<Event>("events", slug, locale, previewSecret);
 
 export const getPoem = (slug: string, locale: Locale, previewSecret?: string) =>
   fetchDocument<Poem>("poems", slug, locale, previewSecret);
 
-export const getWorkshops = (locale: Locale) =>
-  fetchCollection<Workshop>("workshops", locale);
+export const getEvents = (locale: Locale) =>
+  fetchCollection<Event>("events", locale);
 
 export const getPoems = (locale: Locale) =>
   fetchCollection<Poem>("poems", locale);
@@ -114,10 +114,8 @@ export async function getAuthorPoems(
   return poems;
 }
 
-export async function getUpcomingWorkshops(
-  locale: Locale,
-): Promise<Workshop[]> {
-  const url = new URL("/api/workshops", cmsUrl);
+export async function getUpcomingEvents(locale: Locale): Promise<Event[]> {
+  const url = new URL("/api/events", cmsUrl);
   url.searchParams.set("locale", locale);
   url.searchParams.set("fallback-locale", "none");
   url.searchParams.set("depth", "2");
@@ -131,7 +129,7 @@ export async function getUpcomingWorkshops(
   const response = await fetch(url);
   if (!response.ok)
     throw new Error(`Programme request failed with ${response.status}`);
-  const data = (await response.json()) as PayloadListResponse<Workshop>;
+  const data = (await response.json()) as PayloadListResponse<Event>;
   return data.docs;
 }
 
@@ -168,18 +166,18 @@ export async function getHomepage(
   return response.json();
 }
 
-export async function getWorkshopLocales(
+export async function getEventLocales(
   slug: string,
   previewSecret?: string,
 ): Promise<Locale[]> {
   const localized = await Promise.all(
     locales.map(async (locale) => ({
       locale,
-      workshop: await getWorkshop(slug, locale, previewSecret),
+      event: await getEvent(slug, locale, previewSecret),
     })),
   );
   return localized
-    .filter(({ workshop }) => Boolean(workshop?.title))
+    .filter(({ event }) => Boolean(event?.title))
     .map(({ locale }) => locale);
 }
 
@@ -199,7 +197,7 @@ export async function getRecentPoems(locale: Locale): Promise<Poem[]> {
 }
 
 /** Walk newest profiles until four have published work, including beyond the first page. */
-export async function getActivePoets(
+export async function getActiveAuthors(
   locale: Locale,
 ): Promise<{ authors: Author[]; poems: Poem[] }> {
   const authors: Author[] = [];
@@ -216,7 +214,7 @@ export async function getActivePoets(
     url.searchParams.set("page", String(page));
     const response = await fetch(url);
     if (!response.ok)
-      throw new Error(`Active poets request failed with ${response.status}`);
+      throw new Error(`Active authors request failed with ${response.status}`);
     const data = (await response.json()) as PayloadListResponse<Author>;
     const samples = await Promise.all(
       data.docs.map((author) => getAuthorPoems(String(author.id), locale, 1)),

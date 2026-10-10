@@ -1,11 +1,11 @@
 import { afterEach, expect, it, vi } from "vitest";
 import { Homepage } from "../globals/Homepage";
 import { Poems } from "./Poems";
-import { Workshops } from "./Workshops";
+import { Events } from "./Events";
 
 afterEach(() => vi.unstubAllEnvs());
 
-it.each([Homepage, Poems, Workshops])(
+it.each([Homepage, Poems, Events])(
   "$slug preview URLs keep the editor language separate from the content locale",
   async (config) => {
     vi.stubEnv("PREVIEW_SECRET", "secret");

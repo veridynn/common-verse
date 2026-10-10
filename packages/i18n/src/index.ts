@@ -61,8 +61,8 @@ export function getLocaleMetadata(locale: Locale): LocaleMetadata {
 export const routeSegments = {
   articles: { de: "artikel", international: "articles" },
   poems: { de: "gedichte", international: "poems" },
-  poets: { de: "poeten", international: "poets" },
-  workshops: { de: "workshops", international: "workshops" },
+  authors: { de: "autoren", international: "authors" },
+  events: { de: "veranstaltungen", international: "events" },
   about: { de: "ueber-uns", international: "about" },
   contact: { de: "kontakt", international: "contact" },
   privacy: { de: "datenschutz", international: "privacy" },
@@ -74,7 +74,10 @@ export function unlocalizedPath(pathname: string): string {
   const segments = pathname.split("/").filter(Boolean);
   if (isLocale(segments[0])) segments.shift();
   const route = Object.entries(routeSegments).find(
-    ([key, value]) => segments[0] === key || segments[0] === value.de,
+    ([key, value]) =>
+      segments[0] === key ||
+      segments[0] === value.de ||
+      segments[0] === value.international,
   );
   if (route) segments[0] = route[0];
   return segments.length ? `/${segments.join("/")}` : "/";

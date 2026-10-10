@@ -1,11 +1,11 @@
 import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
-test("featured poets include work outside the archive's first page", async ({
+test("featured authors include work outside the archive's first page", async ({
   page,
 }) => {
   await page.goto("/en");
-  await expect(page.locator(".poet-grid")).toContainText(
+  await expect(page.locator(".author-grid")).toContainText(
     "A voice beyond the first archive page",
   );
   await page
@@ -79,10 +79,10 @@ for (const locale of ["en", "ar"]) {
     await page.keyboard.press("Enter");
     await expect(page.locator("#main")).toBeFocused();
     await page
-      .locator(".poet-grid")
+      .locator(".author-grid")
       .getByRole("link", { name: "Prototype Collective", exact: true })
       .click();
-    await expect(page).toHaveURL(new RegExp(`/${locale}/poets/3$`));
+    await expect(page).toHaveURL(new RegExp(`/${locale}/authors/3$`));
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
       "Prototype Collective",
     );
@@ -97,14 +97,14 @@ test("all hero types render their correct content and destination", async ({
   await expect(
     page.locator(".home-feature .feature-translation"),
   ).toContainText("A Shared Morning");
-  await page.goto("/de");
+  await page.goto("/");
   await expect(page.locator(".featured-event")).toContainText(
     "Poesie über Grenzen",
   );
   await page.goto("/fa");
   await expect(page.locator(".featured-event")).toContainText("خبر تازه");
   await expect(
-    page.locator('.featured-event a[href="/fa/workshops"]'),
+    page.locator('.featured-event a[href="/fa/events"]'),
   ).toBeVisible();
 });
 
@@ -130,7 +130,7 @@ test("homepage preview requires runtime authorization, respects order and stays 
       .locator(".home-section")
       .evaluateAll((sections) => sections.map((section) => section.id)),
   ).toEqual([
-    "home-poets-0",
+    "home-authors-0",
     "home-introduction-1",
     "home-poems-2",
     "upcoming",
@@ -213,10 +213,10 @@ for (const locale of ["en", "ar"]) {
       "The biography comes from the poet profile.",
     );
     await expect(
-      page.locator(`#home-featured-6 a[href="/${locale}/poets/3"]`),
+      page.locator(`#home-featured-6 a[href="/${locale}/authors/3"]`),
     ).toBeVisible();
     await expect(
-      page.locator(`#home-featured-7 a[href="/${locale}/workshops/test"]`),
+      page.locator(`#home-featured-7 a[href="/${locale}/events/test"]`),
     ).toBeVisible();
     await expect(
       page
@@ -230,8 +230,8 @@ for (const locale of ["en", "ar"]) {
       "alt",
       "Layered colourful paper shapes",
     );
-    await expect(page.locator(".section-poets .text-link")).toContainText(
-      locale === "en" ? "Meet all poets" : "تعرّف",
+    await expect(page.locator(".section-authors .text-link")).toContainText(
+      locale === "en" ? "Meet all authors" : "تعرّف",
     );
   });
 }

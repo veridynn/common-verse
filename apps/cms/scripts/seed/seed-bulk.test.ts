@@ -72,7 +72,7 @@ describe("optional bulk demo seed", () => {
     );
     expect(poems.filter((poem) => poem._status === "draft")).toHaveLength(60);
     expect(
-      f.records.workshops.filter((event) => event._status === "draft"),
+      f.records.events.filter((event) => event._status === "draft"),
     ).toHaveLength(20);
     for (const language of locales) {
       const originals = poems.filter(
@@ -109,7 +109,7 @@ describe("optional bulk demo seed", () => {
     expect(
       new Set(poems.map((poem) => (poem.originalText as string).length)).size,
     ).toBeGreaterThan(10);
-    for (const event of f.records.workshops) {
+    for (const event of f.records.events) {
       expect(Date.parse(event.endDate as string)).toBeGreaterThan(
         Date.parse(event.startDate as string),
       );
@@ -129,7 +129,7 @@ describe("optional bulk demo seed", () => {
     expect(await f.run()).toEqual({
       authors: 0,
       poems: 0,
-      workshops: 0,
+      events: 0,
       media: 0,
     });
     expect(poems[0].title).toBe("Editor revision");

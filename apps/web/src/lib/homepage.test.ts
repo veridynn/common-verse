@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Workshop } from "@poetry/types";
+import type { Event } from "@poetry/types";
 import {
   contentDirection,
   poemExcerpt,
@@ -12,8 +12,8 @@ import {
 const event = (
   id: number,
   startDate: string,
-  extra: Partial<Workshop> = {},
-): Workshop => ({
+  extra: Partial<Event> = {},
+): Event => ({
   id,
   startDate,
   title: `Event ${id}`,
@@ -65,8 +65,8 @@ describe("homepage editorial behaviour", () => {
     expect(contentDirection("ku")).toBe("ltr");
   });
   it("localises internal links and rejects executable or disguised URLs", () => {
-    expect(safeHref("/workshops", "ar")).toBe("/ar/workshops");
-    expect(safeHref("/de/poems", "ar")).toBe("/gedichte");
+    expect(safeHref("/events", "ar")).toBe("/ar/events");
+    expect(safeHref("/ar/poems", "de")).toBe("/ar/poems");
     for (const value of [
       "javascript:alert(1)",
       "//evil.test",
@@ -126,7 +126,7 @@ describe("composed homepage content", () => {
     const section = {
       blockType: "featured" as const,
       item: {
-        relationTo: "workshops" as const,
+        relationTo: "events" as const,
         value: event(1, "2026-11-01", { _status: "draft" }),
       },
     };

@@ -18,7 +18,8 @@ const messageOptions = { locale }
 <header class="site-header">
   <a class="brand" href={localizedPath(locale)}><BrandLogo /><span class="sr-only">The Poetry Project{m.site_title({}, messageOptions) !== 'The Poetry Project' ? ` — ${m.site_title({}, messageOptions)}` : ''}</span></a>
   <nav aria-label={m.nav_primary({}, messageOptions)}>
-    <a href={localizedPath(locale, 'workshops')}>{m.nav_workshops({}, messageOptions)}</a>
+    <a href={localizedPath(locale, 'events')}>{m.nav_events({}, messageOptions)}</a>
+    <a href={localizedPath(locale, 'articles')}>{m.nav_articles({}, messageOptions)}</a>
     <a href={localizedPath(locale, 'poems')}>{m.nav_poems({}, messageOptions)}</a>
   </nav>
   <div class="header-controls">

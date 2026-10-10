@@ -8,7 +8,7 @@ import type {
   HomepageSection,
   MediaReference,
   Poem,
-  Workshop,
+  Event,
 } from "@poetry/types";
 
 export function contentDirection(language: string) {
@@ -45,20 +45,20 @@ export function mediaObject(
 }
 
 export function upcomingEvents(
-  events: Workshop[],
+  events: Event[],
   pinned: HomepageSection["pinnedEvents"],
   limit: number,
   now = new Date(),
   selectionMode?: HomepageSection["selectionMode"],
   preview = false,
-): Workshop[] {
-  const upcoming = (event: Workshop) =>
+): Event[] {
+  const upcoming = (event: Event) =>
     Boolean(event.title) &&
     (preview || event._status !== "draft") &&
     Number.isFinite(Date.parse(event.startDate)) &&
     Date.parse(event.endDate ?? event.startDate) >= now.getTime();
   const selected = (pinned ?? []).filter(
-    (event): event is Workshop =>
+    (event): event is Event =>
       Boolean(event) && typeof event === "object" && upcoming(event),
   );
   const ordered = [
@@ -129,7 +129,7 @@ export function featuredItem(section: HomepageSection, preview = false) {
   if (item.relationTo === "authors" && item.value.name)
     return { kind: "poet" as const, value: item.value };
   if (
-    item.relationTo === "workshops" &&
+    item.relationTo === "events" &&
     item.value.title &&
     (preview || item.value._status !== "draft")
   )

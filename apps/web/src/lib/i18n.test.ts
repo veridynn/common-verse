@@ -22,15 +22,24 @@ describe("locale metadata", () => {
   });
 
   it("uses unprefixed German paths and prefixes the other languages", () => {
-    expect(localizedPath("en", "/workshops/test/")).toBe("/en/workshops/test");
+    expect(localizedPath("en", "/events/test/")).toBe("/en/events/test");
     expect(localizedPath("de")).toBe("/");
-    expect(localizedPath("de", "/workshops/test/")).toBe("/workshops/test");
+    expect(localizedPath("de", "/events/test/")).toBe("/veranstaltungen/test");
     expect(localizedPath("en")).toBe("/en");
-    expect(unlocalizedPath("/ar/workshops/test")).toBe("/workshops/test");
-    expect(unlocalizedPath("/workshops/test")).toBe("/workshops/test");
+    expect(unlocalizedPath("/ar/events/test")).toBe("/events/test");
+    expect(unlocalizedPath("/events/test")).toBe("/events/test");
     expect(unlocalizedPath("/en")).toBe("/");
   });
   it("maps page identities without changing record slugs", () => {
+    expect(localizedPath("de", "articles/project-news")).toBe(
+      "/artikel/project-news",
+    );
+    expect(localizedPath("ar", "/en/articles/project-news")).toBe(
+      "/ar/articles/project-news",
+    );
+    expect(unlocalizedPath("/ar/articles/project-news")).toBe(
+      "/articles/project-news",
+    );
     expect(localizedPath("de", "contact")).toBe("/kontakt");
     expect(localizedPath("ar", "constructor")).toBe("/ar/constructor");
     expect(localizedPath("ar", "/kontakt?ref=invite#main")).toBe(
@@ -46,6 +55,6 @@ describe("locale metadata", () => {
     expect(localizedPath("uk", "/gedichte/original-slug")).toBe(
       "/uk/poems/original-slug",
     );
-    expect(unlocalizedPath("/poeten/42")).toBe("/poets/42");
+    expect(unlocalizedPath("/autoren/42")).toBe("/authors/42");
   });
 });

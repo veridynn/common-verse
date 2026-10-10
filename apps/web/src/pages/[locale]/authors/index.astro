@@ -11,13 +11,13 @@ const { locale: rawLocale } = Astro.params
 if (!isLocale(rawLocale)) return new Response('Not found', { status: 404 })
 const locale = rawLocale
 const authors = await getAuthors(locale)
-const title = m.home_all_poets({}, { locale })
+const title = m.home_all_authors({}, { locale })
 ---
-<BaseLayout {locale} {title} canonicalPath="poets">
+<BaseLayout {locale} {title} canonicalPath="authors">
   <Heading level={1}>{title}</Heading>
-  <ul class="poet-grid">{authors.map((author) => <li><article>
+  <ul class="author-grid">{authors.map((author) => <li><article>
     <PersonPortrait userId={author.id} image={author.portrait} />
-    <Heading level={2} variant="subtitle"><Link variant="heading" href={localizedPath(locale, `poets/${author.id}`)}>{authorDisplayName(author.name)}</Link></Heading>
+    <Heading level={2} variant="subtitle"><Link variant="heading" href={localizedPath(locale, `authors/${author.id}`)}>{authorDisplayName(author.name)}</Link></Heading>
   </article></li>)}</ul>
 </BaseLayout>
-<style>.poet-grid { margin-block: 3rem; }</style>
+<style>.author-grid { margin-block: 3rem; }</style>

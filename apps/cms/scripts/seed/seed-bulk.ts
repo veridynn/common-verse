@@ -9,7 +9,7 @@ import { bulkFixtures } from "./seed-bulk-fixtures";
 export const bulkCounts = {
   authors: 60,
   poems: 300,
-  workshops: 100,
+  events: 100,
   media: 12,
 } as const;
 const prefix = "bulk-demo-v1";
@@ -61,7 +61,7 @@ export async function seedBulk(payload: Payload) {
     throw new Error("Bulk seeding requires PostgreSQL transactions.");
   const req = { transactionID };
   const common = { req, overrideAccess: true, depth: 0 } as const;
-  const created = { authors: 0, poems: 0, workshops: 0, media: 0 };
+  const created = { authors: 0, poems: 0, events: 0, media: 0 };
   try {
     const mediaIDs: number[] = [];
     for (let i = 0; i < bulkCounts.media; i++) {
@@ -186,11 +186,11 @@ export async function seedBulk(payload: Payload) {
       });
       created.poems++;
     }
-    for (let i = 0; i < bulkCounts.workshops; i++) {
+    for (let i = 0; i < bulkCounts.events; i++) {
       const slug = `${prefix}-workshop-${i + 1}`;
       const existing = await payload.find({
         ...common,
-        collection: "workshops",
+        collection: "events",
         locale: "de",
         draft: true,
         where: { slug: { equals: slug } },
@@ -206,7 +206,7 @@ export async function seedBulk(payload: Payload) {
       const localized = (locale: Locale) => {
         const f = bulkFixtures[locale];
         return {
-          title: `${f.workshopTitles[i % 3]} · ${i + 1}`,
+          title: `${f.eventTitles[i % 3]} · ${i + 1}`,
           description: f.description,
           content: Array.from(
             { length: i % 10 === 0 ? 6 : 1 },
@@ -214,15 +214,15 @@ export async function seedBulk(payload: Payload) {
           ).join("\n\n"),
           location: f.location,
           seo: {
-            title: f.workshopTitles[i % 3],
+            title: f.eventTitles[i % 3],
             description: f.description,
             noIndex: true,
           },
         };
       };
-      const workshop = await payload.create({
+      const event = await payload.create({
         ...common,
-        collection: "workshops",
+        collection: "events",
         locale: "de",
         data: {
           ...localized("de"),
@@ -238,12 +238,12 @@ export async function seedBulk(payload: Payload) {
       ))
         await payload.update({
           ...common,
-          collection: "workshops",
-          id: workshop.id,
+          collection: "events",
+          id: event.id,
           locale,
           data: localized(locale),
         });
-      created.workshops++;
+      created.events++;
     }
     await payload.db.commitTransaction(transactionID);
     payload.logger.info(

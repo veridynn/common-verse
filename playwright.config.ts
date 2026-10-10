@@ -28,7 +28,7 @@ export default defineConfig({
         {
           command:
             "pnpm --filter @poetry/web build && node tests/fixtures/serve-web.mjs",
-          url: `http://127.0.0.1:${webPort}/de`,
+          url: `http://127.0.0.1:${webPort}/`,
           reuseExistingServer: false,
           env: {
             // Build and runtime use different values to detect embedded secrets.

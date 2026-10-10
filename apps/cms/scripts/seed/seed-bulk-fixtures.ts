@@ -17,7 +17,7 @@ export const bulkFixtures = {
       "Der Weg erinnert sich an unsere Schritte.",
       "Heute bleibt die Tür offen.",
     ],
-    workshopTitles: [
+    eventTitles: [
       "Schreiben zwischen Sprachen",
       "Erinnerungen an die Stadt",
       "Gedichte gemeinsam lesen",
@@ -29,7 +29,6 @@ export const bulkFixtures = {
       "Eine fiktive Person aus unserem Demo-Schreibkollektiv. Sie schreibt über Sprache, Erinnerung und das gemeinsame Leben in der Stadt.",
     location: "The Poetry Project, Berlin",
     alt: "Farbige Kreise und Linien auf hellem Hintergrund",
-    pageTitle: "Notizen aus der Schreibwerkstatt",
   },
   en: {
     poemTitles: ["The Open Window", "A Table for Everyone", "The Way Home"],
@@ -41,7 +40,7 @@ export const bulkFixtures = {
       "The path remembers our footsteps.",
       "Today the door stays open.",
     ],
-    workshopTitles: [
+    eventTitles: [
       "Writing Between Languages",
       "Memories of the City",
       "Reading Poems Together",
@@ -53,7 +52,6 @@ export const bulkFixtures = {
       "A fictional member of our demo writing collective. They write about language, memory, and shared life in the city.",
     location: "The Poetry Project, Berlin",
     alt: "Coloured circles and lines on a light background",
-    pageTitle: "Notes from the Writing Workshop",
   },
   ar: {
     poemTitles: ["النافذة المفتوحة", "طاولة للجميع", "الطريق إلى البيت"],
@@ -65,11 +63,7 @@ export const bulkFixtures = {
       "يتذكر الطريق خطواتنا.",
       "اليوم يبقى الباب مفتوحًا.",
     ],
-    workshopTitles: [
-      "الكتابة بين اللغات",
-      "ذكريات المدينة",
-      "قراءة القصائد معًا",
-    ],
+    eventTitles: ["الكتابة بين اللغات", "ذكريات المدينة", "قراءة القصائد معًا"],
     description: "ورشة مفتوحة حول اللغة والذاكرة والتواصل.",
     content:
       "نقرأ معًا ونكتب بلغات متعددة ونتشارك نصوصنا. أحضر كلمة أو ذكرى أو سؤالًا. لا تحتاج إلى خبرة سابقة.",
@@ -77,7 +71,6 @@ export const bulkFixtures = {
       "شخصية خيالية من مجموعة الكتابة التجريبية. تكتب عن اللغة والذاكرة والحياة المشتركة في المدينة.",
     location: "مشروع الشعر، برلين",
     alt: "دوائر وخطوط ملونة على خلفية فاتحة",
-    pageTitle: "ملاحظات من ورشة الكتابة",
   },
   fa: {
     poemTitles: ["پنجرهٔ باز", "میزی برای همه", "راه خانه"],
@@ -89,7 +82,7 @@ export const bulkFixtures = {
       "راه قدم‌های ما را به یاد دارد.",
       "امروز در باز می‌ماند.",
     ],
-    workshopTitles: ["نوشتن میان زبان‌ها", "خاطره‌های شهر", "خواندن شعر با هم"],
+    eventTitles: ["نوشتن میان زبان‌ها", "خاطره‌های شهر", "خواندن شعر با هم"],
     description: "کارگاهی آزاد دربارهٔ زبان، خاطره و پیوند.",
     content:
       "با هم می‌خوانیم، به چند زبان می‌نویسیم و متن‌هایمان را به اشتراک می‌گذاریم. یک واژه، خاطره یا پرسش بیاورید. نیازی به تجربهٔ قبلی نیست.",
@@ -97,7 +90,6 @@ export const bulkFixtures = {
       "شخصیتی خیالی از گروه نوشتن آزمایشی ما. دربارهٔ زبان، خاطره و زندگی مشترک در شهر می‌نویسد.",
     location: "پروژه شعر، برلین",
     alt: "دایره‌ها و خط‌های رنگی روی زمینه‌ای روشن",
-    pageTitle: "یادداشت‌های کارگاه نوشتن",
   },
   uk: {
     poemTitles: ["Відчинене вікно", "Стіл для всіх", "Дорога додому"],
@@ -109,7 +101,7 @@ export const bulkFixtures = {
       "Дорога пам’ятає наші кроки.",
       "Сьогодні двері залишаються відчиненими.",
     ],
-    workshopTitles: [
+    eventTitles: [
       "Письмо між мовами",
       "Спогади про місто",
       "Читаємо вірші разом",
@@ -121,7 +113,6 @@ export const bulkFixtures = {
       "Вигадана людина з нашого демонстраційного письменницького колективу. Пише про мову, пам’ять і спільне життя в місті.",
     location: "Поетичний проєкт, Берлін",
     alt: "Кольорові кола й лінії на світлому тлі",
-    pageTitle: "Нотатки з письменницької майстерні",
   },
   ku: {
     poemTitles: ["Paceya Vekirî", "Maseyek ji bo Hemûyan", "Riya Malê"],
@@ -133,7 +124,7 @@ export const bulkFixtures = {
       "Rê gavên me bi bîr tîne.",
       "Îro derî vekirî dimîne.",
     ],
-    workshopTitles: [
+    eventTitles: [
       "Nivîsandin di Navbera Zimanan de",
       "Bîranînên Bajêr",
       "Bi Hev re Helbest Xwendin",
@@ -145,19 +136,17 @@ export const bulkFixtures = {
       "Kesekî xeyalî ji koma nivîsandina me ya ceribandinê. Li ser ziman, bîranîn û jiyana hevpar a bajêr dinivîse.",
     location: "Projeya Helbestê, Berlîn",
     alt: "Daire û xêzên rengîn li ser paşxaneyeke ronî",
-    pageTitle: "Nîşe ji Atolyeya Nivîsandinê",
   },
 } satisfies Record<
   Locale,
   {
     poemTitles: string[];
     lines: string[];
-    workshopTitles: string[];
+    eventTitles: string[];
     description: string;
     content: string;
     biography: string;
     location: string;
     alt: string;
-    pageTitle: string;
   }
 >;

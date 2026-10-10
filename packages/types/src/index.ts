@@ -9,7 +9,7 @@ export interface MediaReference {
   height?: number | null;
 }
 
-export interface Workshop {
+export interface Event {
   kind?: "workshop" | "event" | null;
   id: number | string;
   title: string;
@@ -70,7 +70,7 @@ export interface HomepageSection {
     | "featured"
     | "poems"
     | "introduction"
-    | "poets"
+    | "authors"
     | "events"
     | "participation"
     | "newsletter";
@@ -84,11 +84,11 @@ export interface HomepageSection {
   item?:
     | { relationTo: "poems"; value: Poem | number | string | null }
     | { relationTo: "authors"; value: Author | number | string | null }
-    | { relationTo: "workshops"; value: Workshop | number | string | null }
+    | { relationTo: "events"; value: Event | number | string | null }
     | null;
   poems?: (Poem | number | string)[] | null;
-  poets?: (Author | number | string)[] | null;
-  pinnedEvents?: (Workshop | number | string)[] | null;
+  authors?: (Author | number | string)[] | null;
+  pinnedEvents?: (Event | number | string)[] | null;
   limit?: number | null;
   links?: HomepageLink[] | null;
 }
@@ -99,7 +99,7 @@ export interface Homepage {
     heading?: string | null;
     description?: string | null;
     poem?: Poem | number | string | null;
-    event?: Workshop | number | string | null;
+    event?: Event | number | string | null;
     announcement?: {
       title?: string | null;
       text?: string | null;

@@ -79,7 +79,7 @@ const selectionMode: Field = {
     afterRead: [
       ({ value, siblingData }) =>
         value ??
-        (siblingData.poets?.length ||
+        (siblingData.authors?.length ||
         siblingData.pinnedEvents?.length ||
         siblingData.poems?.length
           ? "manual"
@@ -88,7 +88,7 @@ const selectionMode: Field = {
     beforeValidate: [
       ({ value, siblingData }) =>
         value ??
-        (siblingData.poets?.length ||
+        (siblingData.authors?.length ||
         siblingData.pinnedEvents?.length ||
         siblingData.poems?.length
           ? "manual"
@@ -112,7 +112,7 @@ const blocks: Block[] = [
         name: "item",
         type: "relationship",
         label: label("item_to_feature"),
-        relationTo: ["poems", "authors", "workshops"],
+        relationTo: ["poems", "authors", "events"],
         required: true,
         admin: {
           description: label(
@@ -154,9 +154,9 @@ const blocks: Block[] = [
       },
       {
         name: "pinnedEvents",
-        label: label("events_and_workshops"),
+        label: label("events"),
         type: "relationship",
-        relationTo: "workshops",
+        relationTo: "events",
         hasMany: true,
         maxRows: 4,
         admin: {
@@ -205,8 +205,8 @@ const blocks: Block[] = [
     ],
   },
   {
-    slug: "poets",
-    labels: { singular: label("poets"), plural: label("poet_sections") },
+    slug: "authors",
+    labels: { singular: label("authors"), plural: label("author_sections") },
     admin: { disableBlockName: true },
     fields: [
       ...optionalFields,
@@ -219,15 +219,15 @@ const blocks: Block[] = [
         },
       },
       {
-        name: "poets",
-        label: label("poets"),
+        name: "authors",
+        label: label("authors"),
         type: "relationship",
         relationTo: "authors",
         hasMany: true,
         maxRows: 4,
         admin: {
           condition: (_, data) => data.selectionMode === "manual",
-          description: label("choose_up_to_four_poets_in_display_order"),
+          description: label("choose_up_to_four_authors_in_display_order"),
         },
       },
     ],
@@ -397,7 +397,7 @@ export const Homepage: GlobalConfig = {
           name: "event",
           label: label("event"),
           type: "relationship",
-          relationTo: "workshops",
+          relationTo: "events",
           admin: { condition: (_, data) => data.kind === "event" },
         },
         {
@@ -432,7 +432,7 @@ export const Homepage: GlobalConfig = {
       },
       defaultValue: [
         { blockType: "introduction" },
-        { blockType: "poets", enabled: true, selectionMode: "auto" },
+        { blockType: "authors", enabled: true, selectionMode: "auto" },
         { blockType: "poems", enabled: true, selectionMode: "auto" },
         { blockType: "events", enabled: true, selectionMode: "auto" },
         { blockType: "participation", enabled: true },

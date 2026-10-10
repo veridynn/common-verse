@@ -58,3 +58,25 @@ test("article preview requires the runtime secret and missing translations stay 
   expect((await page.goto("/fa/articles/project-news"))?.status()).toBe(404);
   expect((await page.goto("/en/articles/missing"))?.status()).toBe(404);
 });
+
+test("old collection URLs return 404 without redirects", async ({
+  request,
+}) => {
+  for (const path of [
+    "/blog",
+    "/posts",
+    "/workshops",
+    "/poets",
+    "/poeten",
+    "/de",
+    "/de/articles/project-news",
+    "/en/blog",
+    "/en/posts",
+    "/en/workshops",
+    "/en/poets",
+  ]) {
+    const response = await request.get(path, { maxRedirects: 0 });
+    expect(response.status(), path).toBe(404);
+    expect(response.headers().location, path).toBeUndefined();
+  }
+});

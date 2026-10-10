@@ -39,13 +39,7 @@ async function fixture() {
 
 describe("curated prototype seeding", () => {
   it("never changes a populated database in automatic mode", async () => {
-    for (const populated of [
-      "authors",
-      "media",
-      "pages",
-      "poems",
-      "workshops",
-    ]) {
+    for (const populated of ["authors", "media", "pages", "poems", "events"]) {
       const f = await fixture();
       f.payload.count.mockImplementation(async ({ collection }) => ({
         totalDocs: collection === populated ? 1 : 0,
@@ -71,10 +65,10 @@ describe("curated prototype seeding", () => {
       expect(args.req.transactionID).toBe("transaction-1");
     expect(
       f.payload.create.mock.calls.map(([args]) => args.collection),
-    ).toEqual(["media", "workshops", "authors", "poems"]);
+    ).toEqual(["media", "events", "authors", "poems"]);
     expect(
       f.payload.update.mock.calls
-        .filter(([args]) => args.collection === "workshops")
+        .filter(([args]) => args.collection === "events")
         .map(([args]) => args.locale),
     ).toEqual(["en", "ar", "fa", "uk", "ku"]);
     expect(f.payload.db.commitTransaction).toHaveBeenCalledOnce();

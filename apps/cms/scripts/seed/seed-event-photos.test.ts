@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import type { Payload } from "payload";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { parseEventPhoto, seedWorkshopPhotos } from "./seed-workshop-photos";
+import { parseEventPhoto, seedEventPhotos } from "./seed-event-photos";
 
 const directories: string[] = [];
 afterEach(async () => {
@@ -65,7 +65,7 @@ async function fixture(cached = false) {
     },
     logger: { info: vi.fn() },
     find: vi.fn(async ({ collection, where }) => {
-      if (collection === "workshops")
+      if (collection === "events")
         return { docs: [{ id: 20, image: 30, _status: "draft" }] };
       if (where.id) return { docs: [{ id: 30, credit: "bulk-demo-v1-art-1" }] };
       return { docs: cached ? [{ id: 100 }] : [] };
@@ -86,7 +86,7 @@ async function fixture(cached = false) {
     directory,
     payload,
     fetchMock,
-    run: () => seedWorkshopPhotos(payload as unknown as Payload),
+    run: () => seedEventPhotos(payload as unknown as Payload),
   };
 }
 
@@ -107,7 +107,7 @@ describe("licensed workshop photo import", () => {
     expect(f.fetchMock).toHaveBeenCalledTimes(13);
     const attachments = f.payload.update.mock.calls
       .map(([args]) => args)
-      .filter((args) => args.collection === "workshops");
+      .filter((args) => args.collection === "events");
     expect(attachments).toHaveLength(75);
     for (const args of attachments)
       expect(args.data).toEqual({ image: 100, _status: "draft" });
@@ -118,7 +118,7 @@ describe("licensed workshop photo import", () => {
   it("uses saved photos without network requests and preserves editor-selected media", async () => {
     const f = await fixture(true);
     f.payload.find.mockImplementation(async ({ collection, where }) => {
-      if (collection === "workshops")
+      if (collection === "events")
         return { docs: [{ id: 20, image: 30, _status: "published" }] };
       if (where.id) return { docs: [{ id: 30, credit: "Editor photo" }] };
       return { docs: [{ id: 100 }] };

@@ -4,22 +4,20 @@ import type { CollectionConfig } from "payload";
 import { authenticated, publishedOrAuthenticated } from "./access";
 import { collectionPreviewUrl, previewEndpoint } from "./preview";
 
-export const Workshops: CollectionConfig = {
-  slug: "workshops",
-  labels: { singular: label("workshop"), plural: label("workshops") },
+export const Events: CollectionConfig = {
+  slug: "events",
+  labels: { singular: label("event"), plural: label("events") },
   admin: {
     useAsTitle: "title",
-    group: label("programme"),
+    group: label("content"),
     defaultColumns: ["title", "startDate", "_status", "updatedAt"],
-    description: label(
-      "create_translated_workshop_pages_and_preview_them_before_publishing",
-    ),
+    description: label("events_help"),
     preview: (doc, { locale, req }) =>
-      collectionPreviewUrl("workshops", doc.slug, locale, req.i18n.language),
+      collectionPreviewUrl("events", doc.slug, locale, req.i18n.language),
     livePreview: {
       url: ({ data, locale, req }) =>
         collectionPreviewUrl(
-          "workshops",
+          "events",
           data.slug,
           locale?.code,
           req.i18n.language,
@@ -33,7 +31,7 @@ export const Workshops: CollectionConfig = {
     delete: authenticated,
     readVersions: authenticated,
   },
-  endpoints: [previewEndpoint("workshops")],
+  endpoints: [previewEndpoint("events")],
   versions: { drafts: { autosave: { interval: 375 } } },
   fields: [
     {
@@ -121,6 +119,7 @@ export const Workshops: CollectionConfig = {
           type: "textarea",
           localized: true,
           label: label("meta_description"),
+          admin: { description: label("meta_description_help") },
           maxLength: 170,
         },
         {

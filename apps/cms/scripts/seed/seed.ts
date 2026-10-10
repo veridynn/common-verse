@@ -83,7 +83,7 @@ export async function seed(payload: Payload, { onlyIfEmpty = false } = {}) {
         "media",
         "pages",
         "poems",
-        "workshops",
+        "events",
       ] as const) {
         const result = await payload.count({
           collection,
@@ -101,7 +101,7 @@ export async function seed(payload: Payload, { onlyIfEmpty = false } = {}) {
     }
     const existingWorkshop = await payload.find({
       req,
-      collection: "workshops",
+      collection: "events",
       where: { slug: { equals: "test" } },
       limit: 1,
     });
@@ -138,9 +138,9 @@ export async function seed(payload: Payload, { onlyIfEmpty = false } = {}) {
       }
 
       const de = translations.de;
-      const workshop = await payload.create({
+      const event = await payload.create({
         req,
-        collection: "workshops",
+        collection: "events",
         locale: "de",
         data: {
           title: de.title,
@@ -165,8 +165,8 @@ export async function seed(payload: Payload, { onlyIfEmpty = false } = {}) {
         const text = translations[locale];
         await payload.update({
           req,
-          collection: "workshops",
-          id: workshop.id,
+          collection: "events",
+          id: event.id,
           locale,
           data: {
             title: text.title,

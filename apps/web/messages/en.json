@@ -2,7 +2,6 @@
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "site_title": "The Poetry Project",
   "site_description": "Multilingual poetry, workshops, and connection.",
-  "nav_workshops": "Workshops",
   "nav_poems": "Poems",
   "nav_primary": "Primary navigation",
   "language_label": "Language",
@@ -19,8 +18,6 @@
   "home_read_poem": "Read the full poem",
   "home_event": "Reading and event",
   "home_event_details": "View details",
-  "home_all_poets": "Meet all poets",
-  "home_no_poets": "Poet profiles will appear here soon.",
   "home_all_events": "All events and workshops",
   "home_no_events": "New dates are on their way. Explore our workshops or contact us to take part.",
   "home_unavailable": "Some content is temporarily unavailable. Please try again shortly.",
@@ -33,5 +30,10 @@
   "theme_dark": "Dark",
   "theme_system": "System",
   "home_translation_missing": "This content is not yet available in this language.",
-  "home_no_poems": "Published poems will appear here soon."
+  "home_no_poems": "Published poems will appear here soon.",
+  "home_about": "About",
+  "nav_articles": "Articles",
+  "nav_events": "Events",
+  "home_all_authors": "Meet all authors",
+  "home_no_authors": "Author profiles will appear here soon."
 }

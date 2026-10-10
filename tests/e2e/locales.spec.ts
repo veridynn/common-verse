@@ -10,7 +10,7 @@ const expectations = [
   ["ku", "ltr"],
 ] as const;
 
-const workshopTitles = {
+const eventTitles = {
   de: "Poesie über Grenzen",
   en: "Poetry Across Borders",
   ar: "الشعر عبر الحدود",
@@ -32,9 +32,9 @@ for (const [locale, direction] of expectations) {
   test(`${locale} workshop route renders localized content`, async ({
     page,
   }) => {
-    await page.goto(localizedPath(locale, "workshops/test"));
+    await page.goto(localizedPath(locale, "events/test"));
     await expect(
-      page.getByRole("heading", { level: 1, name: workshopTitles[locale] }),
+      page.getByRole("heading", { level: 1, name: eventTitles[locale] }),
     ).toBeVisible();
     await expect(page.locator("html")).toHaveAttribute("dir", direction);
   });
@@ -50,8 +50,8 @@ test("primary navigation targets render collection indexes", async ({
   page,
 }) => {
   await page.goto("/en");
-  await page.getByRole("link", { name: "Workshops", exact: true }).click();
-  await expect(page).toHaveURL(/\/en\/workshops$/);
+  await page.getByRole("link", { name: "Events", exact: true }).click();
+  await expect(page).toHaveURL(/\/en\/events$/);
   await expect(
     page.getByRole("link", { name: "Poetry Across Borders" }),
   ).toBeVisible();
@@ -73,7 +73,7 @@ test("language switcher changes the locale URL and document direction", async ({
 test("localized workshop renders media, metadata, and structured data", async ({
   page,
 }) => {
-  await page.goto("/ar/workshops/test");
+  await page.goto("/ar/events/test");
   await expect(
     page.getByRole("heading", { level: 1, name: "الشعر عبر الحدود" }),
   ).toBeVisible();
@@ -84,7 +84,7 @@ test("localized workshop renders media, metadata, and structured data", async ({
   );
   await expect(page.locator('link[hreflang="ku"]')).toHaveAttribute(
     "href",
-    /\/ku\/workshops\/test$/,
+    /\/ku\/events\/test$/,
   );
   const structuredData = await page
     .locator('script[type="application/ld+json"]')
@@ -95,7 +95,7 @@ test("localized workshop renders media, metadata, and structured data", async ({
 test("workshop hreflang omits locales without a translation", async ({
   page,
 }) => {
-  await page.goto("/en/workshops/partial");
+  await page.goto("/en/events/partial");
   await expect(page.locator('link[hreflang="en"]')).toHaveCount(1);
   await expect(page.locator('link[hreflang="fa"]')).toHaveCount(0);
 });
@@ -103,12 +103,10 @@ test("workshop hreflang omits locales without a translation", async ({
 test("draft preview rejects a bad secret and renders an authorized draft", async ({
   page,
 }) => {
-  const invalid = await page.request.get(
-    "/en/workshops/test?previewSecret=wrong",
-  );
+  const invalid = await page.request.get("/en/events/test?previewSecret=wrong");
   expect(invalid.status()).toBe(401);
 
-  await page.goto("/en/workshops/test?previewSecret=test-preview");
+  await page.goto("/en/events/test?previewSecret=test-preview");
   await expect(page.getByRole("status")).toHaveText("Draft preview");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("draft");
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
@@ -146,7 +144,7 @@ test("Arabic home has no console or page errors", async ({ page }) => {
 test("preview secrets are taken from runtime for both content types", async ({
   page,
 }) => {
-  for (const route of ["/de/workshops/test", "/ar/poems/test-poem"]) {
+  for (const route of ["/veranstaltungen/test", "/ar/poems/test-poem"]) {
     const buildSecret = await page.request.get(
       `${route}?previewSecret=build-preview`,
     );

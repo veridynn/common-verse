@@ -2,7 +2,6 @@
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "site_title": "The Poetry Project",
   "site_description": "Mehrsprachige Poesie, Workshops und Begegnungen.",
-  "nav_workshops": "Workshops",
   "nav_poems": "Gedichte",
   "nav_primary": "Hauptnavigation",
   "language_label": "Sprache",
@@ -19,8 +18,6 @@
   "home_read_poem": "Das ganze Gedicht lesen",
   "home_event": "Lesung und Veranstaltung",
   "home_event_details": "Details ansehen",
-  "home_all_poets": "Alle Poet*innen kennenlernen",
-  "home_no_poets": "Hier findest du bald die Profile unserer Poet*innen.",
   "home_all_events": "Alle Veranstaltungen und Workshops",
   "home_no_events": "Neue Termine folgen bald. Entdecke unsere Workshops oder melde dich bei uns, um mitzumachen.",
   "home_unavailable": "Einige Inhalte sind vorübergehend nicht verfügbar. Bitte versuche es in Kürze erneut.",
@@ -33,5 +30,10 @@
   "theme_dark": "Dunkel",
   "theme_system": "System",
   "home_translation_missing": "Dieser Inhalt ist in dieser Sprache noch nicht verfügbar.",
-  "home_no_poems": "Hier erscheinen bald neue Gedichte."
+  "home_no_poems": "Hier erscheinen bald neue Gedichte.",
+  "home_about": "Über uns",
+  "nav_articles": "Artikel",
+  "nav_events": "Veranstaltungen",
+  "home_all_authors": "Alle Autor:innen kennenlernen",
+  "home_no_authors": "Hier erscheinen bald Profile der Autor:innen."
 }

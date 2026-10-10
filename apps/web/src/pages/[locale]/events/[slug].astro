@@ -1,0 +1,69 @@
+---
+import { Heading } from '$lib/components/ui/heading'
+import { Eyebrow } from '$lib/components/ui/eyebrow'
+import { Text } from '$lib/components/ui/text'
+import * as Card from '$lib/components/ui/card'
+import { getSecret } from 'astro:env/server'
+import { isLocale, localizedPath } from '@poetry/i18n'
+import { Button } from '$lib/components/ui/button/index.js'
+import { getEvent, getEventLocales } from '../../../lib/cms'
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+import * as m from '../../../paraglide/messages.js'
+
+const { locale: rawLocale, slug } = Astro.params
+if (!isLocale(rawLocale) || !slug) return new Response('Not found', { status: 404 })
+const locale = rawLocale
+const suppliedSecret = Astro.url.searchParams.get('previewSecret') ?? undefined
+const previewSecret = getSecret('PREVIEW_SECRET')
+const preview = Boolean(suppliedSecret && previewSecret && suppliedSecret === previewSecret)
+if (suppliedSecret && !preview) return new Response('Invalid preview link', { status: 401 })
+const event = await getEvent(slug, locale, preview ? suppliedSecret : undefined)
+if (!event || !event.title) return new Response('Not found', { status: 404 })
+const description = event.seo?.description ?? event.description ?? m.site_description({}, { locale })
+const title = event.seo?.title ?? `${event.title} · ${m.site_title({}, { locale })}`
+const cmsUrl = import.meta.env.PUBLIC_CMS_URL ?? 'http://localhost:3001'
+const socialMedia = event.seo?.image && typeof event.seo.image === 'object' ? event.seo.image : null
+const eventMedia = event.image && typeof event.image === 'object' ? event.image : null
+const image = socialMedia?.url ? new URL(socialMedia.url, cmsUrl).href : eventMedia?.url ? new URL(eventMedia.url, cmsUrl).href : null
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: event.title,
+  description,
+  startDate: event.startDate,
+  ...(event.endDate ? { endDate: event.endDate } : {}),
+  ...(event.location ? { location: { '@type': 'Place', name: event.location } } : {}),
+  ...(image ? { image: [image] } : {}),
+  url: new URL(localizedPath(locale, `events/${slug}`), import.meta.env.PUBLIC_SITE_URL ?? 'http://localhost:4321').href,
+  eventStatus: 'https://schema.org/EventScheduled',
+}
+const date = new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeStyle: 'short' }).format(new Date(event.startDate))
+const alternateLocales = await getEventLocales(slug, preview ? suppliedSecret : undefined)
+---
+
+<BaseLayout {locale} {title} {description} {image} {structuredData} {alternateLocales} canonicalPath={`events/${slug}`} noIndex={event.seo?.noIndex ?? false} {preview} contentType="article">
+  <article>
+    <Eyebrow>{m.workshop_label({}, { locale })}</Eyebrow>
+    <Heading level={1}>{event.title}</Heading>
+    {eventMedia?.url && eventMedia.alt && <figure class="hero-figure">
+      <img class="hero-image" src={new URL(eventMedia.url, cmsUrl).href} alt={eventMedia.alt} width={eventMedia.width ?? 1200} height={eventMedia.height ?? 800} />
+    </figure>}
+    <div class="content-grid">
+      <div>
+        {event.description && <Text variant="lead" class="lede">{event.description}</Text>}
+        {event.content && <div class="prose">{event.content}</div>}
+      </div>
+      <Card.Root as="aside" variant="accent" size="sm" class="self-start" aria-label={m.workshop_label({}, { locale })}>
+        <Card.Content>
+        <p><time datetime={event.startDate}>{date}</time></p>
+        {event.location && <p>{event.location}</p>}
+        </Card.Content>
+        {event.registrationUrl && <Card.Footer><Button href={event.registrationUrl}>{m.registration({}, { locale })}</Button></Card.Footer>}
+      </Card.Root>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .hero-figure { margin: 0; }
+</style>

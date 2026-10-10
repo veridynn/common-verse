@@ -2,7 +2,6 @@
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "site_title": "مشروع الشعر",
   "site_description": "شعر وورشات وتواصل بلغات متعددة.",
-  "nav_workshops": "الورشات",
   "nav_poems": "القصائد",
   "nav_primary": "التنقل الرئيسي",
   "language_label": "اللغة",
@@ -19,8 +18,6 @@
   "home_read_poem": "اقرأ القصيدة كاملة",
   "home_event": "قراءة وفعالية",
   "home_event_details": "عرض التفاصيل",
-  "home_all_poets": "تعرّف إلى جميع الشعراء",
-  "home_no_poets": "ستظهر هنا ملفات الشعراء قريبًا.",
   "home_all_events": "جميع الفعاليات والورش",
   "home_no_events": "ستُعلَن مواعيد جديدة قريبًا. اكتشف ورشنا أو تواصل معنا للمشاركة.",
   "home_unavailable": "بعض المحتوى غير متاح مؤقتًا. يرجى المحاولة مجددًا بعد قليل.",
@@ -33,5 +30,10 @@
   "theme_dark": "داكن",
   "theme_system": "النظام",
   "home_translation_missing": "هذا المحتوى غير متاح بهذه اللغة بعد.",
-  "home_no_poems": "ستظهر القصائد المنشورة هنا قريبًا."
+  "home_no_poems": "ستظهر القصائد المنشورة هنا قريبًا.",
+  "home_about": "من نحن",
+  "nav_articles": "المقالات",
+  "nav_events": "الفعاليات",
+  "home_all_authors": "تعرّف على جميع الكتّاب",
+  "home_no_authors": "ستظهر ملفات الكتّاب هنا قريبًا."
 }

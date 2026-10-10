@@ -152,7 +152,7 @@ async function downloadPhoto(photo: EventPhoto) {
   return Buffer.concat(chunks);
 }
 
-export async function seedWorkshopPhotos(payload: Payload) {
+export async function seedEventPhotos(payload: Payload) {
   assertBulkSeedEnvironment();
   const upload = payload.collections.media.config.upload;
   if (!upload || typeof upload === "boolean")
@@ -222,26 +222,24 @@ export async function seedWorkshopPhotos(payload: Payload) {
       ids.push(media.id);
       imported++;
     }
-    for (let i = 0; i < bulkCounts.workshops; i++) {
-      // Keep deliberately image-free workshops as fixtures for empty-state rendering.
+    for (let i = 0; i < bulkCounts.events; i++) {
+      // Keep deliberately image-free events as fixtures for empty-state rendering.
       if (i % 4 === 0) continue;
       const result = await payload.find({
         ...common,
-        collection: "workshops",
+        collection: "events",
         locale: "de",
         draft: true,
         where: { slug: { equals: `bulk-demo-v1-workshop-${i + 1}` } },
         limit: 1,
       });
-      const workshop = result.docs[0];
-      if (!workshop) continue;
+      const event = result.docs[0];
+      if (!event) continue;
       const desired = ids[i % ids.length];
-      if (workshop.image === desired) continue;
-      if (workshop.image) {
+      if (event.image === desired) continue;
+      if (event.image) {
         const imageID =
-          typeof workshop.image === "object"
-            ? workshop.image.id
-            : workshop.image;
+          typeof event.image === "object" ? event.image.id : event.image;
         const media = await payload.find({
           ...common,
           collection: "media",
@@ -253,10 +251,10 @@ export async function seedWorkshopPhotos(payload: Payload) {
       }
       await payload.update({
         ...common,
-        collection: "workshops",
-        id: workshop.id,
+        collection: "events",
+        id: event.id,
         locale: "de",
-        data: { image: desired, _status: workshop._status },
+        data: { image: desired, _status: event._status },
       });
       attached++;
     }

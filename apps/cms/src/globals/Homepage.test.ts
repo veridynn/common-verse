@@ -90,7 +90,7 @@ describe("homepage publishing and preview", () => {
     expect(homepagePreviewUrl("ar")).toContain("/ar?previewSecret=secret");
     expect(new URL(homepagePreviewUrl("de")!).pathname).toBe("/");
     expect(validLink("javascript:alert(1)")).not.toBe(true);
-    expect(validLink("/workshops")).toBe(true);
+    expect(validLink("/events")).toBe(true);
   });
 });
 
@@ -106,11 +106,11 @@ describe("homepage sections", () => {
         "introduction",
         "events",
         "poems",
-        "poets",
+        "authors",
         "newsletter",
       ]),
     );
-    for (const slug of ["events", "poems", "poets"]) {
+    for (const slug of ["events", "poems", "authors"]) {
       const block = field.blocks.find((block) => block.slug === slug)!;
       const relationship = block.fields.find(
         (field) => field.type === "relationship",
@@ -122,11 +122,11 @@ describe("homepage sections", () => {
       if (mode.type !== "select") throw new Error("Missing mode");
       const read = mode.hooks!.afterRead![0];
       expect(
-        read({ value: undefined, siblingData: { poets: [3] } } as never),
+        read({ value: undefined, siblingData: { authors: [3] } } as never),
       ).toBe("manual");
       expect(read({ value: undefined, siblingData: {} } as never)).toBe("auto");
       expect(
-        read({ value: "auto", siblingData: { poets: [3] } } as never),
+        read({ value: "auto", siblingData: { authors: [3] } } as never),
       ).toBe("auto");
     }
   });

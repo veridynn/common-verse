@@ -2,7 +2,6 @@
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "site_title": "Projeya Helbestê",
   "site_description": "Helbest, atolyeyên pirzimanî û têkilî.",
-  "nav_workshops": "Atolye",
   "nav_poems": "Helbest",
   "nav_primary": "Navîgasyona sereke",
   "language_label": "Ziman",
@@ -19,8 +18,6 @@
   "home_read_poem": "Hemû helbestê bixwîne",
   "home_event": "Xwendin û bûyer",
   "home_event_details": "Hûrguliyan bibîne",
-  "home_all_poets": "Hemû helbestvanan nas bike",
-  "home_no_poets": "Profîlên helbestvanan dê zû li vir xuya bibin.",
   "home_all_events": "Hemû bûyer û atolye",
   "home_no_events": "Dîrokên nû dê zû werin. Atolyeyên me bibîne an ji bo beşdariyê bi me re têkilî dayne.",
   "home_unavailable": "Hin naverok demkî nayê gihîştin. Ji kerema xwe piştî demeke kurt dîsa biceribîne.",
@@ -33,5 +30,10 @@
   "theme_dark": "Tarî",
   "theme_system": "Sîstem",
   "home_translation_missing": "Ev naverok hê bi vî zimanî ne berdest e.",
-  "home_no_poems": "Helbestên weşandî dê di demeke nêz de li vir xuya bibin."
+  "home_no_poems": "Helbestên weşandî dê di demeke nêz de li vir xuya bibin.",
+  "home_about": "Der barê me de",
+  "nav_articles": "Gotar",
+  "nav_events": "Bûyer",
+  "home_all_authors": "Hemû nivîskaran nas bike",
+  "home_no_authors": "Profîlên nivîskaran dê di demeke nêzîk de li vir xuya bibin."
 }

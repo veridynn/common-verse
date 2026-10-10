@@ -26,7 +26,7 @@ const o = { locale }
     {!feature?.heading && <p class="content-unavailable" role="status">{m.home_translation_missing({}, o)}</p>}
     {feature?.description && <Text variant="lead" class="lede">{feature.description}</Text>}
     <Button href={localizedPath(locale, 'poems')}>{m.home_explore({}, o)}</Button>
-    <a class="secondary-link" href={hasUpcoming ? '#upcoming' : localizedPath(locale, 'workshops')}>{m.home_events_link({}, o)}</a>
+    <a class="secondary-link" href={hasUpcoming ? '#upcoming' : localizedPath(locale, 'events')}>{m.home_events_link({}, o)}</a>
   </div>
   {poem && excerpt && <article class="featured-poem" aria-label={m.home_featured_poem({}, o)}>
     <p class="feature-note">{m.home_featured_poem({}, o)}</p>
@@ -48,7 +48,7 @@ const o = { locale }
     <Heading level={2}>{event.title}</Heading>
     <p><time datetime={event.startDate}>{new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeStyle: 'short', timeZone: 'Europe/Berlin' }).format(new Date(event.startDate))}</time></p>
     {event.location && <p>{event.location}</p>}
-    <Link variant="standalone" href={localizedPath(locale, `workshops/${event.slug}`)}>{m.home_event_details({}, o)}</Link>
+    <Link variant="standalone" href={localizedPath(locale, `events/${event.slug}`)}>{m.home_event_details({}, o)}</Link>
   </article>}
   {announcement && <article class="featured-event">
     <EditorialImage image={announcement.image} {locale} eager />

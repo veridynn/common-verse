@@ -66,7 +66,7 @@ for (const locale of ["de", "ar"] as const) {
       "background-color",
       background,
     );
-    await page.goto("/en/workshops/test");
+    await page.goto("/en/events/test");
     await expect(
       page.getByRole("button", { name: "Appearance: System" }),
     ).toBeVisible();

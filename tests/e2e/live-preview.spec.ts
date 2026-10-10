@@ -4,7 +4,7 @@ for (const [contentLocale, editorLanguage, notice, direction] of [
   ["ar", "en", "Draft preview", "ltr"],
   ["en", "ar", "معاينة المسودة", "rtl"],
 ]) {
-  for (const suffix of ["", "/workshops/live-preview", "/poems/test-poem"]) {
+  for (const suffix of ["", "/events/live-preview", "/poems/test-poem"]) {
     test(`${contentLocale}${suffix} preview notice follows the ${editorLanguage} editor language`, async ({
       page,
     }) => {
@@ -41,7 +41,7 @@ test("preview notice falls back to English without a supported editor language",
 for (const locale of ["en", "ar"]) {
   for (const path of [
     `/${locale}`,
-    `/${locale}/workshops/live-preview`,
+    `/${locale}/events/live-preview`,
     `/${locale}/poems/test-poem`,
   ]) {
     test(`${path} draft preview refreshes after a CMS save`, async ({
@@ -60,7 +60,7 @@ for (const locale of ["en", "ar"]) {
         locale === "ar" ? "rtl" : "ltr",
       );
       await expect(frame.getByRole("heading", { level: 1 })).toBeVisible();
-      if (path.includes("workshops")) {
+      if (path.includes("events")) {
         await page.request.post(`${cmsURL}/preview-update?locale=${locale}`);
       }
       const refreshed = frame.waitForNavigation();
@@ -73,7 +73,7 @@ for (const locale of ["en", "ar"]) {
       const response = await refreshed;
       expect(response?.headers()["cache-control"]).toBe("no-store");
       expect(response?.headers()["referrer-policy"]).toBe("no-referrer");
-      if (path.includes("workshops")) {
+      if (path.includes("events")) {
         await expect(frame.getByRole("heading", { level: 1 })).toHaveText(
           "Updated workshop draft",
         );

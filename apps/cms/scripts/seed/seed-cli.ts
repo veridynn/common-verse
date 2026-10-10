@@ -20,8 +20,8 @@ try {
   if (bulk) await bulk.seedBulk(payload);
   else await seed(payload, { onlyIfEmpty: args.includes("--if-empty") });
   if (args.includes("--photos")) {
-    const { seedWorkshopPhotos } = await import("./seed-workshop-photos");
-    await seedWorkshopPhotos(payload);
+    const { seedEventPhotos } = await import("./seed-event-photos");
+    await seedEventPhotos(payload);
   }
 } catch (error) {
   console.error(error);

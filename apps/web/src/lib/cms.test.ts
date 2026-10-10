@@ -1,6 +1,13 @@
 import { plainTextToRichText } from "../../../../apps/cms/src/utilities/plainTextToRichText";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { getArticles, getArticle, getFixedPage, getActivePoets, getRecentPoems, getUpcomingWorkshops } from "./cms";
+import {
+  getArticles,
+  getArticle,
+  getActiveAuthors,
+  getFixedPage,
+  getRecentPoems,
+  getUpcomingEvents,
+} from "./cms";
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -61,7 +68,7 @@ describe("automatic homepage queries", () => {
     expect(poems.searchParams.get("where[_status][equals]")).toBe("published");
     expect(poems.searchParams.get("limit")).toBe("4");
     expect(poems.searchParams.get("fallback-locale")).toBe("none");
-    await getUpcomingWorkshops("ar");
+    await getUpcomingEvents("ar");
     const events = new URL(fetch.mock.calls[1][0]);
     expect(events.searchParams.get("sort")).toBe("startDate");
     expect(events.searchParams.get("where[title][exists]")).toBe("true");
@@ -69,7 +76,7 @@ describe("automatic homepage queries", () => {
       events.searchParams.get("where[or][1][endDate][greater_than_equal]"),
     ).toBeTruthy();
   });
-  it("skips inactive profiles and continues past the first page until four active poets", async () => {
+  it("skips inactive profiles and continues past the first page until four active authors", async () => {
     const pages: string[] = [];
     vi.stubGlobal(
       "fetch",
@@ -93,7 +100,7 @@ describe("automatic homepage queries", () => {
         });
       }),
     );
-    const result = await getActivePoets("en");
+    const result = await getActiveAuthors("en");
     expect(pages).toEqual(["1", "2"]);
     expect(result.authors.map((author) => author.id)).toEqual([3, 4, 5, 6]);
     expect(result.poems).toHaveLength(4);
@@ -104,7 +111,7 @@ describe("automatic homepage queries", () => {
       vi.fn().mockResolvedValue(new Response(null, { status: 503 })),
     );
     await expect(getRecentPoems("en")).rejects.toThrow("503");
-    await expect(getActivePoets("en")).rejects.toThrow("503");
+    await expect(getActiveAuthors("en")).rejects.toThrow("503");
   });
 });
 

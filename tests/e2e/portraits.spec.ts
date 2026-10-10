@@ -11,7 +11,7 @@ for (const locale of ["en", "ar"]) {
         remoteAvatars.push(request.url());
     });
     await page.goto(`/${locale}`);
-    const card = page.locator(".poet-grid article").filter({
+    const card = page.locator(".author-grid article").filter({
       has: page.getByRole("link", {
         name: "Prototype Collective",
         exact: true,
@@ -27,9 +27,9 @@ for (const locale of ["en", "ar"]) {
       "src",
       source!,
     );
-    await page.goto(`/${locale}/poets`);
+    await page.goto(`/${locale}/authors`);
     const avatars = await page
-      .locator(".poet-grid img")
+      .locator(".author-grid img")
       .evaluateAll((images) =>
         images.map((image) => (image as HTMLImageElement).src),
       );

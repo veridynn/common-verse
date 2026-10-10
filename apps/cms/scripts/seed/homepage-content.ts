@@ -20,8 +20,8 @@ export const homepageContent = {
         linkUrl: "https://thepoetryproject.de/kontakt",
       },
       {
-        id: "homepage-poets",
-        blockType: "poets",
+        id: "homepage-authors",
+        blockType: "authors",
         selectionMode: "manual",
         enabled: true,
         heading: "Die Menschen hinter den Worten",
@@ -54,7 +54,7 @@ export const homepageContent = {
             title: "Schreib mit uns",
             description:
               "Finde eine Schreibgruppe und Raum für deine eigenen Worte.",
-            url: "/workshops",
+            url: "/events",
           },
           {
             title: "Lade uns ein",
@@ -100,8 +100,8 @@ export const homepageContent = {
         linkUrl: "https://thepoetryproject.de/kontakt",
       },
       {
-        id: "homepage-poets",
-        blockType: "poets",
+        id: "homepage-authors",
+        blockType: "authors",
         selectionMode: "manual",
         enabled: true,
         heading: "Люди за словами",
@@ -133,7 +133,7 @@ export const homepageContent = {
           {
             title: "Пишіть із нами",
             description: "Знайдіть групу письма та простір для власних слів.",
-            url: "/workshops",
+            url: "/events",
           },
           {
             title: "Запросіть нас",
@@ -179,8 +179,8 @@ export const homepageContent = {
         linkUrl: "https://thepoetryproject.de/kontakt",
       },
       {
-        id: "homepage-poets",
-        blockType: "poets",
+        id: "homepage-authors",
+        blockType: "authors",
         selectionMode: "manual",
         enabled: true,
         heading: "Mirovên li pişt peyvan",
@@ -211,7 +211,7 @@ export const homepageContent = {
           {
             title: "Bi me re binivîse",
             description: "Komeke nivîsandinê û cihek ji bo peyvên xwe bibîne.",
-            url: "/workshops",
+            url: "/events",
           },
           {
             title: "Me vexwîne",
@@ -257,13 +257,13 @@ export const homepageContent = {
         linkUrl: "https://thepoetryproject.de/kontakt",
       },
       {
-        id: "homepage-poets",
-        blockType: "poets",
+        id: "homepage-authors",
+        blockType: "authors",
         selectionMode: "manual",
         enabled: true,
         heading: "The people behind the words",
         description:
-          "Meet the poets and discover the stories in their own words.",
+          "Meet the authors and discover the stories in their own words.",
       },
       {
         id: "homepage-poems",
@@ -277,9 +277,9 @@ export const homepageContent = {
         blockType: "events",
         selectionMode: "auto",
         enabled: true,
-        heading: "Poetry workshops",
+        heading: "Poetry events",
         description:
-          "Join a writing workshop or hear our poets at a public reading.",
+          "Join a writing workshop or hear our authors at a public reading.",
       },
       {
         id: "homepage-participation",
@@ -291,7 +291,7 @@ export const homepageContent = {
             title: "Write with us",
             description:
               "Find a writing group and make space for your own words.",
-            url: "/workshops",
+            url: "/events",
           },
           {
             title: "Invite us",
@@ -313,7 +313,7 @@ export const homepageContent = {
         enabled: true,
         heading: "A little poetry in your inbox.",
         description:
-          "Hear about new poems, readings, and workshops in our newsletter.",
+          "Hear about new poems, readings, and events in our newsletter.",
         linkLabel: "Subscribe to the newsletter",
         linkUrl: "https://thepoetryproject.de/newsletter",
       },
@@ -337,8 +337,8 @@ export const homepageContent = {
         linkUrl: "https://thepoetryproject.de/kontakt",
       },
       {
-        id: "homepage-poets",
-        blockType: "poets",
+        id: "homepage-authors",
+        blockType: "authors",
         selectionMode: "manual",
         enabled: true,
         heading: "آدم‌های پشت واژه‌ها",
@@ -370,7 +370,7 @@ export const homepageContent = {
             title: "با ما بنویسید",
             description:
               "گروهی برای نوشتن و فضایی برای واژه‌های خود پیدا کنید.",
-            url: "/workshops",
+            url: "/events",
           },
           {
             title: "از ما دعوت کنید",
@@ -416,8 +416,8 @@ export const homepageContent = {
         linkUrl: "https://thepoetryproject.de/kontakt",
       },
       {
-        id: "homepage-poets",
-        blockType: "poets",
+        id: "homepage-authors",
+        blockType: "authors",
         selectionMode: "manual",
         enabled: true,
         heading: "الأشخاص وراء الكلمات",
@@ -447,7 +447,7 @@ export const homepageContent = {
           {
             title: "اكتب معنا",
             description: "اعثر على مجموعة كتابة ومساحة لكلماتك.",
-            url: "/workshops",
+            url: "/events",
           },
           {
             title: "ادعُنا",

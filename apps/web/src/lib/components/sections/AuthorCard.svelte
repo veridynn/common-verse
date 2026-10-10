@@ -23,13 +23,13 @@
 <article>
   <PersonPortrait userId={author.id} image={author.portrait} />
   <Heading level={3}>
-    <Link variant="heading" href={localizedPath(locale, `poets/${author.id}`)}
+    <Link variant="heading" href={localizedPath(locale, `authors/${author.id}`)}
       >{authorDisplayName(author.name)}</Link
     >
   </Heading>
   {#if poem}
     <p
-      class="poet-excerpt"
+      class="author-excerpt"
       lang={language === "other" ? "und" : language}
       dir={contentDirection(language)}
     >

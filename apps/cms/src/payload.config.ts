@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import "./env";
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import { label } from "@poetry/cms-ui";
 import { mcpPlugin } from "@payloadcms/plugin-mcp";
 import { ar } from "@payloadcms/translations/languages/ar";
 import { de } from "@payloadcms/translations/languages/de";
@@ -13,14 +14,13 @@ import { buildConfig } from "payload";
 import sharp from "sharp";
 
 import { administrator } from "./collections/access";
-import { label } from "@poetry/cms-ui";
 import { Articles } from "./collections/Articles";
 import { Authors } from "./collections/Authors";
 import { Media } from "./collections/Media";
 import { Pages } from "./collections/Pages";
 import { Poems } from "./collections/Poems";
 import { Users } from "./collections/Users";
-import { Workshops } from "./collections/Workshops";
+import { Events } from "./collections/Events";
 import { contentFields } from "./components/contentFields";
 import { FixedPages } from "./globals/FixedPages";
 import { Homepage } from "./globals/Homepage";
@@ -34,7 +34,7 @@ export default buildConfig({
     importMap: { baseDir: path.resolve(dirname) },
     meta: { titleSuffix: " · The Poetry Project" },
   },
-  collections: [Articles, Users, Media, Pages, Authors, Workshops, Poems].map(
+  collections: [Articles, Users, Media, Pages, Authors, Events, Poems].map(
     (collection) => ({
       ...collection,
       fields: contentFields(collection.fields),
@@ -93,7 +93,7 @@ export default buildConfig({
           description: "Poet and author profiles used by published poetry.",
           enabled: { find: true, create: true, update: true, delete: false },
         },
-        workshops: {
+        events: {
           description: "Localized workshop drafts and published event content.",
           enabled: { find: true, create: true, update: true, delete: false },
         },

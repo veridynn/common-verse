@@ -34,7 +34,7 @@ for (const locale of ["en", "ar"]) {
         });
       }
     }
-    await page.goto(`/${locale}/workshops/test`);
+    await page.goto(`/${locale}/events/test`);
     const cardPadding = await page
       .locator('[data-slot="card-content"]')
       .evaluate((element) =>

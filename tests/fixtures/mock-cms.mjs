@@ -2,7 +2,7 @@ import { plainTextToRichText } from "../../apps/cms/src/utilities/plainTextToRic
 import http from "node:http";
 import { homepageContent } from "../../apps/cms/scripts/seed/homepage-content.ts";
 
-const workshops = {
+const events = {
   de: [
     "Poesie über Grenzen",
     "Ein offener Workshop über Sprache, Erinnerung und Begegnung.",
@@ -31,8 +31,8 @@ const media = {
   height: 600,
 };
 
-function workshop(locale, preview) {
-  const [title, description] = workshops[locale] ?? workshops.de;
+function event(locale, preview) {
+  const [title, description] = events[locale] ?? events.de;
   return {
     id: 1,
     title: preview ? `${title} — draft` : title,
@@ -90,7 +90,7 @@ function homepage(locale, preview) {
   );
   const feature =
     locale === "de"
-      ? { kind: "event", event: workshop(locale, false) }
+      ? { kind: "event", event: event(locale, false) }
       : locale === "fa"
         ? {
             kind: "announcement",
@@ -98,14 +98,14 @@ function homepage(locale, preview) {
               title: "خبر تازه",
               text: "با هم می‌نویسیم",
               linkLabel: "بیشتر بخوانید",
-              linkUrl: "/workshops",
+              linkUrl: "/events",
             },
           }
         : { kind: "poem", poem };
   Object.assign(feature, content.feature, { kind: feature.kind });
   const sections = content.sections.map((section) => ({
     ...section,
-    ...(section.blockType === "poets" ? { poets: authors } : {}),
+    ...(section.blockType === "authors" ? { authors: authors } : {}),
   }));
   sections.push(
     {
@@ -126,7 +126,7 @@ function homepage(locale, preview) {
       blockType: "featured",
       enabled: true,
       heading: "Featured programme",
-      item: { relationTo: "workshops", value: workshop(locale, false) },
+      item: { relationTo: "events", value: event(locale, false) },
     },
     {
       blockType: "featured",
@@ -237,7 +237,6 @@ const server = http.createServer((request, response) => {
       }),
     );
   }
-
   if (url.pathname.startsWith("/api/globals/homepage/")) {
     const document = homepage(locale, isPreview);
     if (isPreview && reversedHomepageLocales.has(locale))
@@ -280,11 +279,11 @@ const server = http.createServer((request, response) => {
       }),
     );
   }
-  if (url.pathname.startsWith("/api/workshops")) {
+  if (url.pathname.startsWith("/api/events")) {
     const requestedSlug = isPreview
       ? url.searchParams.get("slug")
       : url.searchParams.get("where[slug][equals]");
-    const document = workshop(locale, isPreview);
+    const document = event(locale, isPreview);
     if (
       isPreview &&
       requestedSlug === "live-preview" &&

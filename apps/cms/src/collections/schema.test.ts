@@ -3,12 +3,14 @@ import configPromise from "../payload.config";
 import { Authors } from "./Authors";
 import { Media } from "./Media";
 import { Pages } from "./Pages";
+import { Articles } from "./Articles";
+import { Users } from "./Users";
 import { Poems } from "./Poems";
-import { Workshops } from "./Workshops";
+import { Events } from "./Events";
 import { authenticated } from "./access";
 import { previewEndpoint } from "./preview";
 
-function field(collection: typeof Workshops, name: string) {
+function field(collection: typeof Events, name: string) {
   return collection.fields.find(
     (candidate) => "name" in candidate && candidate.name === name,
   );
@@ -35,12 +37,7 @@ describe("editorial schemas", () => {
     };
     collectNames(mcpKeys?.fields);
     expect(names).toEqual(
-      expect.arrayContaining([
-        "media",
-        "authors",
-        "workshops",
-        "poems",
-      ]),
+      expect.arrayContaining(["media", "authors", "events", "poems"]),
     );
     expect(names).not.toContain("users");
     expect(names).not.toContain("pages");
@@ -48,38 +45,73 @@ describe("editorial schemas", () => {
   });
 
   it("requires authentication for editorial mutations and version history", async () => {
-    const collections = [Authors, Media, Pages, Workshops, Poems];
+    const collections = [Articles, Authors, Media, Pages, Events, Poems];
     for (const collection of collections) {
       expect(collection.access?.create).toBe(authenticated);
       expect(collection.access?.update).toBe(authenticated);
       expect(collection.access?.delete).toBe(authenticated);
     }
-    for (const collection of [Pages, Workshops, Poems]) {
+    for (const collection of [Articles, Pages, Events, Poems]) {
       expect(collection.access?.readVersions).toBe(authenticated);
     }
     expect(await authenticated({ req: { user: null } } as never)).toBe(false);
-    expect(await authenticated({ req: { user: { id: 1, collection: "users", role: "editor" } } } as never)).toBe(
-      true,
-    );
+    expect(
+      await authenticated({
+        req: { user: { id: 1, collection: "users", role: "editor" } },
+      } as never),
+    ).toBe(true);
   });
 
-  it("localizes workshop prose while keeping one stable slug", () => {
-    expect(field(Workshops, "title")).toMatchObject({
+  it("keeps contributor accounts out of MVP schemas and hides deferred content", () => {
+    expect(Authors.admin?.hidden).toBe(true);
+    expect(Poems.admin?.hidden).toBe(true);
+    expect(Articles.admin?.hidden).not.toBe(true);
+    expect(Articles.labels).toMatchObject({
+      singular: { en: "Article" },
+      plural: { en: "Articles" },
+    });
+    expect(field(Articles, "title")).toMatchObject({
       localized: true,
       required: true,
     });
-    expect(field(Workshops, "description")).toMatchObject({ localized: true });
-    expect(field(Workshops, "slug")).toMatchObject({
+    expect(field(Articles, "content")).toMatchObject({
+      type: "richText",
+      localized: true,
+    });
+    expect(field(Articles, "author")).toBeUndefined();
+    expect(field(Users, "author")).toBeUndefined();
+    expect(field(Users, "role")).toMatchObject({
+      options: [
+        expect.objectContaining({ value: "editor" }),
+        expect.objectContaining({ value: "admin" }),
+      ],
+    });
+  });
+
+  it("localizes event prose while keeping one stable slug", () => {
+    expect(field(Events, "title")).toMatchObject({
+      localized: true,
+      required: true,
+    });
+    expect(field(Events, "description")).toMatchObject({ localized: true });
+    expect(field(Events, "slug")).toMatchObject({
       required: true,
       unique: true,
     });
-    expect(field(Workshops, "slug")).not.toHaveProperty("localized", true);
-    expect(Workshops.versions).toMatchObject({ drafts: expect.any(Object) });
+    expect(field(Events, "slug")).not.toHaveProperty("localized", true);
+    expect(Events.versions).toMatchObject({ drafts: expect.any(Object) });
   });
 
   it("models poem translations as optional explicit records", () => {
+    expect(field(Poems, "author")).toMatchObject({
+      type: "relationship",
+      relationTo: "authors",
+      required: true,
+    });
     expect(field(Authors, "poems")).toMatchObject({
-      type: "join", collection: "poems", on: "author",
+      type: "join",
+      collection: "poems",
+      on: "author",
     });
     expect(field(Poems, "originalLanguage")).toMatchObject({
       type: "select",
@@ -92,14 +124,23 @@ describe("editorial schemas", () => {
     expect(field(Poems, "translations")).toMatchObject({ type: "array" });
     expect(field(Poems, "translations")).not.toHaveProperty("localized", true);
   });
+
+  it("uses clear translated collection names and editorial groups", () => {
+    expect(Poems.admin?.group).toMatchObject({ en: "Content" });
+    expect(Authors.labels?.plural).toMatchObject({ en: "Authors" });
+    expect(Events.labels?.plural).toMatchObject({ en: "Events" });
+    expect(Events.admin?.group).toMatchObject({ en: "Content" });
+    expect(Media.labels?.plural).toMatchObject({ en: "Media" });
+    expect(Media.admin?.group).toMatchObject({ en: "Content" });
+  });
 });
 
 describe("draft preview endpoint", () => {
   it("rejects requests without the shared secret", async () => {
-    const endpoint = previewEndpoint("workshops");
+    const endpoint = previewEndpoint("events");
     const response = await endpoint.handler!({
       headers: new Headers(),
-      url: "http://localhost/api/workshops/preview?slug=test&locale=en",
+      url: "http://localhost/api/events/preview?slug=test&locale=en",
     } as never);
     expect(response.status).toBe(401);
   });
@@ -107,10 +148,10 @@ describe("draft preview endpoint", () => {
   it("requests the latest draft with access override after authorization", async () => {
     vi.stubEnv("PREVIEW_SECRET", "secret");
     const find = vi.fn().mockResolvedValue({ docs: [{ id: 1 }] });
-    const endpoint = previewEndpoint("workshops");
+    const endpoint = previewEndpoint("events");
     const response = await endpoint.handler!({
       headers: new Headers({ "x-preview-secret": "secret" }),
-      url: "http://localhost/api/workshops/preview?slug=test&locale=ar",
+      url: "http://localhost/api/events/preview?slug=test&locale=ar",
       payload: { find },
     } as never);
 
@@ -118,7 +159,7 @@ describe("draft preview endpoint", () => {
     expect(response.headers.get("Cache-Control")).toBe("no-store");
     expect(find).toHaveBeenCalledWith(
       expect.objectContaining({
-        collection: "workshops",
+        collection: "events",
         draft: true,
         overrideAccess: true,
         locale: "ar",

@@ -1,11 +1,11 @@
 <script lang="ts">
   import { localizedPath, type Locale } from "@poetry/i18n";
-  import type { Workshop } from "@poetry/types";
+  import type { Event } from "@poetry/types";
   import { Heading } from "$lib/components/ui/heading";
   import { Link } from "$lib/components/ui/link";
   import * as m from "../../../paraglide/messages.js";
 
-  let { event, locale }: { event: Workshop; locale: Locale } = $props();
+  let { event, locale }: { event: Event; locale: Locale } = $props();
   const dateFormat = $derived(
     new Intl.DateTimeFormat(locale, {
       dateStyle: "long",
@@ -13,7 +13,7 @@
       timeZone: "Europe/Berlin",
     }),
   );
-  const href = $derived(localizedPath(locale, `workshops/${event.slug}`));
+  const href = $derived(localizedPath(locale, `events/${event.slug}`));
 </script>
 
 <article>

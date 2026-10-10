@@ -14,7 +14,7 @@ const locale = rawLocale
 const [author, poems] = await Promise.all([getAuthor(id, locale), getAuthorPoems(id, locale)])
 if (!author) return new Response('Not found', { status: 404 })
 ---
-<BaseLayout {locale} title={authorDisplayName(author.name)} canonicalPath={`poets/${id}`}>
+<BaseLayout {locale} title={authorDisplayName(author.name)} canonicalPath={`authors/${id}`}>
   <article>
     <Heading level={1}>{authorDisplayName(author.name)}</Heading>
     <PersonPortrait userId={author.id} image={author.portrait} />

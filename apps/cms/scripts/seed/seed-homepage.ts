@@ -16,7 +16,7 @@ try {
       "Homepage already exists; editorial content was preserved.",
     );
   } else {
-    const [poems, authors, workshops] = await Promise.all([
+    const [poems, authors, events] = await Promise.all([
       payload.find({
         collection: "poems",
         where: { _status: { equals: "published" } },
@@ -25,13 +25,13 @@ try {
       }),
       payload.find({ collection: "authors", limit: 4, depth: 0 }),
       payload.find({
-        collection: "workshops",
+        collection: "events",
         where: { _status: { equals: "published" } },
         limit: 1,
         depth: 0,
       }),
     ]);
-    const image = workshops.docs[0]?.image;
+    const image = events.docs[0]?.image;
     for (const locale of locales) {
       const content = homepageContent[locale];
       await payload.updateGlobal({
@@ -44,8 +44,8 @@ try {
           sections: content.sections.map((section) => ({
             ...section,
             ...(section.blockType === "introduction" && image ? { image } : {}),
-            ...(section.blockType === "poets"
-              ? { poets: authors.docs.map((author) => author.id) }
+            ...(section.blockType === "authors"
+              ? { authors: authors.docs.map((author) => author.id) }
               : {}),
           })),
         },
