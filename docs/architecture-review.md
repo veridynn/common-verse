@@ -15,7 +15,7 @@ The first milestone is implemented as a pnpm workspace with an Astro public site
 | Interactive language selection                                 | Svelte 5         | `apps/web/src/components/LanguageSwitcher.svelte`                |
 | UI messages in Git                                             | Paraglide/inlang | `apps/web/messages` and `apps/web/project.inlang`                |
 | Editorial models, drafts, media, preview API, and admin        | Payload          | `apps/cms/src/collections` and `apps/cms/src/payload.config.ts`  |
-| Framework context and scoped content tooling                   | MCP              | `.mcp.json`, `docs/payload-mcp.example.json`, and Payload config |
+| Framework context and scoped content tooling                   | MCP              | `.mcp.json`, [configuration](configuration.md#documentation-tools), and Payload config |
 | Persistence                                                    | PostgreSQL       | `compose.yml` and Payload's PostgreSQL adapter                   |
 | Payments                                                       | Stripe, later    | Explicitly deferred with all ecommerce work                      |
 
