@@ -1,38 +1,43 @@
-# The Poetry Project agent guide
+# Agents
 
-Read the relevant upstream skill in `.agents/skills/` and the applicable topic in the
-[documentation index](docs/README.md) before changing that domain.
-Project requirements take precedence over generic skill defaults. Keep downloaded
-skills unchanged; maintain project-specific rules here and in the linked guide.
+[The Poetry Project e.V.](https://thepoetryproject.de/ueber-uns/der-verein) is a
+German nonprofit association supporting young refugees and migrants through
+poetry and autobiographical writing. Its workshops, public readings, and
+publications promote education, self-expression, and intercultural dialogue.
+This repository builds its multilingual website, presenting poetry, events,
+and ways to participate.
 
-## Architecture boundaries
+`apps/web` uses Astro with Svelte UI components; `apps/cms` uses Payload CMS.
+UI translations use Paraglide/inlang; editorial translations are stored in Payload.
 
-- Astro owns public routing, rendering, layouts, SEO, and locale URLs.
-- Svelte 5 owns reusable UI and interactive islands. Hydrate only interactive components.
-- Payload owns editorial data, drafts, media, admin, APIs, and later ecommerce.
-- Paraglide/inlang owns project UI messages stored in Git, with separate catalogs
-  for Payload UI and website UI. Payload's built-in controls retain its translation
-  packs; editorial content translations stay in Payload. Follow
-  [translation rules](docs/translations.md) and [routing rules](docs/routing.md).
-- PostgreSQL is the only application database.
-- Stripe will own payments in the later ecommerce milestone; ecommerce is currently out of scope.
+## Before changing code
 
-Use Node.js 26 and pnpm. Keep changes small, typed, accessible, and testable. Never assume content exists in every language. Verify affected UI in both an LTR and RTL locale.
+- Read the app guide: [web](apps/web/AGENTS.md) or [CMS](apps/cms/AGENTS.md).
+  For changes spanning both apps, read both.
+- Use the [documentation index](docs/README.md) to read the topics relevant to
+  the change.
+- Use the matching upstream skill in `.agents/skills/`. Project requirements
+  take precedence over skill defaults. Preserve unrelated user edits.
 
-## Skill routing and maintenance
+## Shared contracts
 
-- Svelte components and modules: `svelte-code-writer`.
-- UI components and theme: `shadcn-svelte`; also `web-accessibility` for interaction behavior.
-- Payload models, hooks, access, queries, and persistence: `payload`.
-- Unit tests: `vitest`. Browser tests remain Playwright tests in this repository.
-- Public metadata and indexing: `seo`, together with the project's locale and preview rules.
-- Branches and commits: `conventional-git`. In Codex, use managed worktree tools when a new worktree is needed; the skill's `.claude/worktrees/` location is not a project requirement.
-- Apple-style design reviews: `apple-design` when requested or relevant to the brief. Native Apple conventions do not determine public web behavior or WCAG requirements.
-- Astro APIs: use the official `astro-docs` MCP configured in `.mcp.json`, or official Astro documentation. Do not apply Astro source-monorepo contributor skills to this application.
+- Build public pages in Astro, reusable UI in Svelte, and editorial models and
+  permissions in Payload. Next.js and React serve the CMS, not the public site.
+- Reuse `@poetry/i18n` for locales, writing direction, and public URL mappings.
+  Update `@poetry/types` when changing the data contract between CMS and website.
+- Keep website UI messages in `apps/web/messages` and custom CMS UI messages in
+  `packages/cms-ui/messages`. Translate displayed labels, not stored identifiers.
+- Preserve existing database records, uploads, and stable identifiers when changing
+  editorial models or persistence.
 
-Load only the skills and references needed for the task. Run application and
-component commands in the owning workspace (`apps/web` or `apps/cms`) using pnpm;
-the web component configuration is `apps/web/components.json`.
+## Verification
+
+- Match checks to the affected behavior using
+  [testing guidance](docs/testing.md). Report checks
+  performed and any remaining gaps.
+- Use pnpm package scripts so required translation catalogs compile before checks,
+  tests, and builds. For startup or environment changes, read
+  [development](docs/development.md).
 
 Before installing or updating skills, or creating worktrees, read
 [skill maintenance and project overrides](docs/skills.md).
