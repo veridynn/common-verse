@@ -34,9 +34,5 @@ Load only the skills and references needed for the task. Run application and
 component commands in the owning workspace (`apps/web` or `apps/cms`) using pnpm;
 the web component configuration is `apps/web/components.json`.
 
-Install external skills from the repository root using
-`npx skills add <owner/repo> --skill <name> -a codex -y`, without `-g`.
-Commit `.agents/skills/` and `skills-lock.json` together. Review selected upstream
-updates with `npx skills update <name> -p`; do not edit the lockfile by hand or
-install entire skill bundles. The lockfile records sources and hashes; committed
-skill files preserve the reviewed contents.
+Before installing or updating skills, or creating worktrees, read
+[skill maintenance and project overrides](docs/skills.md).
