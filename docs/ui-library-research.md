@@ -36,7 +36,7 @@ Arabic and Persian are RTL; Kurmanji is LTR. Originals and translations may have
 different languages and directions from the surrounding interface. Missing
 editorial translations must not silently appear as translated content.
 
-The [project guidance](project-guidance.md) already selects shadcn-svelte and
+The [architecture](architecture.md) already selects shadcn-svelte and
 Bits UI. Alternatives below are candidates for reconsideration, not additions to
 install alongside the current general-purpose system without a demonstrated need.
 Astro continues to own routing, rendering, and SEO; Svelte owns reusable UI and

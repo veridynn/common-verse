@@ -68,3 +68,22 @@ Card also exports `Header`, `Content`, `Footer`, `Action`, `Title` and `Descript
 `Title` composes Heading (default level 2, subtitle size), and `Description` composes
 Text (default small and muted). Select the appropriate heading level at the call
 site. Card parts share `--card-spacing`, which can be customized on the root.
+
+## Accessibility and RTL
+
+Components must work in LTR and RTL, expose semantic HTML, retain visible focus,
+and respect reduced motion. Prefer logical CSS properties. Preserve native
+controls, keyboard operation, accessible names, useful error text, and WCAG AA
+contrast. Use the existing component primitives for patterns needing managed
+focus or ARIA. Verify affected UI with keyboard input, a narrow viewport, German
+or English, and Arabic or Persian. Use `web-accessibility` for deeper evaluation;
+record checks actually performed rather than claiming accessibility from a scan.
+
+## Profile portraits
+
+Public poet cards and profile pages use DiceBear Open Peeps with the Bold Pop
+preset. A missing portrait is generated locally from the person’s ID; the same ID
+produces the same illustration across locales and pages. Uploaded editorial
+portraits take precedence. Earlier imported demo portrait photos are replaced in
+the public UI by illustrations; their media records remain intact. No external
+avatar API calls, browser JavaScript, or portrait-photo seed step is needed.

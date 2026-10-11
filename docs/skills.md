@@ -2,7 +2,7 @@
 
 Upstream skills live in `.agents/skills/`. Their descriptions identify when to use
 them. Keep downloaded skills unchanged; maintain project-specific rules in
-[`AGENTS.md`](../AGENTS.md) and [project guidance](project-guidance.md).
+[`AGENTS.md`](../AGENTS.md) and [topic documentation](README.md).
 
 ## Project overrides
 

@@ -1,7 +1,8 @@
-# Translations and language routing
+# Translations
 
-This document records the agreed translation rules and their implementation.
-These rules are project requirements.
+Supported locales are `de`, `en`, `ar`, `fa`, `uk`, and `ku` (Kurmanji).
+Locale labels and direction live in `@poetry/i18n`. These translation rules are
+project requirements; public URL conventions live in [routing](routing.md).
 
 ## Three translation buckets
 
@@ -98,47 +99,6 @@ field remains `heading`. Keep collection slugs, block identifiers such as
 `introduction`, relationship IDs, and option values stable. Translating UI alone
 must not require a database migration or rewrite editorial records.
 
-## Public URL conventions
-
-Astro owns route resolution. URLs use explicit route mappings, independently of
-translated navigation labels and internal field names.
-
-- German routes have no locale prefix: `/` and, when implemented, `/kontakt`.
-- Other languages have a locale prefix and English page path names: `/en/contact`,
-  `/ar/contact`, `/fa/contact`, `/uk/contact`, and `/ku/contact`.
-- New or changed editorial slugs use Latin ASCII letters, digits, hyphens, and
-  underscores. Existing saved slugs remain valid when unchanged. Public path
-  segments use Latin ASCII characters. Arabic and Cyrillic characters
-  are technically supported through URL encoding, but Latin paths are the agreed
-  project convention. Editorial titles keep their original script.
-- Identify the same page internally with one stable route key, such as `contact`.
-  Map that key to `kontakt` for German and `contact` for other languages. Do not
-  derive a route by translating its navigation label.
-- Language switching resolves the same page through the route mapping and keeps
-  its query and anchor. Switching from `/kontakt` to Arabic should lead to
-  `/ar/contact`; switching back should return to `/kontakt`.
-- Links, previews, canonical URLs, and language alternates must all use the same
-  route resolution. Main-page aliases use permanent (301) redirects to the canonical
-  localized URL, preserving query parameters; browsers retain URL anchors. Examples:
-  `/de` → `/`, `/de/contact` → `/kontakt`, `/ar/kontakt` → `/ar/contact`.
-- Content-record slugs are separate from interface labels. Keep existing slugs
-  stable; changes to a record's public URL require an explicit naming decision.
-
-Fixed local routes are backed by the About, Contact, Privacy, and Legal Notice
-Payload globals. German uses `/ueber-uns`, `/kontakt`, `/datenschutz`, and
-`/impressum`; other locales use `/about`, `/contact`, `/privacy`, and `/legal`
-with a locale prefix. The footer links to these local routes. Missing or incomplete
-translations use the English page. If English is also unavailable, the route returns
-a 404. Language alternates include routes served with English fallback. Editors can
-supply and publish translations separately for each language.
-
-Poems, Authors, Events and Articles use `/gedichte`, `/autoren`,
-`/veranstaltungen` and `/artikel` in German. Other locales use prefixed English
-segments: `/ar/poems`, `/ar/authors`, `/ar/events` and `/ar/articles`.
-Main-page redirects also cover collection indexes, such as `/de/articles` →
-`/artikel`. Detail-page aliases and old collection names (`blog`, `posts`,
-`workshops`, `poets`) still return 404 without redirects.
-
 ## Direction and translation quality
 
 Use central locale metadata: Arabic and Persian are RTL; German, English,
@@ -151,6 +111,9 @@ banner. Verify keyboard behavior, narrow layouts, long translations, mixed writi
 directions, and English fallback. Translated wording is provisional for the
 MVP/POC. Native-speaker wording review is a separate task before public launch;
 it does not block the MVP implementation.
+
+Adding a locale requires central metadata, Paraglide catalogs, Payload locales,
+tests, metadata alternates, and editor documentation to be updated together.
 
 ## Implementation
 
@@ -167,35 +130,28 @@ it does not block the MVP implementation.
 - **Content:** Payload's six content locales keep `fallback: false`. Preview
   queries explicitly disable content fallback as well. No field names, collection
   slugs, block identifiers, selection values, or existing records were renamed.
-- **Preview:** the authorized preview URL carries the editor's interface language.
-  The draft banner reads the CMS catalog and declares that language and direction.
-  The website UI follows the preview's content route. Unsupported editor languages,
-  including Kurmanji, resolve to English.
 - **Inputs:** native Payload text and textarea controls retain their validation
   and behavior. Localized editorial inputs declare the selected content language
   and direction. Original poems and explicit translations use their own language
   fields, so Arabic originals and English translations can share one form.
   Interface labels continue to follow the editor preference.
-- **Routes:** `packages/i18n/src/index.ts` owns stable route keys and public path
-  mappings. Links, previews, metadata, and language switching use `localizedPath`;
-  Astro middleware resolves German paths and rejects noncanonical paths. Query strings,
-  anchors, and content-record slugs survive language switching. About, contact, privacy,
-  and legal routes resolve fixed Payload globals.
 
-Run these commands from the repository root:
+## Catalog compilation
+
+Run the owning catalog compiler from the repository root:
 
 ```sh
 pnpm --filter @poetry/cms-ui compile
 pnpm --filter @poetry/web compile:ui
-pnpm check
-pnpm test
-pnpm lint
 ```
 
 Compilation, development setup, and the owning app commands check the catalogs.
 Every message requires an English source. Missing locale messages produce a visible
 English-fallback warning. Generated Paraglide files are ignored and recreated by
 setup, app builds, and tests; edit the JSON catalogs instead.
+
+Choose affected checks using [testing guidance](testing.md).
+See [draft previews](previews.md) for the editor-language banner.
 
 ## Verification and remaining review
 
@@ -224,4 +180,3 @@ localized label object as `[object Object]`.
 - [Payload interface translations](https://payloadcms.com/docs/configuration/i18n)
 - [Payload content localization](https://payloadcms.com/docs/configuration/localization)
 - [Inlang message catalogs](https://inlang.com/m/reootnfj/plugin-inlang-messageFormat)
-- [URL character encoding](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURI)

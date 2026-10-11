@@ -23,22 +23,14 @@ but can update only their own account and cannot see Administrator accounts. The
 creation defaults to Editor, while Payload's first-account setup explicitly makes
 the first account an Administrator. On an existing installation, ensure the
 intended developer account has `role: admin` before enforcing these rules.
-Before a production upgrade, run the Payload migration
-`20261010_blog_posts` after the existing migrations to create the article tables,
-localized content and draft/version storage. Development uses Payload schema push;
-do not run this creation migration over tables already created by development push.
+See [migrations](migrations.md) before upgrading an existing database.
 Do not guess an administrator from an email address or create credentials in seeds.
 
-The native dashboard and sidebar show Content (Articles, Events), Media,
-Administration (Users for both roles; API keys for administrators), and Pages. Poems and Authors are hidden
-from admin navigation until v2.0. Their existing records, public routes, and poem
-author credits are preserved. No content is deleted and no author is converted
-into a user. Existing content APIs remain governed by editorial permissions.
-Articles use localized title, summary and native Payload rich text, shared slug,
-optional image and publication date, SEO fields, drafts and preview. They are
-organization-managed articles without personal author bylines in this MVP.
-Public archives and detail pages use `/artikel` and `/<locale>/articles`, and omit
-incomplete translations rather than silently replacing their language.
+The last Administrator cannot be demoted to Editor or deleted. Promote another
+user to Administrator first. Payload rejects and rolls back changes that would
+leave no Administrator, including simultaneous demotions and bulk deletions.
+
+Content models and admin organization are in [editorial models](editorial-models.md).
 
 ## v2.0: contributor accounts and connected credits
 
@@ -75,11 +67,3 @@ review, and assign oneself broader privileges.
 Self-service signup, account claiming, invitations and password delivery are
 separate v2.0 decisions. Start with administrator-managed invitations; never
 expose private account email addresses through public Author profiles.
-
-The last Administrator cannot be demoted to Editor or deleted. Promote another
-user to Administrator first. Payload rejects and rolls back changes that would
-leave no Administrator, including simultaneous demotions and bulk deletions.
-
-The `20261010_editorial_names` migration renames existing collection tables,
-version tables, homepage author blocks and relationships without dropping records.
-It also updates stored internal links. This migration is forward-only.

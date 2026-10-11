@@ -1,7 +1,7 @@
 # The Poetry Project agent guide
 
-Read the relevant upstream skill in `.agents/skills/` and the applicable section of
-[`docs/project-guidance.md`](docs/project-guidance.md) before changing that domain.
+Read the relevant upstream skill in `.agents/skills/` and the applicable topic in the
+[documentation index](docs/README.md) before changing that domain.
 Project requirements take precedence over generic skill defaults. Keep downloaded
 skills unchanged; maintain project-specific rules here and in the linked guide.
 
@@ -13,7 +13,7 @@ skills unchanged; maintain project-specific rules here and in the linked guide.
 - Paraglide/inlang owns project UI messages stored in Git, with separate catalogs
   for Payload UI and website UI. Payload's built-in controls retain its translation
   packs; editorial content translations stay in Payload. Follow
-  [translation and routing rules](docs/translations-and-routing.md).
+  [translation rules](docs/translations.md) and [routing rules](docs/routing.md).
 - PostgreSQL is the only application database.
 - Stripe will own payments in the later ecommerce milestone; ecommerce is currently out of scope.
 

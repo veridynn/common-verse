@@ -1,5 +1,8 @@
 # Multilingual CMS vertical-slice review
 
+Historical milestone record. Test counts and acceptance results below describe
+that review, not the current suite. Current decisions are in [architecture](architecture.md).
+
 ## Outcome
 
 The first milestone is implemented as a pnpm workspace with an Astro public site, focused Svelte 5 interactivity, Payload CMS, and PostgreSQL persistence. The PostgreSQL-backed editorial workflow has been exercised end to end. Ecommerce remains deliberately absent pending review of this milestone.
@@ -43,7 +46,7 @@ The baseline includes semantic landmarks, a skip link, visible focus, labelled c
 - `pnpm test`: 10 Vitest tests pass, covering locale invariants, Payload schema boundaries, authenticated editorial mutations, scoped MCP capabilities, and preview authorization.
 - `pnpm build`: Astro and Payload production builds pass.
 - `pnpm test:e2e`: 20 Chromium tests pass across all six locales, both RTL locales, localized events, translation-aware `hreflang`, collection navigation, language switching, keyboard access, preview security, SEO, media, structured data, poem translations, and browser errors.
-- At the milestone review, all nine original project-local skills passed the Codex skill validator. Their project-specific guidance has since moved into `AGENTS.md` and `docs/project-guidance.md`; upstream skills are maintained through `skills-lock.json`.
+- At the milestone review, all nine original project-local skills passed the Codex skill validator. Their project-specific guidance has since moved into `AGENTS.md` and the [topic documentation](README.md); upstream skills are maintained through `skills-lock.json`.
 - The project runs on Node.js 26, following the prototype-specific runtime decision that supersedes the original Node.js 22 baseline.
 
 The browser suite uses a deterministic mock Payload HTTP service. This validates the public integration contract without mutating a developer database.

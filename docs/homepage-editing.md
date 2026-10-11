@@ -1,6 +1,6 @@
 # Homepage editing
 
-The homepage is a Payload global under **Website → Homepage**. Astro renders the
+The homepage is a Payload global under **Pages → Home**. Astro renders the
 public homepage and its preview using the same components. Ordinary public pages
 remain server rendered; the preview bridge is active only on authorised previews.
 
@@ -12,9 +12,8 @@ Your Payload interface language is your account's preferred language for editor
 controls. It is independent of the content language selected for editing: you can
 use Ukrainian controls while editing English content. English is the agreed UI
 default/fallback, including for unsupported Kurmanji editor UI. Website Kurmanji
-content and UI remain supported. Project-defined editor labels still need the
-translation work described in
-[translations-and-routing.md](translations-and-routing.md).
+content and UI remain supported. Custom editor labels use the CMS UI catalog described in
+[translations](translations.md).
 
 ## Editorial controls
 
@@ -56,68 +55,12 @@ Payload language fallback is disabled. Missing prose uses the translated base UI
 copy, never another language's editorial text. Images without an accessible
 description in the current language are omitted.
 
-## Drafts and Live Preview
+## Drafts and starting content
 
-Configure the same `PREVIEW_SECRET` in the CMS and Astro runtime, and correct
-`PUBLIC_SITE_URL` / `PUBLIC_CMS_URL` origins. Open Live Preview and select a mobile,
-tablet, desktop, or responsive width. The preview refreshes after autosave, draft
-save, and publish. It verifies the CMS message origin and preserves scroll position.
-The draft-preview banner must follow the editor's Payload interface language,
-independently of the content language being previewed. Direct preview links without
-an editor language use English for the banner. Preview URLs already pass an editor
-language, but the signed-in account flow still needs verification; the translation
-guide records the remaining work.
+Save drafts to review changes privately, then publish to make them public.
+See [draft previews](previews.md) for Live Preview setup and security, and
+[demo data](demo-data.md#homepage-starting-content) for local initialization.
 
-For local preview, use the same hostname for both applications (for example,
-`localhost:3001` and `localhost:4321`). Chromium's local-network protection can
-block an iframe when one application uses `127.0.0.1` and the other uses `localhost`.
-
-Save a draft to review changes privately; publish to make them public. The editor,
-mutations, and version history require authentication. Anonymous homepage reads
-use the published global and exclude populated draft relationships. Preview
-requests require the preview secret, use `no-store`, suppress referrers, and emit
-`noindex,nofollow`. Treat preview links as credentials, as documented in
-[development.md](development.md).
-
-## Local initialisation
-
-Run `pnpm seed:homepage` in `apps/cms` with PostgreSQL available. It creates the
-homepage only if no saved homepage exists, using existing published records and
-the six translated starting texts. It never replaces an existing homepage.
-Review the initial content before using it outside the local prototype.
-
-Invitation, support, and newsletter links initially point to the existing Poetry
-Project website. Editors can replace these homepage section destinations. The footer
-links to the local About, Contact, Privacy, and Legal Notice routes. Each has its own
-fixed Payload editor under Pages. Supply and publish the title and rich text content (paragraphs, headings, bold/italic, lists and links)
-for each language. Missing or incomplete translations use English on these four
-fixed pages; other editorial content retains its existing translation behavior. The legacy
-generic page collection is hidden and its records are preserved.
-
-The local development database uses Payload's schema push. As with the existing
-collections, production rollout requires a reviewed Payload migration; running
-the local seed is not a deployment command.
-
-## Fixed informational page starting content
-
-Run `pnpm seed:pages` in `apps/cms` to import the German and English
-About, Contact, Privacy, and Legal Notice content. This replaces those two locales
-for the four globals in one transaction and preserves other translations. Existing
-versions retain the previous content. The command refuses production.
-
-The adaptations were prepared from [About](https://thepoetryproject.de/ueber-uns),
-[Association](https://thepoetryproject.de/ueber-uns/der-verein),
-[Contact](https://thepoetryproject.de/kontakt),
-[Privacy](https://thepoetryproject.de/datenschutz), and
-[Legal Notice](https://thepoetryproject.de/impressum), retrieved on 10 October 2026.
-Names, organization identifiers, addresses and contact details use placeholders.
-Privacy describes the starting content and needs to match the services used by the
-website. Replace placeholders and review
-privacy/legal content before public launch. No old photographs are imported.
-
-The meta-description helper explains its use in search results and link previews;
-it is not part of the visible page text. Existing fixed-page text and saved versions
-are converted by `20261010_fixed_page_rich_text`. Run `pnpm payload migrate`
-with schema push disabled (`PAYLOAD_MIGRATING=true`) before starting an older
-development database with this schema. Rolling this migration back preserves text
-but removes rich-text formatting.
+About, Contact, Privacy, and Legal Notice have separate global editors under Pages.
+Their content and fallback rules are in [editorial models](editorial-models.md)
+and [translations](translations.md#defaults-and-missing-translations).

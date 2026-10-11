@@ -17,12 +17,12 @@ and editorial content are preserved.
 
 `pnpm dev:setup` prepares without launching apps. Use `--no-seed` to skip demo
 content or `--external-db` to use your configured database without Compose or
-automatic seeding. [Startup and secrets explained](docs/development.md).
+automatic seeding. [Startup](docs/development.md) and [configuration](docs/configuration.md).
 
 Site: `http://localhost:4321`. Admin: `http://localhost:3001/admin`;
 create the first account there. Optional larger demo dataset:
 `pnpm --filter @poetry/cms seed:bulk` adds 300 poems, 100 workshops, and supporting
-content to the local database. See [bulk seed details](docs/development.md#optional-bulk-demo-data).
+content to the local database. See [bulk seed details](docs/demo-data.md#optional-bulk-demo-data).
 Optional event photos (free, no API key): `pnpm --filter @poetry/cms seed:photos`.
 Ports 4321, 3001, and 5432 must be available.
 The database and uploads are local data and are not transferred by cloning.
@@ -33,15 +33,12 @@ The database and uploads are local data and are not transferred by cloning.
 For browser tests, run `pnpm exec playwright install chromium` once, then
 `pnpm test:e2e` with development servers stopped. The browser suite uses a mock CMS.
 
-## Project guidance
+## Documentation
 
-- [Agent guide](AGENTS.md) and [implementation guidance](docs/project-guidance.md).
-- [Translation ownership, language choices, and URL conventions](docs/translations-and-routing.md).
-- [Architecture review](docs/architecture-review.md).
-- [Accessible UI library research](docs/ui-library-research.md).
-- Skills are committed in `.agents/skills/` with `skills-lock.json`.
-- `.mcp.json` provides Astro docs; [Payload MCP example](docs/payload-mcp.example.json)
-  requires a personal scoped key and the CMS running.
+[Documentation index](docs/README.md) — Topic guides for architecture, content,
+languages, UI, development, and maintenance.
+
+[Agent guide](AGENTS.md) — Instructions for working in this repository.
 
 For deployment, set environment-specific secrets and database credentials in the
 hosting platform. Keep them stable across deploys; do not reuse local secrets.
