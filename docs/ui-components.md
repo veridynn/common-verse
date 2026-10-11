@@ -32,37 +32,10 @@ URLs: routes still use `localizedPath`, and editorial URLs still use `safeHref`.
 
 ## Svelte composition
 
-```svelte
-<script lang="ts">
-  import { Button } from '$lib/components/ui/button'
-  import { Link } from '$lib/components/ui/link'
-  import { Heading } from '$lib/components/ui/heading'
-  import { Text } from '$lib/components/ui/text'
-  import { Eyebrow } from '$lib/components/ui/eyebrow'
-  import { Badge } from '$lib/components/ui/badge'
-  import * as Card from '$lib/components/ui/card'
-  import { Sun } from 'lucide-svelte'
-</script>
-
-<Button variant="ghost" size="icon" aria-label="Appearance">
-  <Sun aria-hidden="true" />
-</Button>
-
-<Eyebrow>Our programme</Eyebrow>
-<Heading level={1} variant="display">Poetry across borders</Heading>
-<Text variant="lead">A space for reading and writing together.</Text>
-<Link href="/en/poems">Explore poems</Link>
-
-<Card.Root as="article">
-  <Card.Header>
-    <Card.Title level={2}>Writing workshop</Card.Title>
-    <Card.Description>Write together and share your work.</Card.Description>
-    <Card.Action><Badge variant="secondary">Workshop</Badge></Card.Action>
-  </Card.Header>
-  <Card.Content><Text>Workshop details go here.</Text></Card.Content>
-  <Card.Footer><Button href="/en/events">View events</Button></Card.Footer>
-</Card.Root>
-```
+Before composing UI, refer to the existing
+[event detail page](../apps/web/src/pages/[locale]/events/[slug].astro) for Card,
+Button, and typography usage, and
+[HomeFeature.astro](../apps/web/src/components/HomeFeature.astro) for links and badges.
 
 Card also exports `Header`, `Content`, `Footer`, `Action`, `Title` and `Description`.
 `Title` composes Heading (default level 2, subtitle size), and `Description` composes

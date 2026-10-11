@@ -30,21 +30,10 @@ command. Production schema changes need reviewed Payload migrations.
 
 ## Documentation tools
 
-`.mcp.json` configures the Astro documentation service.
-The following example connects to Payload with a personal scoped key and the CMS
-running. MCP API key permissions
+[`.mcp.json`](../.mcp.json) configures the Astro documentation service.
+Before connecting a client to Payload, read the
+[Payload MCP client setup documentation](https://payloadcms.com/docs/plugins/mcp#connecting-to-mcp-clients).
+Use the running local CMS endpoint at `http://localhost:3001/api/mcp` with a
+personal scoped API key. The project's enabled capabilities are defined in
+[`payload.config.ts`](../apps/cms/src/payload.config.ts); key-management permissions
 are covered in [accounts and permissions](accounts-and-permissions.md).
-
-```json
-{
-  "mcpServers": {
-    "payload": {
-      "type": "http",
-      "url": "http://localhost:3001/api/mcp",
-      "headers": {
-        "Authorization": "Bearer replace-with-a-local-payload-mcp-key"
-      }
-    }
-  }
-}
-```
