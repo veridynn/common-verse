@@ -1,7 +1,8 @@
 # Documentation
 
 Read the topic relevant to your task. These documents hold project decisions and
-procedures; agent instructions live in the [root](../AGENTS.md) and [CMS](../apps/cms/AGENTS.md) guides.
+procedures; agent instructions live in the [root](../AGENTS.md),
+[web](../apps/web/AGENTS.md), and [CMS](../apps/cms/AGENTS.md) guides.
 
 ## Architecture and content
 
