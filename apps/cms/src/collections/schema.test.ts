@@ -100,6 +100,7 @@ describe("editorial schemas", () => {
     });
     expect(field(Events, "slug")).not.toHaveProperty("localized", true);
     expect(Events.versions).toMatchObject({ drafts: expect.any(Object) });
+    expect(field(Events, "seo")).toMatchObject({ admin: { hidden: true } });
   });
 
   it("models poem translations as optional explicit records", () => {

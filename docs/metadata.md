@@ -13,6 +13,9 @@ workflow is proven.
 The fixed-page meta-description is for search results and link previews, not the
 visible article text. Editors can supply it separately from the page content.
 
+Event SEO metadata remains stored for compatibility, but its controls are hidden
+from the event editor.
+
 Use `apps/web/src/layouts/BaseLayout.astro` for document metadata. Resolve URLs
 through `@poetry/i18n` as described in [routing](routing.md).
 See [draft previews](previews.md) for preview authorization and response headers.

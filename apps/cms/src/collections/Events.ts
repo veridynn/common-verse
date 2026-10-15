@@ -107,6 +107,8 @@ export const Events: CollectionConfig = {
       name: "seo",
       type: "group",
       label: label("search_and_social_sharing"),
+      // Retain stored metadata while removing its controls from the event editor.
+      admin: { hidden: true },
       fields: [
         {
           name: "title",
