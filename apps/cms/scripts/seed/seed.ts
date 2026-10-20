@@ -151,7 +151,7 @@ export async function seed(payload: Payload, { onlyIfEmpty = false } = {}) {
           content: plainTextToRichText(de.content),
           image: media.id,
           startDate: "2026-11-14T13:00:00.000Z",
-          location: de.location,
+          location: { coordinates: [13.405, 52.52], address: de.location },
           registrationUrl: "https://example.org/register",
           seo: {
             title: de.seoTitle,
@@ -173,7 +173,7 @@ export async function seed(payload: Payload, { onlyIfEmpty = false } = {}) {
             title: text.title,
             description: text.description,
             content: plainTextToRichText(text.content),
-            location: text.location,
+            location: { coordinates: [13.405, 52.52], address: text.location },
             seo: {
               title: text.seoTitle,
               description: text.seoDescription,

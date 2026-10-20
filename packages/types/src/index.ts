@@ -9,6 +9,11 @@ export interface MediaReference {
   height?: number | null;
 }
 
+export interface LocationValue {
+  coordinates: [number, number];
+  address?: string | null;
+}
+
 export interface Event {
   kind?: "workshop" | "event" | null;
   id: number | string;
@@ -20,7 +25,7 @@ export interface Event {
   price?: number | null;
   startDate: string;
   endDate?: string | null;
-  location?: string | null;
+  location?: LocationValue | null;
   registrationUrl?: string | null;
   seo?: {
     title?: string | null;

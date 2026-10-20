@@ -147,5 +147,22 @@
   "editor_indent_more": "افزایش تورفتگی",
   "editor_link": "پیوند",
   "editor_text_style": "سبک متن",
-  "editor_alignment": "ترازبندی"
+  "editor_alignment": "ترازبندی",
+  "saved_places": "مکان‌های ذخیره‌شده",
+  "location_address": "نشانی",
+  "latitude": "عرض جغرافیایی",
+  "longitude": "طول جغرافیایی",
+  "place_search_prompt": "حداقل ۳ نویسه وارد کنید",
+  "place_no_results": "مکانی پیدا نشد",
+  "location_map": "نقشه مکان",
+  "place_map_failed": "نقشه در دسترس نیست. جستجو یا ورود مختصات همچنان ممکن است.",
+  "place_search_failed": "جستجو در دسترس نیست. دوباره تلاش کنید یا مختصات وارد کنید.",
+  "saved_places_failed": "بارگیری مکان‌های ذخیره‌شده ممکن نشد. دوباره تلاش کنید.",
+  "locations": "مکان‌ها",
+  "location_alias": "نام مستعار",
+  "place_reverse_failed": "نشانی در دسترس نیست. مختصات انتخاب‌شده حفظ شد.",
+  "place_search_clear": "پاک کردن جستجو",
+  "location_bookmark_add": "نشان‌گذاری مکان انتخاب‌شده",
+  "location_bookmark_edit": "ویرایش مکان ذخیره‌شده",
+  "coordinates": "مختصات"
 }

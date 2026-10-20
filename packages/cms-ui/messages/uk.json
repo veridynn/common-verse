@@ -147,5 +147,22 @@
   "editor_indent_more": "Збільшити відступ",
   "editor_link": "Посилання",
   "editor_text_style": "Стиль тексту",
-  "editor_alignment": "Вирівнювання"
+  "editor_alignment": "Вирівнювання",
+  "saved_places": "Збережені місця",
+  "location_address": "Адреса",
+  "latitude": "Широта",
+  "longitude": "Довгота",
+  "place_search_prompt": "Введіть щонайменше 3 символи",
+  "place_no_results": "Місць не знайдено",
+  "location_map": "Карта місця",
+  "place_map_failed": "Карта недоступна. Можна шукати або вводити координати.",
+  "place_search_failed": "Пошук недоступний. Спробуйте ще раз або введіть координати.",
+  "saved_places_failed": "Не вдалося завантажити збережені місця. Спробуйте ще раз.",
+  "locations": "Місця",
+  "location_alias": "Псевдонім",
+  "place_reverse_failed": "Адреса недоступна. Вибрані координати збережено.",
+  "place_search_clear": "Очистити пошук",
+  "location_bookmark_add": "Додати вибране місце до закладок",
+  "location_bookmark_edit": "Редагувати збережене місце",
+  "coordinates": "Координати"
 }

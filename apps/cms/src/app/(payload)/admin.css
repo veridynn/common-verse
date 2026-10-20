@@ -97,3 +97,7 @@
     overflow-x: auto;
   }
 }
+
+.doc-drawer:has(.collection-edit--locations) > .drawer__content {
+  max-inline-size: 42rem;
+}

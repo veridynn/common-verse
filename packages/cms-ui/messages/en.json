@@ -147,5 +147,22 @@
   "editor_indent_more": "Increase indent",
   "editor_link": "Link",
   "editor_text_style": "Text style",
-  "editor_alignment": "Alignment"
+  "editor_alignment": "Alignment",
+  "saved_places": "Saved locations",
+  "location_address": "Address",
+  "latitude": "Latitude",
+  "longitude": "Longitude",
+  "place_search_prompt": "Type at least 3 characters",
+  "place_no_results": "No places found",
+  "location_map": "Location map",
+  "place_map_failed": "Map unavailable. You can still search or enter coordinates.",
+  "place_search_failed": "Place search unavailable. Try again or enter coordinates.",
+  "saved_places_failed": "Could not load saved locations. Try again.",
+  "locations": "Locations",
+  "location_alias": "Alias",
+  "place_reverse_failed": "No address available. The selected coordinates are kept.",
+  "place_search_clear": "Clear search",
+  "location_bookmark_add": "Bookmark selected place",
+  "location_bookmark_edit": "Edit saved location",
+  "coordinates": "Coordinates"
 }

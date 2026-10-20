@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { locationText } from "../../location";
   import { localizedPath, type Locale } from "@poetry/i18n";
   import type { Event } from "@poetry/types";
   import { Heading } from "$lib/components/ui/heading";
@@ -31,7 +32,7 @@
     <Heading level={3}
       ><Link variant="heading" {href}>{event.title}</Link></Heading
     >
-    {#if event.location}<p>{event.location}</p>{/if}
+    {#if locationText(event.location)}<p>{locationText(event.location)}</p>{/if}
     {#if event.description}<p>{event.description}</p>{/if}
   </div>
   <Link

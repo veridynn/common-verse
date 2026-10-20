@@ -1,32 +1,17 @@
-# Migrations and local data
+# Prototype schema and local data
 
-Development uses Payload's schema push; production schema changes require
-reviewed Payload migrations in `apps/cms/src/migrations`. Running a local seed
-is not a deployment command. Preserve records, stored identifiers, versions,
-and relationships when changing the schema.
+This is a greenfield prototype with no production database. Use Payload's
+development schema push while iterating. Do not add migration chains, compatibility
+fields, or renamed-field fallbacks for prototype model changes. Define the intended
+schema directly and rebuild disposable feature tables when a reset is authorized.
 
-## Existing database upgrades
+The Locations collection is `locations`. It stores optional alias and address fields, plus one required native coordinate point. Events store their own address and point snapshots. No virtual point, duplicate latitude/longitude columns, old collection aliases, or location migrations are needed.
 
-Before a production upgrade, run the Payload migration
-`20261010_blog_posts` after the existing migrations to create the article tables,
-localized content and draft/version storage. Development uses Payload schema push;
-do not run this creation migration over tables already created by development push.
+A feature reset must stay within its authorized scope. Users, uploads, and unrelated
+editorial data remain intact. Ordinary startup never resets database tables or
+Docker volumes. Back up PostgreSQL and `apps/cms/media/` together when transferring
+content; cloning Git does not transfer local data.
 
-Existing fixed-page text and saved versions
-are converted by `20261010_fixed_page_rich_text`. Run `pnpm --filter @poetry/cms payload migrate`
-with schema push disabled (`PAYLOAD_MIGRATING=true`) before starting an older
-development database with this schema. Rolling this migration back preserves text
-but removes rich-text formatting.
-
-The `20261010_editorial_names` migration renames existing collection tables,
-version tables, homepage author blocks and relationships without dropping records.
-It also updates stored internal links. This migration is forward-only.
-
-## Preserving local data
-
-Database content, users, and uploads are local data; cloning Git does not transfer
-them. Back up PostgreSQL and `apps/cms/media/` together when transferring content.
-`docker compose down --volumes` deletes database data; ordinary startup never does.
-
-Verify migrations and changes to transaction behavior against real PostgreSQL;
-mocked application tests do not prove database behavior. See [testing](testing.md).
+Verify persistence and queries against PostgreSQL, using rolled-back transactions
+for temporary verification records. See [testing](testing.md) and
+[development](development.md).

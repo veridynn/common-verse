@@ -1,4 +1,5 @@
 ---
+import { locationText } from "../../../lib/location"
 import { eventContentHTML } from '../../../lib/event-content'
 import { Heading } from '$lib/components/ui/heading'
 import { Eyebrow } from '$lib/components/ui/eyebrow'
@@ -33,7 +34,7 @@ const structuredData = {
   description,
   startDate: event.startDate,
   ...(event.endDate ? { endDate: event.endDate } : {}),
-  ...(event.location ? { location: { '@type': 'Place', name: event.location } } : {}),
+  ...(event.location?.coordinates ? { location: { '@type': 'Place', name: locationText(event.location), ...(event.location.address ? { address: event.location.address } : {}), geo: { '@type': 'GeoCoordinates', longitude: event.location.coordinates[0], latitude: event.location.coordinates[1] } } } : {}),
   ...(image ? { image: [image] } : {}),
   ...(event.kind === 'event' && typeof event.price === 'number' ? { offers: { '@type': 'Offer', price: event.price, priceCurrency: 'EUR' } } : {}),
   url: new URL(localizedPath(locale, `events/${slug}`), import.meta.env.PUBLIC_SITE_URL ?? 'http://localhost:4321').href,
@@ -61,7 +62,7 @@ const alternateLocales = await getEventLocales(slug, preview ? suppliedSecret : 
       <Card.Root as="aside" variant="accent" size="sm" class="self-start" aria-label={kindLabel}>
         <Card.Content>
         <p><time datetime={event.startDate}>{date}</time></p>
-        {event.location && <p>{event.location}</p>}
+        {locationText(event.location) && <p>{locationText(event.location)}</p>}
         {price && <p>{price}</p>}
         </Card.Content>
         {event.registrationUrl && <Card.Footer><Button href={event.registrationUrl}>{m.registration({}, { locale })}</Button></Card.Footer>}

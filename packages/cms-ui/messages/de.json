@@ -147,5 +147,22 @@
   "editor_indent_more": "Einzug vergrößern",
   "editor_link": "Link",
   "editor_text_style": "Textstil",
-  "editor_alignment": "Ausrichtung"
+  "editor_alignment": "Ausrichtung",
+  "saved_places": "Gespeicherte Orte",
+  "location_address": "Adresse",
+  "latitude": "Breitengrad",
+  "longitude": "Längengrad",
+  "place_search_prompt": "Mindestens 3 Zeichen eingeben",
+  "place_no_results": "Keine Orte gefunden",
+  "location_map": "Karte des Veranstaltungsorts",
+  "place_map_failed": "Karte nicht verfügbar. Suche und Koordinateneingabe sind weiterhin möglich.",
+  "place_search_failed": "Ortssuche nicht verfügbar. Erneut versuchen oder Koordinaten eingeben.",
+  "saved_places_failed": "Gespeicherte Orte konnten nicht geladen werden. Bitte erneut versuchen.",
+  "locations": "Orte",
+  "location_alias": "Alias",
+  "place_reverse_failed": "Keine Adresse verfügbar. Die gewählten Koordinaten bleiben erhalten.",
+  "place_search_clear": "Suche leeren",
+  "location_bookmark_add": "Ausgewählten Ort merken",
+  "location_bookmark_edit": "Gespeicherten Ort bearbeiten",
+  "coordinates": "Koordinaten"
 }

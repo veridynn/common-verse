@@ -20,6 +20,7 @@ import { Media } from "./collections/Media";
 import { Pages } from "./collections/Pages";
 import { Poems } from "./collections/Poems";
 import { Users } from "./collections/Users";
+import { Locations } from "./collections/Locations";
 import { Events } from "./collections/Events";
 import { contentFields } from "./components/contentFields";
 import { FixedPages } from "./globals/FixedPages";
@@ -35,24 +36,31 @@ export default buildConfig({
     importMap: { baseDir: path.resolve(dirname) },
     meta: { titleSuffix: " · The Poetry Project" },
   },
-  collections: [Articles, Events, Poems, Authors, Media, Users, Pages].map(
-    (collection) => ({
-      ...collection,
-      fields: contentFields(collection.fields),
-      admin: {
-        ...collection.admin,
-        components: {
-          ...collection.admin?.components,
-          edit: {
-            ...collection.admin?.components?.edit,
-            beforeDocumentControls: [
-              "./components/CollectionLabels#CollectionLabels",
-            ],
-          },
+  collections: [
+    Articles,
+    Events,
+    Locations,
+    Poems,
+    Authors,
+    Media,
+    Users,
+    Pages,
+  ].map((collection) => ({
+    ...collection,
+    fields: contentFields(collection.fields),
+    admin: {
+      ...collection.admin,
+      components: {
+        ...collection.admin?.components,
+        edit: {
+          ...collection.admin?.components?.edit,
+          beforeDocumentControls: [
+            "./components/CollectionLabels#CollectionLabels",
+          ],
         },
       },
-    }),
-  ),
+    },
+  })),
   globals: [Homepage, ...FixedPages].map((global) => ({
     ...global,
     fields: contentFields(global.fields),

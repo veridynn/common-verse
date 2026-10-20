@@ -18,8 +18,8 @@ are shown through Payload’s native join field in the admin. Fixed shared pages
 not need a byline; events describe activities rather than authored texts.
 
 Keep Payload’s native dashboard and cards. Organize the editorial sidebar as
-Content (Articles, Events), Media (Images & Files), Administration (Users),
-then Pages (Home, About, Contact, Privacy, Legal Notice). Collection IDs, route identities and labels use the same editorial names.
+Content (Articles, Events, Locations), Media (Images & Files), Administration (Users),
+then Pages (Home, About, Contact, Privacy, Legal Notice). Collection IDs, route identities and labels use the same editorial names, including `locations`.
 
 Home, About, Contact, Privacy, and Legal Notice are fixed Payload globals. Event,
 poet, and poem detail pages come from their collections. Articles are an MVP collection with localized native rich text, drafts, preview
@@ -32,7 +32,7 @@ See [accounts and permissions](accounts-and-permissions.md) for content access
 and the planned contributor workflow.
 
 The event editor currently shows a title, description textarea, image upload,
-native date/time picker, and location field during redesign.
+native date/time picker, and map-based location picker during redesign.
 Other event fields and their stored values remain in the model but are hidden
 from the form. New events can be saved as drafts; publishing still requires a date.
 
@@ -44,7 +44,42 @@ and credits appear on the public page. Articles retain their simpler toolbar.
 Slugs generate from the title when missing and remain stable thereafter.
 The editor shows one date/time (`startDate`); historical end dates remain stored
 and continue to support upcoming-event filtering. Optional EUR prices (0 for free,
-blank for unknown) belong only to readings.
+blank for unknown) belong only to readings. The Location field stores one structured location value. A single autocomplete searches
+saved locations by alias and address, followed by external
+map results. Selecting a result fills the search control with its full address.
+Saved and external matches at the same coordinates are shown once. Focus and clicks
+open the suggestions, including before typing. Clearing also shows saved bookmarks.
+
+The shared `Location` component provides a Payload search input with a
+bookmark button on the right and a Leaflet map underneath. Direct Photon requests
+support autocomplete after three characters and reverse lookup; no geocoder plugin
+is used. Saved suggestions use a bookmark icon and a bold alias
+followed by the address on one line. Clear removes the selection and map pin.
+Editors can also click the map, drag the pin, or search latitude/longitude pairs.
+Reverse lookup fills the address without moving the chosen coordinates. When it
+fails, coordinates remain usable and the picker shows an error.
+
+In event forms, the search field contains a bookmark suffix button. A bookmark-plus
+opens Payload's native Create Location drawer, with the selected address and
+coordinates prefilled. A filled bookmark opens the existing Location for editing.
+The drawer uses the same form as the Locations page: an optional native Alias field
+above the required Location search and map. There is no inline alias editor or
+automatic bookmark creation. Saving creates or updates the Location, selects its
+saved address/coordinates in the event, and closes the drawer. Cancelling leaves
+the event selection unchanged. Saving a Location does not publish the event; its normal draft autosave continues.
+
+Locations store three fields: optional `alias`, optional `address`, and required
+`coordinates` as Payload's native Point in longitude/latitude order. The Location
+control automatically writes the point from an address result, pasted coordinates,
+map click, or marker drag. There are no duplicate coordinate fields or a nested
+location group in the saved Locations collection, so the creation form has no group
+separator. Its search only queries the geocoder; saved bookmarks appear only in
+the event selector. Coordinate-only locations are valid.
+
+The native Location drawer has a responsive maximum width of 42rem. It uses the
+same fields as the Locations page, and its save action returns to the event form.
+
+Events keep their own location snapshots, so later bookmark edits do not automatically change other events. The same structured value is used by the field, collection, search, and public website. The development experiment has been removed.
 
 ## Naming contracts
 

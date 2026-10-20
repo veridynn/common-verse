@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { editorLocale, label, message } from "@poetry/cms-ui";
 import { Homepage, validLink } from "../globals/Homepage";
 import configPromise from "../payload.config";
+import { Events } from "./Events";
 
 describe("independent editor UI translations", () => {
   it("uses English for unsupported editor languages and translates our labels", () => {
@@ -71,4 +72,30 @@ it("assigns native field adapters to localized prose and explicit poem languages
     path: "./components/ContentField#ContentText",
     clientProps: { languageField: "language" },
   });
+});
+
+it("uses the same location field in events and Locations", async () => {
+  const config = await configPromise;
+  const events = config.collections.find(
+    (collection) => collection.slug === "events",
+  )!;
+  const location = events.fields.find(
+    (field) => "name" in field && field.name === "location",
+  );
+  if (location?.type !== "group") throw new Error("Missing location group");
+  expect(
+    location.fields.find(
+      (field) => "name" in field && field.name === "coordinates",
+    )?.admin?.components?.Field,
+  ).toEqual({
+    path: "./components/LocationField#LocationField",
+    clientProps: { bookmarks: true },
+  });
+  expect(
+    Events.fields.findIndex(
+      (field) => "name" in field && field.name === "content",
+    ),
+  ).toBeGreaterThan(
+    Events.fields.findIndex((field) => field.type === "collapsible"),
+  );
 });

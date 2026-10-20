@@ -10,6 +10,7 @@ primarily create and publish articles and events.
 | Capability                                           | Administrator | Editor |
 | ---------------------------------------------------- | ------------- | ------ |
 | Create, edit, publish and delete articles and events | Yes           | Yes    |
+| Manage shared locations                              | Yes           | Yes    |
 | Manage images and fixed pages                        | Yes           | Yes    |
 | Edit own account details                             | Yes           | Yes    |
 | Create Editor accounts                               | Yes           | Yes    |

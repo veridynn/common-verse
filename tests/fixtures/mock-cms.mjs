@@ -42,7 +42,10 @@ function event(locale, preview) {
     content: plainTextToRichText(description),
     image: media,
     startDate: "2026-11-14T13:00:00.000Z",
-    location: "The Poetry Project, Berlin",
+    location: {
+      coordinates: [13.405, 52.52],
+      address: "The Poetry Project, Berlin",
+    },
     registrationUrl: "https://example.org/register",
     seo: { title, description, image: media, noIndex: false },
     _status: preview ? "draft" : "published",

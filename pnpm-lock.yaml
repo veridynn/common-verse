@@ -198,6 +198,12 @@ importers:
       sharp:
         specifier: 0.34.4
         version: 0.34.4
+      leaflet:
+        specifier: 1.9.4
+        version: 1.9.4
+      "@poetry/types":
+        specifier: workspace:*
+        version: link:../../packages/types
     devDependencies:
       "@faker-js/faker":
         specifier: 10.6.0
@@ -220,6 +226,9 @@ importers:
       vitest:
         specifier: 5.0.2
         version: 5.0.2(@types/node@26.6.4)(happy-dom@20.14.5)(vite@8.3.1(@types/node@26.6.4)(esbuild@0.25.12)(jiti@2.7.0)(sass@1.77.4)(tsx@4.22.4)(yaml@2.9.1))
+      "@types/leaflet":
+        specifier: 1.9.21
+        version: 1.9.21
 
   apps/web:
     dependencies:
@@ -8407,6 +8416,24 @@ packages:
         integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==,
       }
 
+  "@types/geojson@7946.0.16":
+    resolution:
+      {
+        integrity: sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==,
+      }
+
+  "@types/leaflet@1.9.21":
+    resolution:
+      {
+        integrity: sha512-TbAd9DaPGSnzp6QvtYngntMZgcRk+igFELwR2N99XZn7RXUdKgsXMR+28bUO0rPsWp8MIu/f47luLIQuSLYv/w==,
+      }
+
+  leaflet@1.9.4:
+    resolution:
+      {
+        integrity: sha512-nxS1ynzJOmOlHp+iL3FyWqK89GtNL8U8rvlMOsQdTTssxZwCXh8N2NB3GDQOL+YR3XnWyZAxwQixURb+FA74PA==,
+      }
+
 snapshots:
   "@apidevtools/json-schema-ref-parser@11.9.3":
     dependencies:
@@ -13294,3 +13321,11 @@ snapshots:
   zod@4.6.5: {}
 
   zwitch@2.0.4: {}
+
+  "@types/geojson@7946.0.16": {}
+
+  "@types/leaflet@1.9.21":
+    dependencies:
+      "@types/geojson": 7946.0.16
+
+  leaflet@1.9.4: {}

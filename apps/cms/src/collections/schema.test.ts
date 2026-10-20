@@ -6,6 +6,7 @@ import { Pages } from "./Pages";
 import { Articles } from "./Articles";
 import { Users } from "./Users";
 import { Poems } from "./Poems";
+import { Locations } from "./Locations";
 import { Events } from "./Events";
 import { authenticated } from "./access";
 import { previewEndpoint } from "./preview";
@@ -45,7 +46,15 @@ describe("editorial schemas", () => {
   });
 
   it("requires authentication for editorial mutations and version history", async () => {
-    const collections = [Articles, Authors, Media, Pages, Events, Poems];
+    const collections = [
+      Articles,
+      Authors,
+      Media,
+      Pages,
+      Events,
+      Poems,
+      Locations,
+    ];
     for (const collection of collections) {
       expect(collection.access?.create).toBe(authenticated);
       expect(collection.access?.update).toBe(authenticated);

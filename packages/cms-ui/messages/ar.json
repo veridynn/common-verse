@@ -147,5 +147,22 @@
   "editor_indent_more": "زيادة المسافة البادئة",
   "editor_link": "رابط",
   "editor_text_style": "نمط النص",
-  "editor_alignment": "المحاذاة"
+  "editor_alignment": "المحاذاة",
+  "saved_places": "الأماكن المحفوظة",
+  "location_address": "العنوان",
+  "latitude": "خط العرض",
+  "longitude": "خط الطول",
+  "place_search_prompt": "أدخل 3 أحرف على الأقل",
+  "place_no_results": "لم يتم العثور على أماكن",
+  "location_map": "خريطة الموقع",
+  "place_map_failed": "الخريطة غير متاحة. يمكنك البحث أو إدخال الإحداثيات.",
+  "place_search_failed": "البحث غير متاح. حاول مرة أخرى أو أدخل الإحداثيات.",
+  "saved_places_failed": "تعذر تحميل الأماكن المحفوظة. حاول مرة أخرى.",
+  "locations": "الأماكن",
+  "location_alias": "اسم بديل",
+  "place_reverse_failed": "لا يوجد عنوان متاح. تم الاحتفاظ بالإحداثيات المحددة.",
+  "place_search_clear": "مسح البحث",
+  "location_bookmark_add": "حفظ الموقع المحدد في المفضلة",
+  "location_bookmark_edit": "تعديل المكان المحفوظ",
+  "coordinates": "الإحداثيات"
 }

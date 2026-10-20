@@ -10,6 +10,7 @@ type NavElementProps = {
 const entityOrder = [
   "articles",
   "events",
+  "locations",
   "poems",
   "authors",
   "media",

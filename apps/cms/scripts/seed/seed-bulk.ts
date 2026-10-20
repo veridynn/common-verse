@@ -213,7 +213,10 @@ export async function seedBulk(payload: Payload) {
               "\n\n",
             ),
           ),
-          location: f.location,
+          location: {
+            coordinates: [13.405, 52.52] as [number, number],
+            address: f.location,
+          },
           seo: {
             title: f.eventTitles[i % 3],
             description: f.description,

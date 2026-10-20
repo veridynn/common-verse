@@ -1,3 +1,4 @@
+import { eventLocationField } from "./locationField";
 import { validPublicSlug } from "./slug";
 import { label } from "@poetry/cms-ui";
 import { slugField, type CollectionConfig } from "payload";
@@ -89,12 +90,7 @@ export const Events: CollectionConfig = {
       required: true,
       admin: { date: { pickerAppearance: "dayAndTime" } },
     },
-    {
-      name: "location",
-      label: label("location"),
-      type: "text",
-      localized: true,
-    },
+    eventLocationField(),
     {
       name: "endDate",
       label: label("end_date"),

@@ -37,3 +37,19 @@ Use the running local CMS endpoint at `http://localhost:3001/api/mcp` with a
 personal scoped API key. The project's enabled capabilities are defined in
 [`payload.config.ts`](../apps/cms/src/payload.config.ts); key-management permissions
 are covered in [accounts and permissions](accounts-and-permissions.md).
+
+## Editor maps and place search
+
+The event editor uses Leaflet with OpenStreetMap standard tiles and Photon place
+search. No API key is needed. Search is proxied through the authenticated CMS
+endpoint; map tiles load directly in the editor with visible OSM attribution.
+No map requests are added to public pages. External queries are debounced and limited to six results. The same search also
+returns saved locations by alias, name, or address. Map clicks use reverse geocoding
+to resolve an address while retaining the selected coordinates. Coordinate selection and saved places remain available if external
+search fails.
+
+`PLACE_SEARCH_URL` optionally selects another Photon server (base URL, including a
+trailing slash). The default is `https://photon.komoot.io/`. Its public service has
+fair-use throttling and no availability guarantee; use a dedicated Photon service
+if editorial traffic exceeds its allowance. Standard OSM tiles also have a
+[usage policy](https://operations.osmfoundation.org/policies/tiles/).
