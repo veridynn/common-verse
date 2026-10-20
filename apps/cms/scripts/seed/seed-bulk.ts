@@ -1,3 +1,4 @@
+import { plainTextToRichText } from "../../src/utilities/plainTextToRichText";
 import { randomUUID } from "node:crypto";
 import { readdir, rm } from "node:fs/promises";
 import path from "node:path";
@@ -202,16 +203,16 @@ export async function seedBulk(payload: Payload) {
         from: "2026-01-01T12:00:00Z",
         to: "2027-12-31T12:00:00Z",
       });
-      const end = new Date(start.getTime() + (2 + (i % 3)) * 3600000);
       const localized = (locale: Locale) => {
         const f = bulkFixtures[locale];
         return {
           title: `${f.eventTitles[i % 3]} · ${i + 1}`,
           description: f.description,
-          content: Array.from(
-            { length: i % 10 === 0 ? 6 : 1 },
-            () => f.content,
-          ).join("\n\n"),
+          content: plainTextToRichText(
+            Array.from({ length: i % 10 === 0 ? 6 : 1 }, () => f.content).join(
+              "\n\n",
+            ),
+          ),
           location: f.location,
           seo: {
             title: f.eventTitles[i % 3],
@@ -228,7 +229,8 @@ export async function seedBulk(payload: Payload) {
           ...localized("de"),
           slug,
           startDate: start.toISOString(),
-          endDate: end.toISOString(),
+          kind: i % 2 === 0 ? "workshop" : "event",
+          ...(i % 2 ? { price: i % 4 === 1 ? 0 : 12.5 } : {}),
           image: i % 4 === 0 ? undefined : mediaIDs[i % mediaIDs.length],
           _status: i % 5 === 0 ? "draft" : "published",
         },

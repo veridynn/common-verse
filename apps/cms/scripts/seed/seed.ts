@@ -1,3 +1,4 @@
+import { plainTextToRichText } from "../../src/utilities/plainTextToRichText";
 import { randomUUID } from "node:crypto";
 import { readFile, readdir, rm } from "node:fs/promises";
 import path from "node:path";
@@ -143,13 +144,13 @@ export async function seed(payload: Payload, { onlyIfEmpty = false } = {}) {
         collection: "events",
         locale: "de",
         data: {
+          kind: "workshop",
           title: de.title,
           slug: "test",
           description: de.description,
-          content: de.content,
+          content: plainTextToRichText(de.content),
           image: media.id,
           startDate: "2026-11-14T13:00:00.000Z",
-          endDate: "2026-11-14T16:00:00.000Z",
           location: de.location,
           registrationUrl: "https://example.org/register",
           seo: {
@@ -171,7 +172,7 @@ export async function seed(payload: Payload, { onlyIfEmpty = false } = {}) {
           data: {
             title: text.title,
             description: text.description,
-            content: text.content,
+            content: plainTextToRichText(text.content),
             location: text.location,
             seo: {
               title: text.seoTitle,

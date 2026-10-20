@@ -97,10 +97,39 @@ describe("editorial schemas", () => {
     expect(field(Events, "slug")).toMatchObject({
       required: true,
       unique: true,
+      admin: { hidden: true },
     });
     expect(field(Events, "slug")).not.toHaveProperty("localized", true);
     expect(Events.versions).toMatchObject({ drafts: expect.any(Object) });
     expect(field(Events, "seo")).toMatchObject({ admin: { hidden: true } });
+  });
+
+  it("shows title, description, image and date/time while retaining other fields", () => {
+    const visible = Events.fields.filter(
+      (field) =>
+        !field.admin || !("hidden" in field.admin) || !field.admin.hidden,
+    );
+    expect(visible).toEqual([
+      field(Events, "title"),
+      field(Events, "description"),
+      field(Events, "image"),
+      field(Events, "startDate"),
+      field(Events, "location"),
+    ]);
+    expect(field(Events, "description")).toMatchObject({ type: "textarea" });
+    expect(field(Events, "image")).toMatchObject({
+      type: "upload",
+      relationTo: "media",
+    });
+    expect(field(Events, "startDate")).toMatchObject({
+      type: "date",
+      required: true,
+      admin: { date: { pickerAppearance: "dayAndTime" } },
+    });
+    expect(field(Events, "content")).toBeDefined();
+    expect(
+      Events.fields.find((field) => field.type === "collapsible"),
+    ).toHaveProperty("admin.hidden", true);
   });
 
   it("models poem translations as optional explicit records", () => {

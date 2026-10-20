@@ -37,11 +37,11 @@ function event(locale, preview) {
     id: 1,
     title: preview ? `${title} — draft` : title,
     slug: "test",
+    kind: "workshop",
     description,
-    content: description,
+    content: plainTextToRichText(description),
     image: media,
     startDate: "2026-11-14T13:00:00.000Z",
-    endDate: "2026-11-14T16:00:00.000Z",
     location: "The Poetry Project, Berlin",
     registrationUrl: "https://example.org/register",
     seo: { title, description, image: media, noIndex: false },
@@ -180,6 +180,12 @@ const reversedHomepageLocales = new Set();
 const server = http.createServer((request, response) => {
   const url = new URL(request.url ?? "/", "http://127.0.0.1:3001");
   response.setHeader("content-type", "application/json; charset=utf-8");
+  if (url.pathname === "/api/media/file/inline.svg") {
+    response.setHeader("content-type", "image/svg+xml");
+    return response.end(
+      '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600"><rect width="1200" height="600" fill="#26465a"/></svg>',
+    );
+  }
   if (url.pathname === "/health")
     return response.end(JSON.stringify({ ok: true }));
 
@@ -290,6 +296,25 @@ const server = http.createServer((request, response) => {
       previewTitles.has(locale)
     ) {
       document.title = previewTitles.get(locale);
+    }
+    if (requestedSlug === "reading") {
+      document.kind = "event";
+      document.price = 12.5;
+      document.content.root.children[0].children[0].format = 1;
+      document.content.root.children.push({
+        type: "upload",
+        version: 3,
+        relationTo: "media",
+        fields: null,
+        value: {
+          ...media,
+          url: "/api/media/file/inline.svg",
+          mimeType: "image/svg+xml",
+          credit: "The Poetry Project",
+        },
+      });
+      document.title = `Reading ${locale}`;
+      document.slug = "reading";
     }
     if (requestedSlug === "partial" && locale === "fa") document.title = null;
     return response.end(JSON.stringify({ docs: [document], totalDocs: 1 }));

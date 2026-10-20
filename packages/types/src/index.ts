@@ -15,8 +15,9 @@ export interface Event {
   title: string;
   slug: string;
   description?: string | null;
-  content?: string | null;
+  content?: FixedPage["content"];
   image?: MediaReference | number | string | null;
+  price?: number | null;
   startDate: string;
   endDate?: string | null;
   location?: string | null;

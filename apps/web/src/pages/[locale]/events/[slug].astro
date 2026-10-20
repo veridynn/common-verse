@@ -1,4 +1,5 @@
 ---
+import { eventContentHTML } from '../../../lib/event-content'
 import { Heading } from '$lib/components/ui/heading'
 import { Eyebrow } from '$lib/components/ui/eyebrow'
 import { Text } from '$lib/components/ui/text'
@@ -34,16 +35,20 @@ const structuredData = {
   ...(event.endDate ? { endDate: event.endDate } : {}),
   ...(event.location ? { location: { '@type': 'Place', name: event.location } } : {}),
   ...(image ? { image: [image] } : {}),
+  ...(event.kind === 'event' && typeof event.price === 'number' ? { offers: { '@type': 'Offer', price: event.price, priceCurrency: 'EUR' } } : {}),
   url: new URL(localizedPath(locale, `events/${slug}`), import.meta.env.PUBLIC_SITE_URL ?? 'http://localhost:4321').href,
   eventStatus: 'https://schema.org/EventScheduled',
 }
-const date = new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeStyle: 'short' }).format(new Date(event.startDate))
+const kindLabel = event.kind === 'event' ? m.home_event({}, { locale }) : m.workshop_label({}, { locale })
+const html = eventContentHTML(event.content, cmsUrl)
+const price = event.kind === 'event' && typeof event.price === 'number' ? new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(event.price) : null
+const date = new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeStyle: 'short', timeZone: 'Europe/Berlin' }).format(new Date(event.startDate))
 const alternateLocales = await getEventLocales(slug, preview ? suppliedSecret : undefined)
 ---
 
 <BaseLayout {locale} {title} {description} {image} {structuredData} {alternateLocales} canonicalPath={`events/${slug}`} noIndex={event.seo?.noIndex ?? false} {preview} contentType="article">
   <article>
-    <Eyebrow>{m.workshop_label({}, { locale })}</Eyebrow>
+    <Eyebrow>{kindLabel}</Eyebrow>
     <Heading level={1}>{event.title}</Heading>
     {eventMedia?.url && eventMedia.alt && <figure class="hero-figure">
       <img class="hero-image" src={new URL(eventMedia.url, cmsUrl).href} alt={eventMedia.alt} width={eventMedia.width ?? 1200} height={eventMedia.height ?? 800} />
@@ -51,12 +56,13 @@ const alternateLocales = await getEventLocales(slug, preview ? suppliedSecret : 
     <div class="content-grid">
       <div>
         {event.description && <Text variant="lead" class="lede">{event.description}</Text>}
-        {event.content && <div class="prose">{event.content}</div>}
+        {html && <div class="prose rich-text" set:html={html} />}
       </div>
-      <Card.Root as="aside" variant="accent" size="sm" class="self-start" aria-label={m.workshop_label({}, { locale })}>
+      <Card.Root as="aside" variant="accent" size="sm" class="self-start" aria-label={kindLabel}>
         <Card.Content>
         <p><time datetime={event.startDate}>{date}</time></p>
         {event.location && <p>{event.location}</p>}
+        {price && <p>{price}</p>}
         </Card.Content>
         {event.registrationUrl && <Card.Footer><Button href={event.registrationUrl}>{m.registration({}, { locale })}</Button></Card.Footer>}
       </Card.Root>

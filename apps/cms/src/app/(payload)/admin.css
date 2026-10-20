@@ -2,3 +2,98 @@
 .field-label > .localized {
   display: none;
 }
+
+/* Event editing follows the publishing flow: summary, practical details, story. */
+.event-editor-title input {
+  font-size: 1.6rem;
+  font-weight: 550;
+  line-height: 1.3;
+  padding-block: 0.9rem;
+}
+.event-editor-details {
+  margin-block: 1rem 2.5rem;
+}
+.event-editor-details > .collapsible__toggle-wrap {
+  background: var(--theme-elevation-50);
+  border-block-end: 1px solid var(--theme-elevation-150);
+}
+.event-editor-details .collapsible__content {
+  padding-block: 1.5rem 0.5rem;
+}
+.event-editor-details .row__fields > * {
+  min-inline-size: 0;
+  flex: 1 1 18rem;
+}
+.event-editor-content > .rich-text-lexical__label-row > .field-label {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-block-end: 0.8rem;
+}
+.event-editor-content .ContentEditable__root {
+  min-block-size: 24rem;
+  padding: 1.5rem;
+  font-size: 1.15rem;
+  line-height: 1.75;
+}
+.event-editor-content .fixed-toolbar {
+  flex-wrap: wrap;
+}
+@media (max-width: 48rem) {
+  .event-editor-details .row__fields {
+    flex-direction: column;
+  }
+  .event-editor-details .row__fields > * {
+    flex-basis: auto;
+    inline-size: 100%;
+  }
+  .event-editor-content .ContentEditable__root {
+    min-block-size: 20rem;
+    padding: 1rem;
+  }
+}
+.event-editor-content .ContentEditable__root > * {
+  max-inline-size: 75ch;
+  margin-inline: auto;
+}
+.event-editor-content .LexicalEditorTheme__upload,
+.event-editor-content .LexicalEditorTheme__upload__contents {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+.event-editor-content .LexicalEditorTheme__upload img {
+  max-inline-size: 100%;
+  block-size: auto;
+}
+.event-editor-content .LexicalEditorTheme__upload__filename {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+.event-editor-content .toolbar-popup__button,
+.event-editor-content .toolbar-popup__dropdown {
+  min-inline-size: 2.25rem;
+  min-block-size: 2.25rem;
+}
+@media (max-width: 48rem) {
+  .collection-edit--events .doc-controls__meta {
+    flex-wrap: wrap;
+    row-gap: 0.25rem;
+  }
+}
+.event-editor-content .LexicalEditorTheme__upload__card,
+.event-editor-content .LexicalEditorTheme__upload__media,
+.event-editor-content .LexicalEditorTheme__upload .thumbnail {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+.event-editor-content .LexicalEditorTheme__upload__doc-drawer-toggler {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  text-align: start;
+}
+@media (max-width: 48rem) {
+  body:has(.collection-edit--events) .app-header__step-nav-wrapper {
+    min-inline-size: 0;
+    flex: 1;
+    overflow-x: auto;
+  }
+}

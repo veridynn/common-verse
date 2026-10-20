@@ -110,9 +110,11 @@ describe("optional bulk demo seed", () => {
       new Set(poems.map((poem) => (poem.originalText as string).length)).size,
     ).toBeGreaterThan(10);
     for (const event of f.records.events) {
-      expect(Date.parse(event.endDate as string)).toBeGreaterThan(
-        Date.parse(event.startDate as string),
-      );
+      expect(Number.isFinite(Date.parse(event.startDate as string))).toBe(true);
+      expect(event.endDate).toBeUndefined();
+      expect(event.content).toHaveProperty("root");
+      if (event.kind === "event") expect(event.price).toBeGreaterThanOrEqual(0);
+      else expect(event.price).toBeUndefined();
     }
     for (const [args] of [
       ...f.payload.find.mock.calls,

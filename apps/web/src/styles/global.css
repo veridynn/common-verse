@@ -375,6 +375,33 @@ h6 {
 .rich-text a {
   text-decoration: underline;
 }
+.rich-text .event-content-image {
+  margin: var(--space-lg) 0;
+}
+.rich-text .event-content-image img {
+  display: block;
+  max-inline-size: 100%;
+  block-size: auto;
+  border-radius: var(--radius-md);
+}
+.rich-text .event-content-image figcaption {
+  margin-block-start: var(--space-xs);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-sm);
+  color: var(--color-muted-foreground);
+  white-space: pre-line;
+}
+.rich-text blockquote {
+  margin-inline: 0;
+  padding-inline-start: var(--space-md);
+  border-inline-start: 3px solid var(--color-soft);
+  font-style: italic;
+}
+.rich-text hr {
+  margin-block: var(--space-lg);
+  border: 0;
+  border-block-start: 1px solid var(--color-soft);
+}
 .translation {
   margin-block: var(--space-xl);
   padding-block-start: var(--space-lg);

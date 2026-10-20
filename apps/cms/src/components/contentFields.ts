@@ -12,6 +12,7 @@ export function contentFields(
       (field.type === "text" || field.type === "textarea") &&
       (localized || field.custom?.languageField)
     ) {
+      if (field.admin?.components?.Field) return field;
       const result: Field = { ...field };
       result.admin = { ...result.admin };
       result.admin.components = { ...result.admin.components };

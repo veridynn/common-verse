@@ -1,16 +1,5 @@
 import { label } from "@poetry/cms-ui";
-import {
-  lexicalEditor,
-  ParagraphFeature,
-  HeadingFeature,
-  BoldFeature,
-  ItalicFeature,
-  UnorderedListFeature,
-  OrderedListFeature,
-  LinkFeature,
-  FixedToolbarFeature,
-  InlineToolbarFeature,
-} from "@payloadcms/richtext-lexical";
+import { proseEditor } from "../utilities/proseEditor";
 import type { CollectionConfig } from "payload";
 import { authenticated, publishedOrAuthenticated } from "./access";
 import { collectionPreviewUrl, previewEndpoint } from "./preview";
@@ -73,19 +62,7 @@ export const Articles: CollectionConfig = {
       type: "richText",
       localized: true,
       required: true,
-      editor: lexicalEditor({
-        features: [
-          ParagraphFeature(),
-          HeadingFeature({ enabledHeadingSizes: ["h2", "h3"] }),
-          BoldFeature(),
-          ItalicFeature(),
-          UnorderedListFeature(),
-          OrderedListFeature(),
-          LinkFeature({ enabledCollections: [] }),
-          FixedToolbarFeature(),
-          InlineToolbarFeature(),
-        ],
-      }),
+      editor: proseEditor,
     },
     {
       name: "image",
@@ -115,7 +92,6 @@ export const Articles: CollectionConfig = {
           label: label("meta_description"),
           type: "textarea",
           localized: true,
-          maxLength: 170,
           admin: { description: label("meta_description_help") },
         },
         {

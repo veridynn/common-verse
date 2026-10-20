@@ -1,6 +1,8 @@
 import { validPublicSlug } from "./slug";
 import { label } from "@poetry/cms-ui";
-import type { CollectionConfig } from "payload";
+import { slugField, type CollectionConfig } from "payload";
+import { eventEditor } from "../utilities/proseEditor";
+import { prepareEvent, eventSlug, validEventPrice } from "./eventFields";
 import { authenticated, publishedOrAuthenticated } from "./access";
 import { collectionPreviewUrl, previewEndpoint } from "./preview";
 
@@ -32,68 +34,59 @@ export const Events: CollectionConfig = {
     readVersions: authenticated,
   },
   endpoints: [previewEndpoint("events")],
+  hooks: { beforeValidate: [prepareEvent] },
   versions: { drafts: { autosave: { interval: 375 } } },
   fields: [
-    {
-      name: "kind",
-      label: label("kind"),
-      type: "select",
-      defaultValue: "workshop",
-      options: [
-        { label: label("workshop"), value: "workshop" },
-        { label: label("reading_or_event"), value: "event" },
-      ],
-    },
     {
       name: "title",
       label: label("title"),
       type: "text",
       localized: true,
       required: true,
-    },
-    {
-      name: "slug",
-      validate: validPublicSlug,
-      label: label("slug"),
-      type: "text",
-      required: true,
-      unique: true,
-      index: true,
       admin: {
-        description: label(
-          "stable_url_segment_shared_by_every_language_version",
-        ),
+        className: "event-editor-title",
       },
     },
+    ...slugField({
+      slugify: eventSlug,
+      overrides: (row) => {
+        // Generate only missing slugs; saved URLs stay stable, including drafts.
+        row.fields = row.fields.filter((field) => field.type === "text");
+        for (const field of row.fields) {
+          if (field.type !== "text") continue;
+          field.label = label("slug");
+          field.validate = validPublicSlug;
+          field.admin = {
+            ...field.admin,
+            hidden: true,
+            description: label(
+              "stable_url_segment_shared_by_every_language_version",
+            ),
+          };
+        }
+        return row;
+      },
+    }).fields,
     {
       name: "description",
       label: label("description"),
       type: "textarea",
       localized: true,
-    },
-    {
-      name: "content",
-      label: label("content"),
-      type: "textarea",
-      localized: true,
+      admin: {
+        rows: 3,
+      },
     },
     {
       name: "image",
-      label: label("image"),
+      label: label("event_cover_image"),
       type: "upload",
       relationTo: "media",
     },
     {
       name: "startDate",
-      label: label("start_date"),
+      label: label("date_and_time"),
       type: "date",
       required: true,
-      admin: { date: { pickerAppearance: "dayAndTime" } },
-    },
-    {
-      name: "endDate",
-      label: label("end_date"),
-      type: "date",
       admin: { date: { pickerAppearance: "dayAndTime" } },
     },
     {
@@ -102,7 +95,72 @@ export const Events: CollectionConfig = {
       type: "text",
       localized: true,
     },
-    { name: "registrationUrl", type: "text", label: label("registration_url") },
+    {
+      name: "endDate",
+      label: label("end_date"),
+      type: "date",
+      admin: { hidden: true },
+    },
+    {
+      type: "collapsible",
+      label: label("event_details"),
+      admin: {
+        hidden: true,
+        className: "event-editor-details",
+        initCollapsed: false,
+      },
+      fields: [
+        {
+          type: "row",
+          fields: [
+            {
+              name: "kind",
+              label: label("event_type"),
+              type: "select",
+              defaultValue: "workshop",
+              required: true,
+              options: [
+                { label: label("workshop"), value: "workshop" },
+                { label: label("reading"), value: "event" },
+              ],
+            },
+            {
+              name: "price",
+              label: label("price_eur"),
+              type: "number",
+              min: 0,
+              validate: validEventPrice,
+              admin: {
+                step: 0.01,
+                description: label("price_help"),
+                condition: (data) => data.kind === "event",
+              },
+            },
+          ],
+        },
+        {
+          name: "registrationUrl",
+          type: "text",
+          label: label("registration_url"),
+          admin: { description: label("event_registration_help") },
+        },
+      ],
+    },
+    {
+      name: "content",
+      label: label("content"),
+      type: "richText",
+      localized: true,
+      editor: eventEditor,
+      admin: {
+        hidden: true,
+        className: "event-editor-content",
+        components: {
+          beforeInput: ["./components/EventFields#EditorAccessibility"],
+        },
+        description: label("event_content_help"),
+      },
+    },
     {
       name: "seo",
       type: "group",
@@ -122,7 +180,6 @@ export const Events: CollectionConfig = {
           localized: true,
           label: label("meta_description"),
           admin: { description: label("meta_description_help") },
-          maxLength: 170,
         },
         {
           name: "image",

@@ -31,6 +31,21 @@ records and existing public routes.
 See [accounts and permissions](accounts-and-permissions.md) for content access
 and the planned contributor workflow.
 
+The event editor currently shows a title, description textarea, image upload,
+native date/time picker, and location field during redesign.
+Other event fields and their stored values remain in the model but are hidden
+from the form. New events can be saved as drafts; publishing still requires a date.
+
+Events offer Workshop (`workshop`) and Reading (`event`). Titles and descriptions
+have no character limit or custom character counter. Content appears at the bottom of the form with headings, lists, quotes, alignment,
+indentation, emphasis, links, separators, and images from Media. Images can be
+selected from the library or uploaded within the editor; their alternative text
+and credits appear on the public page. Articles retain their simpler toolbar.
+Slugs generate from the title when missing and remain stable thereafter.
+The editor shows one date/time (`startDate`); historical end dates remain stored
+and continue to support upcoming-event filtering. Optional EUR prices (0 for free,
+blank for unknown) belong only to readings.
+
 ## Naming contracts
 
 Use Articles (`Article`, `Articles`, `getArticle`, `getArticles`), Events
