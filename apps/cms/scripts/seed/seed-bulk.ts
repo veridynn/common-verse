@@ -234,7 +234,8 @@ export async function seedBulk(payload: Payload) {
           startDate: start.toISOString(),
           kind: i % 2 === 0 ? "workshop" : "event",
           ...(i % 2 ? { price: i % 4 === 1 ? 0 : 12.5 } : {}),
-          image: i % 4 === 0 ? undefined : mediaIDs[i % mediaIDs.length],
+          image: mediaIDs[i % mediaIDs.length],
+          registrationUrl: "https://example.org/register",
           _status: i % 5 === 0 ? "draft" : "published",
         },
       });

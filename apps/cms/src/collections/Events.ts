@@ -79,12 +79,14 @@ export const Events: CollectionConfig = {
       name: "registrationUrl",
       type: "text",
       label: label("registration_url"),
+      required: true,
     },
     {
       name: "image",
       label: label("event_cover_image"),
       type: "upload",
       relationTo: "media",
+      required: true,
     },
     {
       name: "startDate",
