@@ -15,7 +15,6 @@ vi.mock("react", async (original) => ({
 }));
 vi.mock("@payloadcms/ui", () => ({
   ReactSelect: vi.fn(),
-  SearchIcon: vi.fn(),
   XIcon: vi.fn(),
   useTranslation: () => ({ i18n: { language: harness.language } }),
 }));
@@ -125,7 +124,7 @@ it("keeps empty focus, short searches and pending searches quiet", () => {
   expect(bookmarks.menuIsOpen).toBe(true);
 });
 
-it("opens bookmark creation and editing from a suffix button", () => {
+it("opens bookmark creation and editing from a leading button", () => {
   for (const bookmarked of [false, true]) {
     const input = props();
     const tree = LocationSearch({ ...input, bookmarked });
@@ -133,6 +132,10 @@ it("opens bookmark creation and editing from a suffix button", () => {
     expect(button["aria-label"]).toBe(
       bookmarked ? "Edit saved location" : "Bookmark selected place",
     );
+    expect(button.children.props).toMatchObject({
+      filled: bookmarked,
+      add: !bookmarked,
+    });
     button.onClick();
     expect(input.onBookmark).toHaveBeenCalledOnce();
   }
@@ -155,4 +158,30 @@ it("keeps the selected place as a real required value while showing editable sea
   expect(select.value.place).toEqual(selection);
   expect(select.inputValue).toBe("Berlin");
   expect(select.controlShouldRenderValue).toBe(false);
+});
+
+it("renders the selected alias in bold and keeps typed searches editable", () => {
+  const selection = {
+    alias: "Workshop",
+    address: "Berlin",
+    coordinates: [13.4, 52.5] as [number, number],
+  };
+  const input = {
+    ...props(),
+    selection,
+    bookmarked: true,
+    text: "Workshop Berlin",
+  };
+  const select = propsOf(LocationSearch(input), ReactSelect);
+  expect(select.inputValue).toBe("");
+  expect(select.controlShouldRenderValue).toBe(true);
+  const label = select.formatOptionLabel(select.value, { context: "value" });
+  expect(propsOf(label, "strong").children).toBe("Workshop");
+  expect(propsOf(label, "span").children.props.children).toContain("Berlin");
+  const editing = propsOf(
+    LocationSearch({ ...input, editing: true, text: "Hamburg" }),
+    ReactSelect,
+  );
+  expect(editing.inputValue).toBe("Hamburg");
+  expect(editing.controlShouldRenderValue).toBe(false);
 });

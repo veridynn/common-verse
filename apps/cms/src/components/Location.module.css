@@ -36,7 +36,7 @@
 .bookmarkToggle {
   position: absolute;
   inset-block-start: 50%;
-  inset-inline-end: 0.15rem;
+  inset-inline-start: 0.15rem;
   transform: translateY(-50%);
   z-index: 1;
   display: grid;
@@ -55,9 +55,6 @@
 }
 .bookmarkToggle:focus-visible {
   outline: 2px solid var(--theme-text);
-}
-.withBookmark .clearSearch {
-  inset-inline-end: 2.5rem;
 }
 
 .result {
@@ -95,18 +92,11 @@
   border: 0;
 }
 
-.searchIcon,
 .clearSearch {
   position: absolute;
   inset-block-start: 50%;
   transform: translateY(-50%);
   z-index: 1;
-}
-
-.searchIcon {
-  inset-inline-start: 0.65rem;
-  inline-size: 20px;
-  pointer-events: none;
 }
 
 .clearSearch {
@@ -127,7 +117,7 @@
 }
 
 .searchControl :global(.rs__control) {
-  padding-inline: 2.25rem 2.5rem;
+  padding-inline: 0.5rem 2.5rem;
 }
 
 .searchControl :global(.rs__input-container) {
@@ -135,5 +125,5 @@
 }
 
 .withBookmark :global(.rs__control) {
-  padding-inline-end: 5rem;
+  padding-inline-start: 2.5rem;
 }

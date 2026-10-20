@@ -74,12 +74,10 @@ export function Location({
   const [cache, setCache] = useState({ scope, data: emptyLocationCache });
   const reverse = useRef<AbortController | null>(null);
   const selectedBookmark =
-    bookmarks &&
-    query === null &&
-    value &&
-    bookmark &&
-    sameLocation(value, bookmark)
-      ? bookmark
+    bookmarks && query === null && value
+      ? bookmark && sameLocation(value, bookmark)
+        ? bookmark
+        : (results.saved.find((place) => sameLocation(value, place)) ?? null)
       : null;
   const [DocumentDrawer, , { openDrawer, closeDrawer }] = useDocumentDrawer({
     collectionSlug: "locations",
@@ -170,7 +168,7 @@ export function Location({
     const params = new URLSearchParams({
       limit: "1",
       sort: "id",
-      "where[coordinates][near]": JSON.stringify([...value.coordinates, 1]),
+      "where[coordinates][near]": [...value.coordinates, 1].join(","),
     });
     fetch(`/api/locations?${params}`, { signal: controller.signal })
       .then(async (response) => {
@@ -285,7 +283,14 @@ export function Location({
     <div className={styles.picker}>
       <LocationSearch
         id={id}
-        text={query ?? (value ? locationAddress(value) : "")}
+        text={
+          query ??
+          (value
+            ? [selectedBookmark?.alias, locationAddress(value)]
+                .filter(Boolean)
+                .join(" ")
+            : "")
+        }
         options={options}
         loading={loading || resolving}
         disabled={disabled}
@@ -297,7 +302,8 @@ export function Location({
         }}
         onSelect={select}
         onClear={() => select(null)}
-        selection={value}
+        selection={value ? { ...value, alias: selectedBookmark?.alias } : null}
+        editing={query !== null}
         bookmarked={Boolean(selectedBookmark)}
         showBookmark={bookmarks}
         bookmarkDisabled={
@@ -323,6 +329,12 @@ export function Location({
           redirectAfterCreate={false}
           onDelete={() => {
             setBookmark(null);
+            setResults((current) => ({
+              ...current,
+              saved: current.saved.filter(
+                (place) => place.id !== selectedBookmark?.id,
+              ),
+            }));
             setRevision((current) => current + 1);
             closeDrawer();
           }}

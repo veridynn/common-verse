@@ -46,12 +46,13 @@ The editor shows one date/time (`startDate`); historical end dates remain stored
 and continue to support upcoming-event filtering. Optional EUR prices (0 for free,
 blank for unknown) belong only to readings. The Location field stores one structured location value. A single autocomplete searches
 saved locations by alias and address, followed by external
-map results. Selecting a result fills the search control with its full address.
+map results. Selecting a result fills the search control with its full address
+and the matching saved location's alias, when present.
 Saved and external matches at the same coordinates are shown once. Focus and clicks
 open the suggestions, including before typing. Clearing also shows saved bookmarks.
 
 The shared `Location` component provides a Payload search input with a
-bookmark button on the right and a Leaflet map underneath. Direct Photon requests
+bookmark button in a reserved leading slot and a Leaflet map underneath. Direct Photon requests
 support autocomplete after three characters and reverse lookup; no geocoder plugin
 is used. Saved suggestions use a bookmark icon and a bold alias
 followed by the address on one line. Clear removes the selection and map pin.
@@ -59,7 +60,7 @@ Editors can also click the map, drag the pin, or search latitude/longitude pairs
 Reverse lookup fills the address without moving the chosen coordinates. When it
 fails, coordinates remain usable and the picker shows an error.
 
-In event forms, the search field contains a bookmark suffix button. A bookmark-plus
+In event forms, the search field contains a leading bookmark button. A bookmark-plus
 opens Payload's native Create Location drawer, with the selected address and
 coordinates prefilled. A filled bookmark opens the existing Location for editing.
 The drawer uses the same form as the Locations page: an optional native Alias field

@@ -239,9 +239,37 @@ it("opens an existing bookmark in edit mode", () => {
     id: 12,
   });
   expect(child(tree, 0).bookmarked).toBe(true);
+  expect(child(tree, 0).text).toBe("Workshop Berlin");
   expect(child(tree, 1).initialData).toBeUndefined();
   child(tree, 0).onBookmark();
   expect(harness.openDrawer).toHaveBeenCalledOnce();
+});
+
+it("recognizes a selected saved suggestion before the bookmark lookup finishes", () => {
+  harness.savedResults = [{ ...place, id: 12, alias: "Workshop" }];
+  const tree = Location({ id: "location", value: place, onChange: vi.fn() });
+  expect(child(tree, 0).bookmarked).toBe(true);
+  expect(child(tree, 0).text).toBe("Workshop Berlin");
+  expect(harness.drawerArgs).toHaveBeenLastCalledWith({
+    collectionSlug: "locations",
+    id: 12,
+  });
+  expect(child(tree, 1).initialData).toBeUndefined();
+  child(tree, 0).onBookmark();
+  expect(harness.openDrawer).toHaveBeenCalledOnce();
+});
+
+it("looks up the stored location using Payload's comma-separated near query", async () => {
+  const request = vi.fn(async (_url: string) => ({
+    ok: true,
+    json: async () => ({ docs: [{ ...place, id: 12, alias: "Workshop" }] }),
+  }));
+  vi.stubGlobal("fetch", request);
+  Location({ id: "location", value: place, onChange: vi.fn() });
+  const cleanup = harness.effects[2]();
+  const url = new URL(request.mock.calls[0][0], "http://localhost");
+  expect(url.searchParams.get("where[coordinates][near]")).toBe("13.4,52.5,1");
+  if (cleanup) cleanup();
 });
 
 it("stops editing the previous bookmark as soon as a different point is selected", () => {
@@ -256,6 +284,7 @@ it("stops editing the previous bookmark as soon as a different point is selected
     id: undefined,
   });
   expect(child(tree, 0).bookmarked).toBe(false);
+  expect(child(tree, 0).text).toBe("Hamburg");
   expect(child(tree, 1).initialData).toEqual({ alias: "", ...next });
   child(tree, 0).onBookmark();
   expect(harness.openDrawer).toHaveBeenCalledOnce();

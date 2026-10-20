@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactSelect, SearchIcon, XIcon, useTranslation } from "@payloadcms/ui";
+import { ReactSelect, XIcon, useTranslation } from "@payloadcms/ui";
 import { editorLocale, message } from "@poetry/cms-ui";
 import { getLocaleMetadata } from "@poetry/i18n";
 import { useEffect, useState } from "react";
@@ -51,6 +51,7 @@ export function LocationSearch({
   onSelect,
   onClear,
   selection,
+  editing = false,
   bookmarked,
   bookmarkDisabled,
   onBookmark,
@@ -66,7 +67,8 @@ export function LocationSearch({
   onQuery: (query: string) => void;
   onSelect: (place: LocationValue) => void;
   onClear: () => void;
-  selection: LocationValue | null;
+  selection: (LocationValue & Partial<SavedLocation>) | null;
+  editing?: boolean;
   bookmarked: boolean;
   bookmarkDisabled: boolean;
   onBookmark: () => void;
@@ -77,6 +79,7 @@ export function LocationSearch({
   const rtl =
     getLocaleMetadata(editorLocale(i18n.language)).direction === "rtl";
   const [menuOpen, setMenuOpen] = useState(false);
+  const showSelectedAlias = Boolean(selection?.alias && !editing);
   useEffect(() => {
     if (selection) setMenuOpen(false);
   }, [selection?.coordinates[0], selection?.coordinates[1]]);
@@ -86,9 +89,23 @@ export function LocationSearch({
         <div
           className={`${styles.searchControl} ${showBookmark ? styles.withBookmark : ""}`}
         >
-          <span className={styles.searchIcon} aria-hidden="true">
-            <SearchIcon />
-          </span>
+          {showBookmark && (
+            <button
+              type="button"
+              id={`${id}-bookmark`}
+              className={styles.bookmarkToggle}
+              disabled={disabled || bookmarkDisabled}
+              aria-label={m(
+                bookmarked ? "location_bookmark_edit" : "location_bookmark_add",
+              )}
+              title={m(
+                bookmarked ? "location_bookmark_edit" : "location_bookmark_add",
+              )}
+              onClick={onBookmark}
+            >
+              <BookmarkIcon filled={bookmarked} add={!bookmarked} />
+            </button>
+          )}
           <ReactSelect
             inputId={id}
             components={{
@@ -102,8 +119,9 @@ export function LocationSearch({
               selection
                 ? {
                     value: "selected",
-                    label: locationAddress(selection),
+                    label: selection.alias || locationAddress(selection),
                     place: selection,
+                    saved: bookmarked,
                   }
                 : []
             }
@@ -113,18 +131,21 @@ export function LocationSearch({
             }
             placeholder={m("location_address")}
             {...{
-              inputValue: text,
+              inputValue: showSelectedAlias ? "" : text,
               required,
               "aria-invalid": showError,
               "aria-errormessage": showError ? `${id}-error` : undefined,
-              controlShouldRenderValue: false,
+              controlShouldRenderValue: showSelectedAlias,
               // Keep text visible; onChange closes the controlled menu.
               closeMenuOnSelect: false,
               openMenuOnFocus: true,
               openMenuOnClick: true,
-              formatOptionLabel: (option: LocationOption) => (
+              formatOptionLabel: (
+                option: LocationOption,
+                { context }: { context: "menu" | "value" },
+              ) => (
                 <div className={styles.result}>
-                  {option.saved && (
+                  {option.saved && context === "menu" && (
                     <>
                       <BookmarkIcon filled />
                       <span className={styles.visuallyHidden}>
@@ -192,23 +213,6 @@ export function LocationSearch({
               <span aria-hidden="true">
                 <XIcon />
               </span>
-            </button>
-          )}
-          {showBookmark && (
-            <button
-              type="button"
-              id={`${id}-bookmark`}
-              className={styles.bookmarkToggle}
-              disabled={disabled || bookmarkDisabled}
-              aria-label={m(
-                bookmarked ? "location_bookmark_edit" : "location_bookmark_add",
-              )}
-              title={m(
-                bookmarked ? "location_bookmark_edit" : "location_bookmark_add",
-              )}
-              onClick={onBookmark}
-            >
-              <BookmarkIcon filled={bookmarked} add={!bookmarked} />
             </button>
           )}
         </div>
