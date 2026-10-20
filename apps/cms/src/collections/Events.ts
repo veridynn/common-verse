@@ -71,11 +71,9 @@ export const Events: CollectionConfig = {
     {
       name: "description",
       label: label("description"),
-      type: "textarea",
+      type: "text",
       localized: true,
-      admin: {
-        rows: 3,
-      },
+      required: true,
     },
     {
       name: "registrationUrl",

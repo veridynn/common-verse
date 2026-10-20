@@ -126,7 +126,10 @@ describe("editorial schemas", () => {
       field(Events, "startDate"),
       field(Events, "location"),
     ]);
-    expect(field(Events, "description")).toMatchObject({ type: "textarea" });
+    expect(field(Events, "description")).toMatchObject({
+      type: "text",
+      required: true,
+    });
     expect(field(Events, "image")).toMatchObject({
       type: "upload",
       relationTo: "media",
