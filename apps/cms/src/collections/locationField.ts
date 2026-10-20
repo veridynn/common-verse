@@ -30,7 +30,7 @@ export function eventLocationField(): GroupField {
     name: "location",
     type: "group",
     label: false,
-    admin: { hideGutter: true },
+    admin: { hideGutter: true, className: "event-editor-location" },
     fields: [
       coordinateField(),
       {

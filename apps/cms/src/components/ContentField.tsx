@@ -50,7 +50,7 @@ function ContentLanguage({
     }
   }, [language]);
   return (
-    <div ref={ref} style={{ display: "contents" }}>
+    <div ref={ref} className="content-language" style={{ display: "contents" }}>
       {children}
     </div>
   );
