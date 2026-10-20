@@ -35,5 +35,8 @@
   "nav_articles": "Artikel",
   "nav_events": "Veranstaltungen",
   "home_all_authors": "Alle Autor:innen kennenlernen",
-  "home_no_authors": "Hier erscheinen bald Profile der Autor:innen."
+  "home_no_authors": "Hier erscheinen bald Profile der Autor:innen.",
+  "events_all": "Alle Veranstaltungen",
+  "events_filter": "Veranstaltungen nach Typ filtern",
+  "events_empty": "Für diese Auswahl sind keine Veranstaltungen verfügbar. Wähle einen anderen Typ oder schau später wieder vorbei."
 }

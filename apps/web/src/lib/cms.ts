@@ -33,11 +33,20 @@ async function fetchCollection<T>(
           ? "-createdAt"
           : "title",
   );
-  const response = await fetch(url);
-  if (!response.ok)
-    throw new Error(`Payload request failed with ${response.status}`);
-  const data = (await response.json()) as PayloadListResponse<T>;
-  return data.docs;
+  const documents: T[] = [];
+  let page = 1;
+  let hasNextPage: boolean;
+  do {
+    url.searchParams.set("page", String(page));
+    const response = await fetch(url.href);
+    if (!response.ok)
+      throw new Error(`Payload request failed with ${response.status}`);
+    const data = (await response.json()) as PayloadListResponse<T>;
+    documents.push(...data.docs);
+    hasNextPage = collection === "events" && data.hasNextPage;
+    page += 1;
+  } while (hasNextPage);
+  return documents;
 }
 
 async function fetchDocument<T>(

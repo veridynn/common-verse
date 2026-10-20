@@ -11,6 +11,14 @@ const { locale: rawLocale } = Astro.params
 if (!isLocale(rawLocale)) return new Response('Not found', { status: 404 })
 const locale = rawLocale
 const events = await getEvents(locale)
+const requestedKind = Astro.url.searchParams.get('type')
+const kind = requestedKind === 'workshop' || requestedKind === 'event' ? requestedKind : null
+const visibleEvents = events.filter((event) => event.title && (!kind || (event.kind ?? 'workshop') === kind))
+const filters = [
+  { kind: null, label: m.events_all({}, { locale }) },
+  { kind: 'workshop', label: m.workshop_label({}, { locale }) },
+  { kind: 'event', label: m.home_event({}, { locale }) },
+]
 const title = m.nav_events({}, { locale })
 ---
 
@@ -18,14 +26,23 @@ const title = m.nav_events({}, { locale })
   <section>
     <Eyebrow>{m.site_title({}, { locale })}</Eyebrow>
     <Heading level={1}>{title}</Heading>
+    <nav aria-label={m.events_filter({}, { locale })} class="event-filters">
+      {filters.map((filter) => (
+        <Link variant="standalone" href={`${localizedPath(locale, 'events')}${filter.kind ? `?type=${filter.kind}` : ''}`} aria-current={kind === filter.kind ? 'page' : undefined}>
+          {filter.label}
+        </Link>
+      ))}
+    </nav>
+    {visibleEvents.length === 0 && <p>{m.events_empty({}, { locale })}</p>}
     <ul class="content-list">
-      {events.filter((event) => event.title).map((event) => (
+      {visibleEvents.map((event) => (
         <li>
           <article>
             <Heading level={2}><Link variant="heading" href={localizedPath(locale, `events/${event.slug}`)}>{event.title}</Link></Heading>
+            <p>{event.kind === 'event' ? m.home_event({}, { locale }) : m.workshop_label({}, { locale })}</p>
             {event.description && <p>{event.description}</p>}
             <time datetime={event.startDate}>
-              {new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(new Date(event.startDate))}
+              {new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone: 'Europe/Berlin' }).format(new Date(event.startDate))}
             </time>
           </article>
         </li>
@@ -33,3 +50,20 @@ const title = m.nav_events({}, { locale })
     </ul>
   </section>
 </BaseLayout>
+
+<style>
+  .event-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin-block: 1.5rem;
+  }
+  .event-filters :global(a) {
+    min-block-size: 44px;
+    padding-inline: 0.25rem;
+  }
+  .event-filters :global(a[aria-current='page']) {
+    text-decoration-thickness: 0.2em;
+    text-underline-offset: 0.4em;
+  }
+</style>

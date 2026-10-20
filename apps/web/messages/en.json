@@ -35,5 +35,8 @@
   "nav_articles": "Articles",
   "nav_events": "Events",
   "home_all_authors": "Meet all authors",
-  "home_no_authors": "Author profiles will appear here soon."
+  "home_no_authors": "Author profiles will appear here soon.",
+  "events_all": "All events",
+  "events_filter": "Filter events by type",
+  "events_empty": "No events available for this selection. Try another type or check back later."
 }

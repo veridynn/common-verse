@@ -7,6 +7,7 @@ import {
   getFixedPage,
   getRecentPoems,
   getUpcomingEvents,
+  getEvents,
 } from "./cms";
 
 afterEach(() => vi.unstubAllGlobals());
@@ -151,4 +152,25 @@ it("requests published article content without language fallback and omits incom
   expect(fetch.mock.calls[2][1]).toEqual({
     headers: { "x-preview-secret": "secret" },
   });
+});
+
+it("loads every event archive page and reports failures on later pages", async () => {
+  const fetch = vi
+    .fn()
+    .mockResolvedValueOnce(
+      Response.json({ docs: [{ id: 1 }], hasNextPage: true }),
+    )
+    .mockResolvedValueOnce(
+      Response.json({ docs: [{ id: 2 }], hasNextPage: false }),
+    );
+  vi.stubGlobal("fetch", fetch);
+  expect(await getEvents("ar")).toEqual([{ id: 1 }, { id: 2 }]);
+  const urls = fetch.mock.calls.map(([url]) => new URL(String(url)));
+  expect(urls.map((url) => url.searchParams.get("page"))).toEqual(["1", "2"]);
+  expect(urls[1].searchParams.get("sort")).toBe("startDate");
+  expect(urls[1].searchParams.get("fallback-locale")).toBe("none");
+  fetch
+    .mockResolvedValueOnce(Response.json({ docs: [], hasNextPage: true }))
+    .mockResolvedValueOnce(new Response(null, { status: 503 }));
+  await expect(getEvents("ar")).rejects.toThrow("503");
 });

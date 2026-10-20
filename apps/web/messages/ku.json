@@ -35,5 +35,8 @@
   "nav_articles": "Gotar",
   "nav_events": "Bûyer",
   "home_all_authors": "Hemû nivîskaran nas bike",
-  "home_no_authors": "Profîlên nivîskaran dê di demeke nêzîk de li vir xuya bibin."
+  "home_no_authors": "Profîlên nivîskaran dê di demeke nêzîk de li vir xuya bibin.",
+  "events_all": "Hemû bûyer",
+  "events_filter": "Bûyeran li gorî cureyê parzûn bike",
+  "events_empty": "Ji bo vê hilbijartinê bûyer tune ne. Cureyek din biceribîne an paşê vegere."
 }

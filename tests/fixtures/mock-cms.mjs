@@ -297,6 +297,23 @@ const server = http.createServer((request, response) => {
     ) {
       document.title = previewTitles.get(locale);
     }
+    if (!requestedSlug && url.searchParams.get("limit") === "100") {
+      if (locale === "de") document.kind = null;
+      const reading = {
+        ...document,
+        id: 20,
+        slug: "reading",
+        kind: "event",
+        title: locale === "fa" ? null : `Reading ${locale}`,
+      };
+      return response.end(
+        JSON.stringify({
+          docs: [document, reading],
+          totalDocs: 2,
+          hasNextPage: false,
+        }),
+      );
+    }
     if (requestedSlug === "reading") {
       document.kind = "event";
       document.price = 12.5;
