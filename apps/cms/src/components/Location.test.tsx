@@ -131,6 +131,43 @@ it("shows bookmarks on initial focus and filters them from the first character",
   harness.query = "HO";
   expect(render().options.map((option: any) => option.place)).toEqual([home]);
 });
+it("only shows local history for the current CMS user and language", () => {
+  harness.user = { id: 1 };
+  const data = { searches: [], recent: [{ place, count: 1, at: Date.now() }] };
+  for (const scope of ["2:de", "1:en", "1:de"]) {
+    harness.state = 0;
+    harness.cache = { scope, data };
+    const tree = Location({ id: "location", value: null, onChange: vi.fn() });
+    expect(child(tree, 0).options).toHaveLength(scope === "1:de" ? 1 : 0);
+  }
+});
+it("uses cached responses while refreshing and on provider failure, but respects fresh empty results", () => {
+  harness.user = { id: 1 };
+  harness.query = "ber";
+  harness.cache = {
+    scope: "1:de",
+    data: {
+      searches: [{ query: "ber", results: [place], at: Date.now() }],
+      recent: [],
+    },
+  };
+  for (const [loading, unavailable, expected] of [
+    [true, false, 1],
+    [false, true, 1],
+    [false, false, 0],
+  ] as const) {
+    harness.state = 0;
+    harness.loading = loading;
+    harness.unavailable = unavailable;
+    const tree = Location({
+      id: "location",
+      value: null,
+      bookmarks: false,
+      onChange: vi.fn(),
+    });
+    expect(child(tree, 0).options).toHaveLength(expected);
+  }
+});
 it.each(["h", "ho", "hom"])(
   "searches bookmarks immediately and debounces the provider only from three characters: %s",
   async (query) => {

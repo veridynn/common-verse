@@ -76,6 +76,20 @@ location group in the saved Locations collection, so the creation form has no gr
 separator. Its search only queries the geocoder; saved bookmarks appear only in
 the event selector. Coordinate-only locations are valid.
 
+Search results are cached in IndexedDB in the editor's browser, scoped to the
+signed-in user and content language. Up to 100 query responses are retained for
+one day; up to 50 selected places retain frequency and recency for 90 days.
+Only selection increments usage, and bookmark aliases/IDs are not cached.
+Unavailable browser storage falls back to normal search without blocking editing.
+On empty event search focus, at most five bookmarks/recent selections appear.
+While typing, at most two strongly matching familiar places precede up to six
+provider results. Text relevance comes before bookmark status, frequency and
+recency; weak substring matches are not promoted. Provider order is preserved,
+duplicate points appear once, and provider matches of saved Locations retain
+their bookmark icon even outside the two promoted positions. Cached results appear
+immediately, with Photon refreshing after three characters and a 200ms debounce.
+Location creation uses cached address results but never bookmark/history promotions.
+
 The native Location drawer has a responsive maximum width of 42rem. It uses the
 same fields as the Locations page, and its save action returns to the event form.
 

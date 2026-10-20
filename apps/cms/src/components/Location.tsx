@@ -1,6 +1,11 @@
 "use client";
 
-import { useDocumentDrawer, useLocale, useTranslation } from "@payloadcms/ui";
+import {
+  useAuth,
+  useDocumentDrawer,
+  useLocale,
+  useTranslation,
+} from "@payloadcms/ui";
 import { message } from "@poetry/cms-ui";
 import { useEffect, useRef, useState } from "react";
 import type { Location as LocationDocument } from "../payload-types";
@@ -14,6 +19,16 @@ import {
   sameLocation,
   savedLocation,
 } from "../utilities/locations-client";
+import {
+  cachedLocationResults,
+  cacheLocationSearch,
+  emptyLocationCache,
+  locationCache,
+  locationSuggestions,
+  pruneLocationCache,
+  rememberLocation,
+  type LocationCache,
+} from "../utilities/location-cache";
 import { LocationMap } from "./LocationMap";
 import { LocationSearch } from "./LocationSearch";
 import styles from "./Location.module.css";
@@ -43,6 +58,10 @@ export function Location({
 }) {
   const { i18n } = useTranslation();
   const locale = useLocale();
+  const { user } = useAuth();
+  const scope = user ? `${user.id}:${locale.code}` : null;
+  const activeScope = useRef(scope);
+  activeScope.current = scope;
   const m = (key: Parameters<typeof message>[0]) => message(key, i18n.language);
   const [query, setQuery] = useState<string | null>(null);
   const [results, setResults] = useState(emptyResults);
@@ -52,6 +71,7 @@ export function Location({
   const [resolving, setResolving] = useState(false);
   const [revision, setRevision] = useState(0);
   const [error, setError] = useState("");
+  const [cache, setCache] = useState({ scope, data: emptyLocationCache });
   const reverse = useRef<AbortController | null>(null);
   const selectedBookmark =
     bookmarks &&
@@ -67,6 +87,18 @@ export function Location({
   });
 
   useEffect(() => () => reverse.current?.abort(), []);
+
+  async function updateCache(update: (cache: LocationCache) => LocationCache) {
+    if (!scope) return;
+    const stored = await locationCache(scope, update);
+    if (activeScope.current === scope)
+      setCache((current) => ({
+        scope,
+        data:
+          stored ??
+          update(current.scope === scope ? current.data : emptyLocationCache),
+      }));
+  }
 
   useEffect(() => {
     const controller = new AbortController();
@@ -100,6 +132,10 @@ export function Location({
           }));
         else {
           setResults(data);
+          if (!data.unavailable)
+            void updateCache((cache) =>
+              cacheLocationSearch(cache, term, data.results),
+            );
           if (data.unavailable) setError(m("place_search_failed"));
         }
       } catch {
@@ -123,7 +159,7 @@ export function Location({
       controller.abort();
       clearTimeout(remoteTimer);
     };
-  }, [query, locale.code, revision, i18n.language, bookmarks]);
+  }, [query, locale.code, revision, i18n.language, bookmarks, scope]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -153,6 +189,17 @@ export function Location({
     return () => controller.abort();
   }, [value?.coordinates[0], value?.coordinates[1], bookmarks, i18n.language]);
 
+  useEffect(() => {
+    let active = true;
+    if (scope)
+      void locationCache(scope).then((data) => {
+        if (active) setCache({ scope, data: data ?? emptyLocationCache });
+      });
+    return () => {
+      active = false;
+    };
+  }, [scope]);
+
   function select(place: LocationValue | null) {
     if (disabled) return;
     reverse.current?.abort();
@@ -160,6 +207,8 @@ export function Location({
     setQuery(null);
     setError("");
     onChange(place);
+    if (place?.address)
+      void updateCache((cache) => rememberLocation(cache, place));
     if (place && !place.address) void selectPoint(place);
   }
 
@@ -203,6 +252,7 @@ export function Location({
     } finally {
       if (!controller.signal.aborted) {
         setResolving(false);
+        void updateCache((cache) => rememberLocation(cache, selected));
       }
     }
   }
@@ -219,32 +269,18 @@ export function Location({
       openDrawer();
   }
 
-  const term = query?.trim().toLocaleLowerCase() ?? "";
-  const saved = bookmarks
-    ? results.saved.filter(
-        (place) =>
-          !term ||
-          [place.alias, place.address].some((text) =>
-            text?.toLocaleLowerCase().includes(term),
-          ),
-      )
-    : [];
-  const options = [
-    ...saved.map((place) => ({
-      value: `saved-${place.id}`,
-      label: place.alias || locationAddress(place),
-      place,
-      saved: true,
-    })),
-    ...results.results
-      .filter((place) => !saved.some((other) => sameLocation(place, other)))
-      .map((place, index) => ({
-        value: `result-${index}`,
-        label: locationAddress(place),
-        place,
-        saved: false,
-      })),
-  ];
+  const local =
+    cache.scope === scope ? pruneLocationCache(cache.data) : emptyLocationCache;
+  const options = locationSuggestions(
+    query ?? "",
+    results.saved,
+    local.recent,
+    results.results.length ||
+      (!loading && !results.unavailable && query && query.trim().length >= 3)
+      ? results.results
+      : cachedLocationResults(local, query ?? ""),
+    bookmarks,
+  );
   return (
     <div className={styles.picker}>
       <LocationSearch
@@ -299,6 +335,7 @@ export function Location({
             setError("");
             setRevision((current) => current + 1);
             onChange(place);
+            void updateCache((cache) => rememberLocation(cache, place));
             closeDrawer();
             requestAnimationFrame(() =>
               document.getElementById(`${id}-bookmark`)?.focus(),
