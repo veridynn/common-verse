@@ -78,6 +78,11 @@ export const Events: CollectionConfig = {
       },
     },
     {
+      name: "registrationUrl",
+      type: "text",
+      label: label("registration_url"),
+    },
+    {
       name: "image",
       label: label("event_cover_image"),
       type: "upload",
@@ -133,12 +138,6 @@ export const Events: CollectionConfig = {
               },
             },
           ],
-        },
-        {
-          name: "registrationUrl",
-          type: "text",
-          label: label("registration_url"),
-          admin: { description: label("event_registration_help") },
         },
       ],
     },

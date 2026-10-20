@@ -113,7 +113,7 @@ describe("editorial schemas", () => {
     expect(field(Events, "seo")).toMatchObject({ admin: { hidden: true } });
   });
 
-  it("shows title, description, image and date/time while retaining other fields", () => {
+  it("shows registration below description while retaining other fields", () => {
     const visible = Events.fields.filter(
       (field) =>
         !field.admin || !("hidden" in field.admin) || !field.admin.hidden,
@@ -121,6 +121,7 @@ describe("editorial schemas", () => {
     expect(visible).toEqual([
       field(Events, "title"),
       field(Events, "description"),
+      field(Events, "registrationUrl"),
       field(Events, "image"),
       field(Events, "startDate"),
       field(Events, "location"),
