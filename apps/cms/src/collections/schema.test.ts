@@ -144,6 +144,15 @@ describe("editorial schemas", () => {
       required: true,
       admin: { date: { pickerAppearance: "dayAndTime" } },
     });
+    expect(field(Events, "location")).toMatchObject({
+      fields: expect.arrayContaining([
+        expect.objectContaining({
+          name: "coordinates",
+          type: "point",
+          required: true,
+        }),
+      ]),
+    });
     expect(field(Events, "content")).toBeDefined();
     expect(
       Events.fields.find((field) => field.type === "collapsible"),
