@@ -19,6 +19,12 @@
 .render-fields > .event-editor-location {
   margin-block: 0 var(--spacing-field);
 }
+.event-editor-location > .group-field__wrap > .group-field__header > header {
+  display: none;
+}
+.event-editor-location > .group-field__wrap > .group-field__header {
+  margin-bottom: 0;
+}
 
 .event-editor-content .ContentEditable__root {
   min-block-size: 24rem;
