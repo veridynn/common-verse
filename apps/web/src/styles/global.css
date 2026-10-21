@@ -645,11 +645,6 @@ footer {
   max-width: 20ch;
   font-size: var(--font-size-sm);
 }
-.event-kind {
-  font-size: var(--font-size-sm);
-  color: var(--secondary-text);
-  margin-block: 0;
-}
 .event-copy h3 {
   margin-block: var(--space-2xs);
   font-size: var(--font-size-lg);

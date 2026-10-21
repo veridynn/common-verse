@@ -133,8 +133,7 @@ export async function getUpcomingEvents(locale: Locale): Promise<Event[]> {
   url.searchParams.set("where[title][exists]", "true");
   url.searchParams.set("where[title][not_equals]", "");
   const now = new Date().toISOString();
-  url.searchParams.set("where[or][0][startDate][greater_than_equal]", now);
-  url.searchParams.set("where[or][1][endDate][greater_than_equal]", now);
+  url.searchParams.set("where[startDate][greater_than_equal]", now);
   const response = await fetch(url);
   if (!response.ok)
     throw new Error(`Programme request failed with ${response.status}`);

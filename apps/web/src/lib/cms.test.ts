@@ -74,7 +74,7 @@ describe("automatic homepage queries", () => {
     expect(events.searchParams.get("sort")).toBe("startDate");
     expect(events.searchParams.get("where[title][exists]")).toBe("true");
     expect(
-      events.searchParams.get("where[or][1][endDate][greater_than_equal]"),
+      events.searchParams.get("where[startDate][greater_than_equal]"),
     ).toBeTruthy();
   });
   it("skips inactive profiles and continues past the first page until four active authors", async () => {

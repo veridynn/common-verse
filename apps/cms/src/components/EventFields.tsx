@@ -3,6 +3,18 @@
 import { useTranslation } from "@payloadcms/ui";
 import { message } from "@poetry/cms-ui";
 import { useEffect } from "react";
+import {
+  $createHorizontalRuleNode,
+  HorizontalRuleNode,
+} from "@payloadcms/richtext-lexical/client";
+
+// shortcut: fix Payload's inherited server-node importer until payloadcms/payload#16477 is resolved.
+HorizontalRuleNode.importDOM = () => ({
+  hr: () => ({
+    conversion: () => ({ node: $createHorizontalRuleNode() }),
+    priority: 0,
+  }),
+});
 
 export function EditorAccessibility() {
   const { i18n, t } = useTranslation();

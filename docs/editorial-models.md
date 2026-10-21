@@ -31,25 +31,24 @@ records and existing public routes.
 See [accounts and permissions](accounts-and-permissions.md) for content access
 and the planned contributor workflow.
 
-The event editor currently shows a title, required description text field, required registration link, required image upload,
-native date/time picker, required map-based location picker, and a required Lexical rich text content editor at the bottom during redesign.
-Other event fields and their stored values remain in the model but are hidden
-from the form. New events can be saved as drafts; publishing still requires a date.
+Events contain a localized title, required description, required registration link,
+required cover image, one date/time (`startDate`), required map-based location,
+and required localized Lexical content. Payload’s native `slugField()` creates the
+stored `slug` text field from `title`, with its standard lock and regeneration
+controls. Its native `generateSlug` checkbox owns automatic generation, including
+draft autosaves; there is no custom event slug hook, transliteration, or collision
+suffixing. Drafts and authorized previews remain supported.
+There are no event subtypes, prices, end dates, or separate SEO fields. Public
+metadata derives from the title, description, and cover image. Upcoming events are
+selected by their start date.
 
-Events offer Workshop (`workshop`) and Reading (`event`). Titles and descriptions
-have no character limit or custom character counter. Content appears at the bottom of the form with headings, lists, quotes, alignment,
-indentation, emphasis, links, separators, and images from Media. Images can be
-selected from the library or uploaded within the editor; their alternative text
-and credits appear on the public page. Articles retain their simpler toolbar.
-Slugs generate from the title when missing and remain stable thereafter.
-The editor shows one date/time (`startDate`); historical end dates remain stored
-and continue to support upcoming-event filtering. Optional EUR prices (0 for free,
-blank for unknown) belong only to readings. The Location field stores one structured location value. A single autocomplete searches
-saved locations by alias and address, followed by external
-map results. Selecting a result fills the search control with its full address
-and the matching saved location's alias, when present.
-Saved and external matches at the same coordinates are shown once. Focus and clicks
-open the suggestions, including before typing. Clearing also shows saved bookmarks.
+Titles and descriptions have no character limit or custom counter. The content
+editor supports headings, lists, quotes, alignment, indentation, emphasis, links,
+separators, and Media images with alternative text and credits. Articles retain
+their simpler toolbar. The location is a structured address/coordinate snapshot.
+Its autocomplete searches saved locations by alias and address, then external map
+results, deduplicating matches at the same coordinates. Focus, clicking, or clearing
+shows saved bookmarks. Selecting a result fills its full address and saved alias.
 
 The shared `Location` component provides a Payload search input with a
 bookmark button in a reserved leading slot and a Leaflet map underneath. Direct Photon requests
@@ -100,7 +99,7 @@ Events keep their own location snapshots, so later bookmark edits do not automat
 
 Use Articles (`Article`, `Articles`, `getArticle`, `getArticles`), Events
 (`Event`, `Events`, `getEvent`, `getEvents`), Authors, Poems, Media, Users and fixed
-Pages in application code and editor labels. Workshops are an event subtype;
+Pages in application code and editor labels. Workshops are event content;
 poets are authors with published poems, not a separate account or collection.
 Homepage author sections and relationship fields use `authors` too.
 

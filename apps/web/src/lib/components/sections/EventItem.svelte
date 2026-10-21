@@ -24,11 +24,6 @@
     >
   </div>
   <div class="event-copy">
-    <p class="event-kind">
-      {event.kind === "event"
-        ? m.home_event({}, { locale })
-        : m.workshop_label({}, { locale })}
-    </p>
     <Heading level={3}
       ><Link variant="heading" {href}>{event.title}</Link></Heading
     >

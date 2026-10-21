@@ -2,50 +2,26 @@ import { expect, test } from "@playwright/test";
 
 for (const locale of ["de", "ar"] as const) {
   const base = locale === "de" ? "/veranstaltungen" : "/ar/events";
-  test(`${locale} events filter by type with keyboard on narrow screens`, async ({
+  test(`${locale} events open with keyboard on narrow screens`, async ({
     page,
   }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
+    await page.setViewportSize({ width: 320, height: 844 });
     await page.goto(base);
-    const filters = page.locator(".event-filters");
-    const links = filters.getByRole("link");
     await expect(page.locator(".content-list article")).toHaveCount(2);
-    await expect(links.nth(0)).toHaveAttribute("aria-current", "page");
-    await links.nth(1).focus();
+    const link = page.locator(`.content-list a[href="${base}/test"]`);
+    await link.focus();
     await page.keyboard.press("Enter");
-    await expect(page).toHaveURL(`${base}?type=workshop`);
-    await expect(page.locator(".content-list article")).toHaveCount(1);
-    await expect(
-      page.locator(`.content-list a[href="${base}/test"]`),
-    ).toBeVisible();
-    await expect(links.nth(1)).toHaveAttribute("aria-current", "page");
-    await links.nth(2).click();
-    await expect(page.locator(".content-list article")).toHaveCount(1);
-    await expect(page.getByRole("heading", { level: 2 })).toHaveText(
-      `Reading ${locale}`,
-    );
-    await expect(links.nth(2)).toHaveAttribute("aria-current", "page");
+    await expect(page).toHaveURL(`${base}/test`);
+    await expect(page.locator("aside time")).toHaveCount(1);
     expect(
       await page.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth,
       ),
     ).toBe(true);
-    const kindLabel = await links.nth(2).innerText();
-    await page.getByRole("heading", { level: 2 }).getByRole("link").click();
-    await expect(page.locator("main article > [data-slot=eyebrow]")).toHaveText(
-      kindLabel,
-    );
-    await page.goto(`${base}?type=unknown`);
-    await expect(page.locator(".content-list article")).toHaveCount(2);
-    await expect(links.nth(0)).toHaveAttribute("aria-current", "page");
-    await links.nth(2).click();
-    await links.nth(0).click();
-    await expect(page).toHaveURL(base);
-    await expect(page.locator(".content-list article")).toHaveCount(2);
   });
 }
 
-test("filters work without JavaScript and empty translations stay missing", async ({
+test("events work without JavaScript and missing translations stay omitted", async ({
   browser,
   baseURL,
 }) => {
@@ -54,15 +30,15 @@ test("filters work without JavaScript and empty translations stay missing", asyn
     baseURL,
   });
   const page = await context.newPage();
-  await page.goto("/fa/events?type=event");
-  await expect(page.locator(".content-list article")).toHaveCount(0);
-  await expect(page.locator("main section > p:not([data-slot])")).toBeVisible();
-  await page.locator(".event-filters a").first().click();
+  await page.goto("/fa/events");
   await expect(page.locator(".content-list article")).toHaveCount(1);
+  await expect(page.locator('a[href="/fa/events/reading"]')).toHaveCount(0);
+  await page.locator(".content-list a").click();
+  await expect(page.locator("aside time")).toHaveCount(1);
   await context.close();
 });
 
-test("event details render rich text and only show reading prices", async ({
+test("event details render the current fields and rich text", async ({
   page,
 }) => {
   await page.goto("/en/events/reading");
@@ -85,7 +61,18 @@ test("event details render rich text and only show reading prices", async ({
   await expect(page.locator(".event-content-image figcaption")).toHaveText(
     "The Poetry Project",
   );
-  await expect(page.locator("aside")).toContainText("€12.50");
+  await expect(page.locator("aside")).toContainText(
+    "The Poetry Project, Berlin",
+  );
+  await expect(page.locator("aside time")).toHaveCount(1);
+  await expect(page.locator(".image-credit")).toHaveText("Event photographer");
+  await expect(
+    page.getByRole("link", { name: "Register", exact: true }),
+  ).toHaveAttribute("href", "https://example.org/register");
+  await expect(page.locator(".back-link")).toHaveAttribute(
+    "href",
+    "/en/events",
+  );
   const event = await page
     .locator('script[type="application/ld+json"]')
     .evaluateAll((scripts) =>
@@ -93,8 +80,43 @@ test("event details render rich text and only show reading prices", async ({
         .map((script) => JSON.parse(script.textContent!))
         .find((value) => value["@type"] === "Event"),
     );
-  expect(event.offers).toMatchObject({ price: 12.5, priceCurrency: "EUR" });
+  expect(event).not.toHaveProperty("offers");
+  expect(event).not.toHaveProperty("endDate");
   await page.goto("/en/events/test");
   await expect(page.locator("aside")).not.toContainText("€");
   await expect(page.locator(".prose p")).toBeVisible();
 });
+
+test("unsafe registration links are omitted", async ({ page }) => {
+  await page.goto("/en/events/unsafe-registration");
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Register", exact: true }),
+  ).toHaveCount(0);
+});
+
+for (const locale of ["de", "ar"]) {
+  test(`${locale} event layout reflows with readable details`, async ({
+    page,
+  }, testInfo) => {
+    await page.goto(
+      locale === "de" ? "/veranstaltungen/reading" : "/ar/events/reading",
+    );
+    for (const width of [320, 1280]) {
+      await page.setViewportSize({ width, height: 900 });
+      await expect(page.locator("aside")).toBeVisible();
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth,
+        ),
+      ).toBe(true);
+      await page.screenshot({
+        path: testInfo.outputPath(`event-${width}.png`),
+        fullPage: true,
+      });
+    }
+    await page.locator(".back-link").focus();
+    await page.keyboard.press("Enter");
+    await expect(page.locator(".event-programme img")).toHaveCount(2);
+  });
+}

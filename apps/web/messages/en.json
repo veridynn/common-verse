@@ -6,7 +6,6 @@
   "nav_primary": "Primary navigation",
   "language_label": "Language",
   "skip_to_content": "Skip to content",
-  "workshop_label": "Workshop",
   "poem_original": "Original",
   "poem_translations": "Translations",
   "translated_by": "Translated by {name}",
@@ -16,7 +15,6 @@
   "home_events_link": "Upcoming events and workshops",
   "home_featured_poem": "A poem to spend time with",
   "home_read_poem": "Read the full poem",
-  "home_event": "Reading and event",
   "home_event_details": "View details",
   "home_all_events": "All events and workshops",
   "home_no_events": "New dates are on their way. Explore our workshops or contact us to take part.",
@@ -36,7 +34,9 @@
   "nav_events": "Events",
   "home_all_authors": "Meet all authors",
   "home_no_authors": "Author profiles will appear here soon.",
-  "events_all": "All events",
-  "events_filter": "Filter events by type",
-  "events_empty": "No events available for this selection. Try another type or check back later."
+  "events_empty": "No events are currently available in this language. Check back later.",
+  "events_intro": "Poetry brings us together. Find workshops, readings, and opportunities to meet.",
+  "events_details": "At a glance",
+  "events_when": "When",
+  "events_where": "Where"
 }

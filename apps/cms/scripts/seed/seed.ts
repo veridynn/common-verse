@@ -12,8 +12,6 @@ const translations = {
     content:
       "Wir lesen gemeinsam, schreiben in mehreren Sprachen und teilen Texte in einer unterstützenden Runde.",
     location: "The Poetry Project, Berlin",
-    seoTitle: "Poesie über Grenzen – Workshop",
-    seoDescription: "Mehrsprachiger Poesie-Workshop in Berlin.",
     alt: "Bunte Papierformen, die sich wie Verse überlagern",
   },
   en: {
@@ -22,8 +20,6 @@ const translations = {
     content:
       "We read together, write across languages, and share work in a supportive circle.",
     location: "The Poetry Project, Berlin",
-    seoTitle: "Poetry Across Borders – Workshop",
-    seoDescription: "A multilingual poetry workshop in Berlin.",
     alt: "Colourful paper forms overlapping like lines of verse",
   },
   ar: {
@@ -31,8 +27,6 @@ const translations = {
     description: "ورشة مفتوحة حول اللغة والذاكرة والتواصل.",
     content: "نقرأ معًا ونكتب بلغات متعددة ونتشارك النصوص في حلقة داعمة.",
     location: "مشروع الشعر، برلين",
-    seoTitle: "الشعر عبر الحدود – ورشة",
-    seoDescription: "ورشة شعر متعددة اللغات في برلين.",
     alt: "أشكال ورقية ملوّنة تتداخل مثل أبيات الشعر",
   },
   fa: {
@@ -41,8 +35,6 @@ const translations = {
     content:
       "با هم می‌خوانیم، به چند زبان می‌نویسیم و نوشته‌ها را در جمعی همراه به اشتراک می‌گذاریم.",
     location: "پروژه شعر، برلین",
-    seoTitle: "شعر فراتر از مرزها – کارگاه",
-    seoDescription: "کارگاه شعر چندزبانه در برلین.",
     alt: "فرم‌های کاغذی رنگارنگ که مانند سطرهای شعر روی هم افتاده‌اند",
   },
   uk: {
@@ -51,8 +43,6 @@ const translations = {
     content:
       "Ми читаємо разом, пишемо різними мовами та ділимося текстами в дружньому колі.",
     location: "Поетичний проєкт, Берлін",
-    seoTitle: "Поезія без кордонів – майстерня",
-    seoDescription: "Багатомовна поетична майстерня в Берліні.",
     alt: "Кольорові паперові форми накладаються, мов поетичні рядки",
   },
   ku: {
@@ -61,8 +51,6 @@ const translations = {
     content:
       "Em bi hev re dixwînin, bi gelek zimanan dinivîsin û nivîsan di derdoreke piştgir de parve dikin.",
     location: "Projeya Helbestê, Berlîn",
-    seoTitle: "Helbest li Ser Sînoran – Atolye",
-    seoDescription: "Atolyeyeke helbestê ya pirzimanî li Berlînê.",
     alt: "Formên kaxezê yên rengîn wek rêzên helbestê li hev dikevin",
   },
 } as const;
@@ -144,7 +132,6 @@ export async function seed(payload: Payload, { onlyIfEmpty = false } = {}) {
         collection: "events",
         locale: "de",
         data: {
-          kind: "workshop",
           title: de.title,
           slug: "test",
           description: de.description,
@@ -153,11 +140,6 @@ export async function seed(payload: Payload, { onlyIfEmpty = false } = {}) {
           startDate: "2026-11-14T13:00:00.000Z",
           location: { coordinates: [13.405, 52.52], address: de.location },
           registrationUrl: "https://example.org/register",
-          seo: {
-            title: de.seoTitle,
-            description: de.seoDescription,
-            image: media.id,
-          },
           _status: "published",
         },
       });
@@ -174,11 +156,6 @@ export async function seed(payload: Payload, { onlyIfEmpty = false } = {}) {
             description: text.description,
             content: plainTextToRichText(text.content),
             location: { coordinates: [13.405, 52.52], address: text.location },
-            seo: {
-              title: text.seoTitle,
-              description: text.seoDescription,
-              image: media.id,
-            },
           },
         });
       }

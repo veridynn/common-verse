@@ -26,19 +26,17 @@ describe("homepage editorial behaviour", () => {
     const now = new Date("2026-10-08T12:00:00Z");
     const first = event(1, "2026-10-09T12:00:00Z");
     const pinned = event(2, "2026-10-10T12:00:00Z");
-    const ongoing = event(3, "2026-10-07T12:00:00Z", {
-      endDate: "2026-10-09T12:00:00Z",
-    });
+    const started = event(3, "2026-10-07T12:00:00Z");
     const past = event(4, "2026-10-01T12:00:00Z");
     const draft = event(5, "2026-10-11T12:00:00Z", { _status: "draft" });
     expect(
       upcomingEvents(
-        [first, pinned, ongoing, past, draft],
+        [first, pinned, started, past, draft],
         [past, pinned],
         3,
         now,
       ).map((entry) => entry.id),
-    ).toEqual([2, 3, 1]);
+    ).toEqual([2, 1]);
     expect(
       upcomingEvents(
         [event(6, "invalid"), event(7, "2026-10-09", { title: "" })],

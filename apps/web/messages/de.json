@@ -6,7 +6,6 @@
   "nav_primary": "Hauptnavigation",
   "language_label": "Sprache",
   "skip_to_content": "Zum Inhalt springen",
-  "workshop_label": "Workshop",
   "poem_original": "Original",
   "poem_translations": "Übersetzungen",
   "translated_by": "Übersetzt von {name}",
@@ -16,7 +15,6 @@
   "home_events_link": "Kommende Veranstaltungen und Workshops",
   "home_featured_poem": "Ein Gedicht zum Verweilen",
   "home_read_poem": "Das ganze Gedicht lesen",
-  "home_event": "Lesung und Veranstaltung",
   "home_event_details": "Details ansehen",
   "home_all_events": "Alle Veranstaltungen und Workshops",
   "home_no_events": "Neue Termine folgen bald. Entdecke unsere Workshops oder melde dich bei uns, um mitzumachen.",
@@ -36,7 +34,9 @@
   "nav_events": "Veranstaltungen",
   "home_all_authors": "Alle Autor:innen kennenlernen",
   "home_no_authors": "Hier erscheinen bald Profile der Autor:innen.",
-  "events_all": "Alle Veranstaltungen",
-  "events_filter": "Veranstaltungen nach Typ filtern",
-  "events_empty": "Für diese Auswahl sind keine Veranstaltungen verfügbar. Wähle einen anderen Typ oder schau später wieder vorbei."
+  "events_empty": "Aktuell sind keine Veranstaltungen in dieser Sprache verfügbar. Schau später noch einmal vorbei.",
+  "events_intro": "Poesie bringt uns zusammen. Hier findest du Workshops, Lesungen und Gelegenheiten zur Begegnung.",
+  "events_details": "Auf einen Blick",
+  "events_when": "Wann",
+  "events_where": "Wo"
 }

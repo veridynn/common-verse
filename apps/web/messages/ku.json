@@ -6,7 +6,6 @@
   "nav_primary": "Navîgasyona sereke",
   "language_label": "Ziman",
   "skip_to_content": "Biçe naverokê",
-  "workshop_label": "Atolye",
   "poem_original": "Orîjînal",
   "poem_translations": "Werger",
   "translated_by": "Wergêr: {name}",
@@ -16,7 +15,6 @@
   "home_events_link": "Bûyer û atolyeyên pêşerojê",
   "home_featured_poem": "Helbestek ji bo rawestanê",
   "home_read_poem": "Hemû helbestê bixwîne",
-  "home_event": "Xwendin û bûyer",
   "home_event_details": "Hûrguliyan bibîne",
   "home_all_events": "Hemû bûyer û atolye",
   "home_no_events": "Dîrokên nû dê zû werin. Atolyeyên me bibîne an ji bo beşdariyê bi me re têkilî dayne.",
@@ -36,7 +34,9 @@
   "nav_events": "Bûyer",
   "home_all_authors": "Hemû nivîskaran nas bike",
   "home_no_authors": "Profîlên nivîskaran dê di demeke nêzîk de li vir xuya bibin.",
-  "events_all": "Hemû bûyer",
-  "events_filter": "Bûyeran li gorî cureyê parzûn bike",
-  "events_empty": "Ji bo vê hilbijartinê bûyer tune ne. Cureyek din biceribîne an paşê vegere."
+  "events_empty": "Niha bi vî zimanî bûyer tune ne. Paşê dîsa ser bide.",
+  "events_intro": "Helbest me digihîne hev. Li vir atolyeyan, xwendinên helbestê û derfetên hevdîtinê bibîne.",
+  "events_details": "Bi kurtî",
+  "events_when": "Kengî",
+  "events_where": "Li ku"
 }

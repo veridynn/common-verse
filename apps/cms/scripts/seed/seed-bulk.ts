@@ -217,11 +217,6 @@ export async function seedBulk(payload: Payload) {
             coordinates: [13.405, 52.52] as [number, number],
             address: f.location,
           },
-          seo: {
-            title: f.eventTitles[i % 3],
-            description: f.description,
-            noIndex: true,
-          },
         };
       };
       const event = await payload.create({
@@ -232,8 +227,6 @@ export async function seedBulk(payload: Payload) {
           ...localized("de"),
           slug,
           startDate: start.toISOString(),
-          kind: i % 2 === 0 ? "workshop" : "event",
-          ...(i % 2 ? { price: i % 4 === 1 ? 0 : 12.5 } : {}),
           image: mediaIDs[i % mediaIDs.length],
           registrationUrl: "https://example.org/register",
           _status: i % 5 === 0 ? "draft" : "published",

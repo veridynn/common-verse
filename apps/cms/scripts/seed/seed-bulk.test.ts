@@ -113,8 +113,8 @@ describe("optional bulk demo seed", () => {
       expect(Number.isFinite(Date.parse(event.startDate as string))).toBe(true);
       expect(event.endDate).toBeUndefined();
       expect(event.content).toHaveProperty("root");
-      if (event.kind === "event") expect(event.price).toBeGreaterThanOrEqual(0);
-      else expect(event.price).toBeUndefined();
+      for (const removed of ["kind", "price", "seo"])
+        expect(event).not.toHaveProperty(removed);
     }
     for (const [args] of [
       ...f.payload.find.mock.calls,

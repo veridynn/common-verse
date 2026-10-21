@@ -13,8 +13,9 @@ workflow is proven.
 The fixed-page meta-description is for search results and link previews, not the
 visible article text. Editors can supply it separately from the page content.
 
-Event SEO metadata remains stored for compatibility, but its controls are hidden
-from the event editor.
+Event metadata derives from the title, description, and cover image. Events have
+no separate SEO fields. Their structured data uses the date/time and location;
+prices and end dates are not part of the event model.
 
 Use `apps/web/src/layouts/BaseLayout.astro` for document metadata. Resolve URLs
 through `@poetry/i18n` as described in [routing](routing.md).

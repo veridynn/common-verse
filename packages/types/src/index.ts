@@ -15,24 +15,15 @@ export interface LocationValue {
 }
 
 export interface Event {
-  kind?: "workshop" | "event" | null;
   id: number | string;
   title: string;
   slug: string;
   description?: string | null;
   content?: FixedPage["content"];
   image?: MediaReference | number | string | null;
-  price?: number | null;
   startDate: string;
-  endDate?: string | null;
   location?: LocationValue | null;
   registrationUrl?: string | null;
-  seo?: {
-    title?: string | null;
-    description?: string | null;
-    image?: MediaReference | number | string | null;
-    noIndex?: boolean | null;
-  } | null;
   _status?: "draft" | "published";
 }
 

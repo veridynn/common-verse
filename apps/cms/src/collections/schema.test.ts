@@ -97,29 +97,48 @@ describe("editorial schemas", () => {
     });
   });
 
-  it("localizes event prose while keeping one stable slug", () => {
+  it("localizes event prose and uses Payload’s native slug helper", () => {
     expect(field(Events, "title")).toMatchObject({
       localized: true,
       required: true,
     });
     expect(field(Events, "description")).toMatchObject({ localized: true });
-    expect(field(Events, "slug")).toMatchObject({
+    const slugFields = Events.fields.find(
+      (candidate) => candidate.type === "row",
+    )!.fields;
+    const slug = slugFields.find(
+      (candidate) => "name" in candidate && candidate.name === "slug",
+    );
+    expect(slug).toMatchObject({
+      type: "text",
       required: true,
       unique: true,
-      admin: { hidden: true },
+      index: true,
     });
-    expect(field(Events, "slug")).not.toHaveProperty("localized", true);
+    expect(slug).not.toHaveProperty("localized", true);
+    expect(slugFields).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          name: "generateSlug",
+          type: "checkbox",
+          defaultValue: true,
+        }),
+      ]),
+    );
+    expect(Events.hooks).toBeUndefined();
     expect(Events.versions).toMatchObject({ drafts: expect.any(Object) });
-    expect(field(Events, "seo")).toMatchObject({ admin: { hidden: true } });
+    for (const removed of ["kind", "price", "endDate", "seo"])
+      expect(field(Events, removed)).toBeUndefined();
   });
 
-  it("shows registration below description while retaining other fields", () => {
+  it("contains only the current event fields", () => {
     const visible = Events.fields.filter(
       (field) =>
         !field.admin || !("hidden" in field.admin) || !field.admin.hidden,
     );
     expect(visible).toEqual([
       field(Events, "title"),
+      Events.fields.find((candidate) => candidate.type === "row"),
       field(Events, "description"),
       field(Events, "registrationUrl"),
       field(Events, "image"),
@@ -162,7 +181,7 @@ describe("editorial schemas", () => {
     });
     expect(
       Events.fields.find((field) => field.type === "collapsible"),
-    ).toHaveProperty("admin.hidden", true);
+    ).toBeUndefined();
   });
 
   it("models poem translations as optional explicit records", () => {

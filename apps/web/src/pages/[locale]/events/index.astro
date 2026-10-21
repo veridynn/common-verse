@@ -1,6 +1,8 @@
 ---
 import { Heading } from '$lib/components/ui/heading'
-import { Eyebrow } from '$lib/components/ui/eyebrow'
+import { Text } from '$lib/components/ui/text'
+import EditorialImage from '../../../components/EditorialImage.astro'
+import { locationText } from '../../../lib/location'
 import { Link } from '$lib/components/ui/link'
 import { isLocale, localizedPath } from '@poetry/i18n'
 import BaseLayout from '../../../layouts/BaseLayout.astro'
@@ -10,40 +12,28 @@ import * as m from '../../../paraglide/messages.js'
 const { locale: rawLocale } = Astro.params
 if (!isLocale(rawLocale)) return new Response('Not found', { status: 404 })
 const locale = rawLocale
-const events = await getEvents(locale)
-const requestedKind = Astro.url.searchParams.get('type')
-const kind = requestedKind === 'workshop' || requestedKind === 'event' ? requestedKind : null
-const visibleEvents = events.filter((event) => event.title && (!kind || (event.kind ?? 'workshop') === kind))
-const filters = [
-  { kind: null, label: m.events_all({}, { locale }) },
-  { kind: 'workshop', label: m.workshop_label({}, { locale }) },
-  { kind: 'event', label: m.home_event({}, { locale }) },
-]
+const events = (await getEvents(locale)).filter((event) => event.title)
 const title = m.nav_events({}, { locale })
 ---
 
 <BaseLayout {locale} {title} canonicalPath="events">
   <section>
-    <Eyebrow>{m.site_title({}, { locale })}</Eyebrow>
     <Heading level={1}>{title}</Heading>
-    <nav aria-label={m.events_filter({}, { locale })} class="event-filters">
-      {filters.map((filter) => (
-        <Link variant="standalone" href={`${localizedPath(locale, 'events')}${filter.kind ? `?type=${filter.kind}` : ''}`} aria-current={kind === filter.kind ? 'page' : undefined}>
-          {filter.label}
-        </Link>
-      ))}
-    </nav>
-    {visibleEvents.length === 0 && <p>{m.events_empty({}, { locale })}</p>}
-    <ul class="content-list">
-      {visibleEvents.map((event) => (
+    <Text variant="lead">{m.events_intro({}, { locale })}</Text>
+    {events.length === 0 && <p>{m.events_empty({}, { locale })}</p>}
+    <ul class="content-list event-programme">
+      {events.map((event) => (
         <li>
           <article>
-            <Heading level={2}><Link variant="heading" href={localizedPath(locale, `events/${event.slug}`)}>{event.title}</Link></Heading>
-            <p>{event.kind === 'event' ? m.home_event({}, { locale }) : m.workshop_label({}, { locale })}</p>
-            {event.description && <p>{event.description}</p>}
-            <time datetime={event.startDate}>
-              {new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone: 'Europe/Berlin' }).format(new Date(event.startDate))}
-            </time>
+            <EditorialImage image={event.image} {locale} />
+            <div class="programme-copy">
+              <p class="programme-date"><time datetime={event.startDate}>
+                {new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeStyle: 'short', timeZone: 'Europe/Berlin' }).format(new Date(event.startDate))}
+              </time></p>
+              <Heading level={2}><Link variant="heading" href={localizedPath(locale, `events/${event.slug}`)}>{event.title}</Link></Heading>
+              {event.description && <Text>{event.description}</Text>}
+              {locationText(event.location) && <Text variant="small" tone="muted">{locationText(event.location)}</Text>}
+            </div>
           </article>
         </li>
       ))}
@@ -52,18 +42,21 @@ const title = m.nav_events({}, { locale })
 </BaseLayout>
 
 <style>
-  .event-filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.5rem;
-    margin-block: 1.5rem;
+  section { overflow-wrap: anywhere; }
+  .event-programme { gap: var(--space-md-lg); }
+  .event-programme article {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+    gap: var(--space-md-lg);
+    align-items: center;
+    padding-block: var(--space-md-lg);
   }
-  .event-filters :global(a) {
-    min-block-size: 44px;
-    padding-inline: 0.25rem;
-  }
-  .event-filters :global(a[aria-current='page']) {
-    text-decoration-thickness: 0.2em;
-    text-underline-offset: 0.4em;
+  .event-programme article:not(:has(figure)) { grid-template-columns: 1fr; }
+  .programme-copy { min-inline-size: 0; }
+  .programme-copy :global(h2) { margin-block: var(--space-xs) var(--space-sm); line-height: 1.2; }
+  .programme-copy :global(p) { margin-block: var(--space-xs); max-inline-size: 58ch; }
+  .programme-date { font-weight: 600; }
+  @media (max-width: 40rem) {
+    .event-programme article { grid-template-columns: 1fr; }
   }
 </style>

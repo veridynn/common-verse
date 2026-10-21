@@ -80,7 +80,7 @@ test("localized workshop renders media, metadata, and structured data", async ({
   await expect(page.getByRole("img")).toHaveAttribute("alt", /paper shapes/i);
   await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
     "content",
-    "الشعر عبر الحدود",
+    "الشعر عبر الحدود · مشروع الشعر",
   );
   await expect(page.locator('link[hreflang="ku"]')).toHaveAttribute(
     "href",

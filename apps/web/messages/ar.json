@@ -6,7 +6,6 @@
   "nav_primary": "التنقل الرئيسي",
   "language_label": "اللغة",
   "skip_to_content": "الانتقال إلى المحتوى",
-  "workshop_label": "ورشة",
   "poem_original": "النص الأصلي",
   "poem_translations": "الترجمات",
   "translated_by": "ترجمة {name}",
@@ -16,7 +15,6 @@
   "home_events_link": "الفعاليات والورش القادمة",
   "home_featured_poem": "قصيدة نتأملها معًا",
   "home_read_poem": "اقرأ القصيدة كاملة",
-  "home_event": "قراءة وفعالية",
   "home_event_details": "عرض التفاصيل",
   "home_all_events": "جميع الفعاليات والورش",
   "home_no_events": "ستُعلَن مواعيد جديدة قريبًا. اكتشف ورشنا أو تواصل معنا للمشاركة.",
@@ -36,7 +34,9 @@
   "nav_events": "الفعاليات",
   "home_all_authors": "تعرّف على جميع الكتّاب",
   "home_no_authors": "ستظهر ملفات الكتّاب هنا قريبًا.",
-  "events_all": "جميع الفعاليات",
-  "events_filter": "تصفية الفعاليات حسب النوع",
-  "events_empty": "لا توجد فعاليات لهذا الاختيار. جرّب نوعًا آخر أو عُد لاحقًا."
+  "events_empty": "لا توجد فعاليات متاحة بهذه اللغة حاليًا. عُد لاحقًا.",
+  "events_intro": "يجمعنا الشعر. اكتشف ورش العمل والأمسيات الشعرية وفرص اللقاء.",
+  "events_details": "لمحة سريعة",
+  "events_when": "الموعد",
+  "events_where": "المكان"
 }

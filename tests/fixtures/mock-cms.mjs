@@ -37,7 +37,6 @@ function event(locale, preview) {
     id: 1,
     title: preview ? `${title} — draft` : title,
     slug: "test",
-    kind: "workshop",
     description,
     content: plainTextToRichText(description),
     image: media,
@@ -47,7 +46,6 @@ function event(locale, preview) {
       address: "The Poetry Project, Berlin",
     },
     registrationUrl: "https://example.org/register",
-    seo: { title, description, image: media, noIndex: false },
     _status: preview ? "draft" : "published",
   };
 }
@@ -301,12 +299,10 @@ const server = http.createServer((request, response) => {
       document.title = previewTitles.get(locale);
     }
     if (!requestedSlug && url.searchParams.get("limit") === "100") {
-      if (locale === "de") document.kind = null;
       const reading = {
         ...document,
         id: 20,
         slug: "reading",
-        kind: "event",
         title: locale === "fa" ? null : `Reading ${locale}`,
       };
       return response.end(
@@ -318,8 +314,7 @@ const server = http.createServer((request, response) => {
       );
     }
     if (requestedSlug === "reading") {
-      document.kind = "event";
-      document.price = 12.5;
+      document.image = { ...media, credit: "Event photographer" };
       document.content.root.children[0].children[0].format = 1;
       document.content.root.children.push({
         type: "upload",
@@ -336,6 +331,8 @@ const server = http.createServer((request, response) => {
       document.title = `Reading ${locale}`;
       document.slug = "reading";
     }
+    if (requestedSlug === "unsafe-registration")
+      document.registrationUrl = "javascript:alert(1)";
     if (requestedSlug === "partial" && locale === "fa") document.title = null;
     return response.end(JSON.stringify({ docs: [document], totalDocs: 1 }));
   }
