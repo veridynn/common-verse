@@ -41,9 +41,6 @@ export const Events: CollectionConfig = {
       type: "text",
       localized: true,
       required: true,
-      admin: {
-        className: "event-editor-title",
-      },
     },
     slugField(),
     {
@@ -86,7 +83,6 @@ export const Events: CollectionConfig = {
         components: {
           beforeInput: ["./components/EventFields#EditorAccessibility"],
         },
-        description: label("event_content_help"),
       },
     },
   ],

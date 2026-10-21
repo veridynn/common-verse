@@ -128,7 +128,6 @@
   "event_cover_image": "Titelbild",
   "event_cover_help": "Erscheint oben auf der Veranstaltungsseite. Weitere Bilder lassen sich unten im Inhalt einfügen.",
   "event_registration_help": "Optionaler Link zu einer Buchungsseite oder einem Anmeldeformular. Ohne Anmeldung leer lassen.",
-  "event_content_help": "Hier steht der vollständige Veranstaltungstext. Über die Werkzeugleiste oder / lassen sich Überschriften, Zitate, Listen und Bilder einfügen.",
   "editor_bold": "Fett",
   "editor_italic": "Kursiv",
   "editor_underline": "Unterstreichen",

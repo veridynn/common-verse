@@ -128,7 +128,6 @@
   "event_cover_image": "Cover image",
   "event_cover_help": "Shown at the top of the event page. Add pictures within the text in Content below.",
   "event_registration_help": "Optional link to a booking page or sign-up form. Leave empty if no registration is needed.",
-  "event_content_help": "Write the full event text. Use the toolbar or type / to add headings, quotes, lists, and images.",
   "editor_bold": "Bold",
   "editor_italic": "Italic",
   "editor_underline": "Underline",
