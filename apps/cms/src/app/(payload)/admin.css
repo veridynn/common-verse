@@ -41,16 +41,8 @@
   min-inline-size: 0;
   flex: 1 1 18rem;
 }
-.event-editor-content > .rich-text-lexical__label-row > .field-label {
-  font-size: 1.4rem;
-  font-weight: 600;
-  margin-block-end: 0.8rem;
-}
 .event-editor-content .ContentEditable__root {
   min-block-size: 24rem;
-  padding: 1.5rem;
-  font-size: 1.15rem;
-  line-height: 1.75;
 }
 .event-editor-content .fixed-toolbar {
   flex-wrap: wrap;
@@ -65,12 +57,7 @@
   }
   .event-editor-content .ContentEditable__root {
     min-block-size: 20rem;
-    padding: 1rem;
   }
-}
-.event-editor-content .ContentEditable__root > * {
-  max-inline-size: 75ch;
-  margin-inline: auto;
 }
 .event-editor-content .LexicalEditorTheme__upload,
 .event-editor-content .LexicalEditorTheme__upload__contents {

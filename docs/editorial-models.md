@@ -32,7 +32,7 @@ See [accounts and permissions](accounts-and-permissions.md) for content access
 and the planned contributor workflow.
 
 The event editor currently shows a title, required description text field, required registration link, required image upload,
-native date/time picker, and required map-based location picker during redesign.
+native date/time picker, required map-based location picker, and a required Lexical rich text content editor at the bottom during redesign.
 Other event fields and their stored values remain in the model but are hidden
 from the form. New events can be saved as drafts; publishing still requires a date.
 

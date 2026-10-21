@@ -125,6 +125,7 @@ describe("editorial schemas", () => {
       field(Events, "image"),
       field(Events, "startDate"),
       field(Events, "location"),
+      field(Events, "content"),
     ]);
     expect(field(Events, "description")).toMatchObject({
       type: "text",
@@ -153,7 +154,12 @@ describe("editorial schemas", () => {
         }),
       ]),
     });
-    expect(field(Events, "content")).toBeDefined();
+    expect(field(Events, "content")).toMatchObject({
+      type: "richText",
+      localized: true,
+      required: true,
+      editor: expect.anything(),
+    });
     expect(
       Events.fields.find((field) => field.type === "collapsible"),
     ).toHaveProperty("admin.hidden", true);

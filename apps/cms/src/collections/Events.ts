@@ -146,9 +146,9 @@ export const Events: CollectionConfig = {
       label: label("content"),
       type: "richText",
       localized: true,
+      required: true,
       editor: eventEditor,
       admin: {
-        hidden: true,
         className: "event-editor-content",
         components: {
           beforeInput: ["./components/EventFields#EditorAccessibility"],
