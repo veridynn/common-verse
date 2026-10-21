@@ -67,7 +67,9 @@ test("event details render the current fields and rich text", async ({
   await expect(page.locator("aside time")).toHaveCount(1);
   await expect(page.locator(".image-credit")).toHaveText("Event photographer");
   await expect(
-    page.getByRole("link", { name: "Register", exact: true }),
+    page
+      .locator("aside")
+      .getByRole("link", { name: "Register now", exact: true }),
   ).toHaveAttribute("href", "https://example.org/register");
   await expect(page.locator(".back-link")).toHaveAttribute(
     "href",
@@ -91,7 +93,7 @@ test("unsafe registration links are omitted", async ({ page }) => {
   await page.goto("/en/events/unsafe-registration");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(
-    page.getByRole("link", { name: "Register", exact: true }),
+    page.getByRole("link", { name: "Register now", exact: true }),
   ).toHaveCount(0);
 });
 
@@ -118,5 +120,46 @@ for (const locale of ["de", "ar"]) {
     await page.locator(".back-link").focus();
     await page.keyboard.press("Enter");
     await expect(page.locator(".event-programme img")).toHaveCount(2);
+  });
+}
+
+test("bare registration domains produce the registration call to action", async ({
+  page,
+}) => {
+  await page.goto("/en/events/bare-registration");
+  const ctas = page.getByRole("link", { name: "Register now", exact: true });
+  await expect(ctas).toHaveCount(1);
+  for (const cta of await ctas.all())
+    await expect(cta).toHaveAttribute("href", "https://google.de/");
+  await page
+    .locator("aside")
+    .getByRole("link", { name: "Register now", exact: true })
+    .focus();
+  await expect(page.locator("aside a")).toBeFocused();
+});
+
+for (const locale of ["de", "ar"]) {
+  test(`${locale} event details stay visible while scrolling on desktop`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto(
+      locale === "de" ? "/veranstaltungen/reading" : "/ar/events/reading",
+    );
+    const facts = page.locator(".event-facts");
+    const initial = (await facts.boundingBox())!.y;
+    await page.evaluate(() =>
+      window.scrollBy({ top: 650, behavior: "instant" }),
+    );
+    await expect
+      .poll(async () => (await facts.boundingBox())!.y)
+      .toBeLessThan(initial);
+    const rect = (await facts.boundingBox())!;
+    const header = (await page.locator(".site-header").boundingBox())!;
+    expect(rect.y).toBeGreaterThanOrEqual(header.y + header.height);
+    expect(rect.y).toBeCloseTo(128, 0);
+    expect(rect.y + rect.height).toBeLessThanOrEqual(900);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect(facts).toHaveCSS("position", "static");
   });
 }

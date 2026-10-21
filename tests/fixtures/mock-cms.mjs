@@ -331,6 +331,8 @@ const server = http.createServer((request, response) => {
       document.title = `Reading ${locale}`;
       document.slug = "reading";
     }
+    if (requestedSlug === "bare-registration")
+      document.registrationUrl = " google.de ";
     if (requestedSlug === "unsafe-registration")
       document.registrationUrl = "javascript:alert(1)";
     if (requestedSlug === "partial" && locale === "fa") document.title = null;
